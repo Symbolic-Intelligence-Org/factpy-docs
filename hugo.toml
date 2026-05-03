@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://factpy.docs.symbolic-intelligence.de/'
 locale = 'en-us'
 title = 'FactPy'
 theme = 'hugo-book'
