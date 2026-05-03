@@ -1,0 +1,21 @@
+baseURL = 'https://example.org/'
+locale = 'en-us'
+title = 'FactPy'
+theme = 'hugo-book'
+
+disqusShortname = "my-site"
+
+
+copyright = '[© CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)'
+
+[markup]
+[markup.goldmark.renderer]
+  unsafe = true
+
+[markup.tableOfContents]
+  startLevel = 1
+
+[markup.highlight]
+  style = 'base16-snazzy'
+
+  
