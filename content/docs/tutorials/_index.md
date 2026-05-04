@@ -1,7 +1,7 @@
 ---
 title: "Tutorials"
 weight: 4
-bookCollapseSection: false
+bookCollapseSection: true
 ---
 
 # Tutorials
