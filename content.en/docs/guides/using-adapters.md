@@ -13,25 +13,23 @@ weight: 8
 
 # Using adapters
 
-The native evaluator covers the rule shape most application code needs: typed bodies with joins, sub-rules, and negation as failure. For reasoning shapes that go beyond that — propagation through a graph of relationships, probabilistic inference over uncertain facts, large-scale Datalog over many millions of rules — factpy delegates to engine adapters. Three are shipped with the kernel: PyReason, ProbLog, and Souffle.
+The native evaluator covers the rule shape that most application code requires: typed bodies with joins, sub-rules, and negation as failure. For three reasoning shapes that the native evaluator does not address — propagation through a graph of typed relationships, probabilistic inference over uncertain facts, and Datalog evaluation at scale — the kernel delegates to adapter engines. Three are shipped: PyReason, ProbLog, and Souffle. The present guide develops the criteria by which an adapter is chosen and the integration pattern of each, with the configuration details and full APIs left to the adapter reference pages.
 
-This guide is about *choosing* an adapter and the rough shape of how each plugs in. The full APIs live in each adapter's reference page; what's covered here is the decision and the integration pattern, not every option.
+## Choosing an adapter
 
-## Choosing an adapter by reasoning shape
+The choice is determined by the shape of the reasoning, not by preference. The native evaluator is the appropriate default until a concrete reason to leave it appears, since it has no further operational dependencies, the fastest iteration cycle, and the smallest blast radius for modelling mistakes.
 
-Pick by the *shape of the reasoning*, not by preference. The native evaluator is the right answer until you have a concrete reason to leave it.
+PyReason is appropriate where the reasoning has the shape of *graph-based annotated logic*. Beliefs are intervals with a lower and an upper bound, they propagate along typed edges through discrete time steps, and the natural data shape is a graph of entities and relationships whose state evolves as inference re-runs. The adapter is the appropriate choice wherever entities are connected by typed relationships, where signals propagate through them carrying confidence bands, and where time is part of the model.
 
-**PyReason** is for *graph-based annotated logic*. Beliefs are intervals (a lower and upper bound), they propagate along edges through time, and the natural data shape is *entities and relationships forming a graph that has a state, with inference re-running as the graph updates*. If you have entities connected by typed relationships, signals propagating through them with confidence bands, and a clock — that's PyReason.
+ProbLog is appropriate where the reasoning is *probabilistic logic programming* in the strict sense. Facts have probabilities, rules combine them, and the answers are probabilities over outcomes. The adapter is the appropriate choice wherever rules need to reason about uncertain inputs in a principled probabilistic way, including marginalising over alternatives, computing joint probabilities, and learning probabilities from labelled data. It is *not* the appropriate choice for systems whose confidences are heuristic labels rather than calibrated probabilities; in that case the native evaluator with weighted bodies is sufficient and considerably cheaper.
 
-**ProbLog** is for *probabilistic logic programming*. Facts have probabilities; rules combine them; the answers are probabilities over outcomes. If your rules need to reason about uncertain inputs in a principled probabilistic way — marginalising, computing joint probabilities, learning from data — that's ProbLog.
+Souffle is appropriate where the reasoning is plain Datalog and the rule set has grown beyond what the native evaluator handles in acceptable time. The engine compiles rules into native code and evaluates them efficiently over very large fact bases. The adapter is the appropriate choice wherever throughput on a large fact base has become the bottleneck and the rules themselves are well-formed Datalog without probabilistic semantics or graph propagation.
 
-**Souffle** is for *fast Datalog at scale*. It compiles your rules into native code and evaluates them efficiently over very large fact bases. If your rule set has grown beyond what the native evaluator handles in reasonable time, and the rules themselves are well-formed Datalog (no probabilistic semantics, no graph propagation) — that's Souffle.
-
-If none of those shapes describes your problem, you probably don't need an adapter. The native evaluator is uniform and good.
+If none of these shapes describes the problem at hand, no adapter is needed. The native evaluator is uniform and sufficient for the substantial majority of factpy projects.
 
 ## ProbLog: probabilities on bodies
 
-ProbLog has the closest-to-uniform integration. Import the adapter to register the engine, then evaluate a derivation with `mode="problog"`:
+ProbLog has the closest-to-uniform integration with the SDK. Importing the adapter package registers the engine with the dispatch in `sdk.evaluate`, after which a derivation can be run under ProbLog by passing `mode="problog"`.
 
 ```python
 import kernel.adapters.problog  # registers the engine evaluator
@@ -39,7 +37,7 @@ import kernel.adapters.problog  # registers the engine evaluator
 candidates = sdk.evaluate(some_derivation, mode="problog")
 ```
 
-For derivations that need engine-specific configuration — branch probabilities, inference parameters — attach a `ProbLogRuleExt` to the rule:
+For derivations that need engine-specific configuration — branch probabilities, inference parameters — a `ProbLogRuleExt` is attached to the derivation through its `engine_ext` parameter.
 
 ```python
 from kernel.adapters.problog.rule_ext import ProbLogRuleExt
@@ -55,13 +53,13 @@ with vars("r", "name") as (r, name):
     )
 ```
 
-Candidates produced by the ProbLog evaluator carry probability annotations forward. Acceptance writes them as conventional confidence metadata on the resulting ledger assertions, and they show up in the audit story like any other derived fact — with the difference that the evidence graph reflects the engine's reasoning trace rather than a flat tree.
+Candidates produced by the ProbLog evaluator carry probability annotations forward into acceptance, which writes them as conventional `confidence` metadata on the resulting ledger assertions. The accepted facts appear in the audit story like any other derived fact, with the difference that the evidence record reflects the engine's reasoning trace rather than a flat tree.
 
-The `Body(..., confidence=...)` shape covered in [running derivations](running-derivations.md) is the lightweight handoff: a derivation with weighted bodies in the native evaluator becomes a derivation with probabilistic bodies in ProbLog with no DSL change. When the native version stops being expressive enough — you need joint distributions, not just per-body weights — the same `Derivation` object runs under ProbLog by switching `mode`.
+The `Body(..., confidence=...)` shape developed in [running derivations](/docs/guides/running-derivations) is the lightweight handoff between the two evaluators: a derivation with weighted bodies under the native evaluator becomes a derivation with probabilistic bodies under ProbLog without any change to the DSL. When weighted-body confidences cease to be expressive enough — when joint distributions and marginalisation become necessary — the same `Derivation` object runs under ProbLog by switching the `mode` argument.
 
 ## PyReason: graph propagation as a session
 
-PyReason's integration is shaped differently because the engine itself is. Inference doesn't happen against a static ledger as a one-shot call; it propagates through a graph that changes over time. The adapter exposes that as a *session* — a stateful object you build up the graph in, then run inference on:
+PyReason's integration is shaped differently because the engine itself is. Inference does not run as a one-shot evaluation against a static ledger; it propagates through a graph whose state changes over discrete time steps. The adapter exposes that shape as a *session* — a stateful object in which the typed graph is built up before propagation runs against it.
 
 ```python
 from kernel.adapters.pyreason.session import PyReasonSession
@@ -82,51 +80,43 @@ result = run_pyreason(session, PyReasonRunConfig(...))
 accept_pyreason_session(sdk, result, ...)
 ```
 
-The pattern: build the typed graph in a session, run propagation, accept the resulting facts back into the main store. The adapter takes care of translating between factpy's schema and PyReason's annotated-graph representation; you write entity declarations as you would normally, with the addition of `bound=[lo, hi]` for confidence intervals and explicit `Relationship` declarations.
+The integration pattern is to build the typed graph in a session, run the propagation, and commit the resulting facts back into the main store. The adapter handles translation between factpy's schema and PyReason's annotated-graph representation; entity declarations and relationships are written as they would be in the SDK, with the addition of `bound=[lo, hi]` for confidence intervals on each fact and explicit `Relationship` declarations for the typed edges along which beliefs propagate.
 
-Use PyReason when the reasoning is propagation over a graph state. The session-based API is what makes that shape ergonomic; trying to express the same thing as a flat derivation under the native engine fights the model.
+PyReason is the appropriate choice wherever the reasoning *is* propagation through a graph state. The session-based API is what makes that shape ergonomic; expressing the same propagation as a flat derivation under the native evaluator is awkward at best and rapidly becomes unworkable as the depth of propagation grows.
 
 ## Souffle: package-based execution
 
-Souffle is a compiled Datalog engine. The integration reflects that: factpy exports a *package* describing the rules, the schema, and the input facts; Souffle compiles and runs against it; results come back as new facts:
+Souffle is a compiled Datalog engine, and the integration reflects that. The kernel exports a *package* describing the rules, the schema, and the input facts; the Souffle binary compiles and runs against the package; the results return as new facts.
 
 ```python
 from kernel.adapters.souffle.package import ExportOptions
 
-# 1. Export an inference package
+# Export an inference package
 out = Path("./packages/run-1")
 sdk.export_package(out, ExportOptions(package_kind="inference"))
 
-# 2. Run it under Souffle
+# Run it under Souffle
 result = sdk.run_package(out, entrypoints=["my_rule"], engine="souffle")
 ```
 
-`package_kind="inference"` is the leaner package — schema, rules, input facts, no audit overhead. `entrypoints` names the rules whose outputs you want. `run_package` invokes the Souffle binary against the package and returns the derived facts.
+The `package_kind="inference"` setting produces the leaner package suitable for re-execution rather than for review — schema, rules, and input facts, without the audit-side records that an audit package additionally carries. The `entrypoints` argument names the rules whose outputs are wanted from the run. `run_package` invokes the Souffle binary against the exported package and returns the derived facts as a result.
 
-Reach for Souffle when rule evaluation under the native engine is the bottleneck. The cost is: a package round-trip per run, a binary dependency on `souffle`, and a less interactive feedback loop than running rules in-process. The benefit is throughput on rule sets that the native evaluator would not handle in acceptable time.
-
-The same `Rule` and `Derivation` declarations work — the adapter compiles them into Souffle's surface language. You don't rewrite rules; you change *how* they run.
+Souffle is the appropriate choice when rule evaluation under the native engine has become the bottleneck. The cost of choosing it is a package round-trip per run, a binary dependency on `souffle` that must be installed on the host, and a less interactive feedback loop than running rules in-process. The benefit is throughput on rule sets and fact bases that the native evaluator would not process in acceptable time. The same `Rule` and `Derivation` declarations are used; the adapter compiles them into Souffle's surface language without further intervention from the rule author.
 
 ## What stays uniform across adapters
 
-Three things are the same regardless of which adapter (or none) you use:
+Three properties hold uniformly across the native evaluator and all three adapters. The schema and the DSL are unchanged: the same `Entity` declarations, the same `Rule` and `Derivation` objects. An adapter changes the evaluator that consumes them, not the language in which they are written. The audit story is unchanged in its general shape: every evaluator produces evidence, in the form of a tree under the native engine and as a richer `EvidenceGraph` under engines whose reasoning does not reduce to a tree, and audit packages capture both shapes uniformly. And the candidate-and-acceptance lifecycle is unchanged where applicable: ProbLog and the candidate-producing portions of Souffle plug into `sdk.accept` and `sdk.accept_many` exactly as the native evaluator does, while PyReason's session-based output flows through `accept_pyreason_session`, which plays the same role for that engine's results.
 
-- **Schema and DSL.** The same entity declarations, the same `Rule` and `Derivation` objects. An adapter changes the evaluator, not the language.
-- **Audit story.** Every adapter produces evidence — as a tree under the native engine, as a richer `EvidenceGraph` under engines that don't reduce to trees. Audit packages capture both shapes uniformly.
-- **The candidate-and-accept rhythm** (where applicable). For ProbLog and the parts of Souffle that produce candidates, evaluate-then-accept works as covered in [running derivations](running-derivations.md). PyReason's session has its own commit step (`accept_pyreason_session`) that plays the same role for that engine's output.
-
-What's *not* uniform: the surface for engine-specific configuration (branch probabilities, propagation steps, Souffle compile flags), the shape of the evidence (tree vs. graph vs. timeline), and the operational dependencies (PyReason and ProbLog as Python packages; Souffle as a compiled binary). The adapters' reference pages cover these in detail.
+What is *not* uniform across adapters is the surface for engine-specific configuration — branch probabilities for ProbLog, propagation step counts and atom-trace flags for PyReason, dialect versions and policy modes for Souffle — and the shape of the evidence each engine produces, which is a tree, graph, or timeline depending on the engine's reasoning model. Operational dependencies likewise differ: PyReason and ProbLog ship as optional Python packages, while Souffle requires a separately installed compiled binary. The adapter reference pages cover each of these surfaces in detail.
 
 ## Operational notes
 
-PyReason and ProbLog ship as optional Python dependencies. They are not installed by default; install them only when you need them (`pip install factpy-kernel[pyreason]`, `pip install factpy-kernel[problog]` — confirm exact extras in the project's install docs). Importing the adapter modules without the underlying engine installed raises a clear error.
+PyReason and ProbLog are optional Python dependencies and are not installed with the kernel by default. They are installed through factpy-kernel's optional extras (`pip install factpy-kernel[pyreason]`, `pip install factpy-kernel[problog]`); the exact extras names should be confirmed against the project's install documentation, since these may evolve. Importing the adapter modules without the underlying engine present raises a clear error rather than failing later in the run.
 
-Souffle requires the `souffle` binary on `PATH`. The adapter doesn't ship the compiler.
+Souffle requires the `souffle` binary on the host's `PATH`. The adapter does not ship the compiler, and a missing binary surfaces as a preflight warning before it surfaces as a runtime error.
 
-When developing rules locally, work against the native evaluator. It has no extra dependencies, fast iteration, and the smallest blast radius for mistakes. Move to an adapter when the *reasoning shape itself* needs it — not as a default.
+Local rule development is best done against the native evaluator. The native evaluator has no further dependencies, the fastest iteration cycle, and the smallest blast radius for modelling mistakes. Adapters are the appropriate choice when the reasoning shape itself requires them, not as a default for ordinary work.
 
 ## Where to next
 
-- [Running derivations](running-derivations.md) for the candidate-and-accept lifecycle the ProbLog and Souffle adapters share with the native engine.
-- [Auditing a run](auditing-a-run.md) for how adapter-produced evidence (graphs, timelines) shows up in audit packages.
-- The adapter-specific reference pages (when written) cover full configuration, engine extensions, and the data conversions each performs.
+[Running derivations](/docs/guides/running-derivations) covers the candidate-and-acceptance lifecycle that ProbLog and Souffle share with the native evaluator. [Auditing a run](/docs/guides/auditing-a-run) covers how adapter-produced evidence — graphs and timelines — appears in audit packages. The adapter-specific reference pages cover full configuration, engine extensions, and the data conversions each adapter performs.

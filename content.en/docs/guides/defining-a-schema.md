@@ -13,11 +13,11 @@ weight: 2
 
 # Defining a schema
 
-This guide walks through writing a schema for a real domain — picking identities, choosing cardinalities, modelling relationships, splitting across modules, and opening it as a store. It assumes you've read [entities and fields](../concepts/entities-and-fields.md) for the concepts, and focuses on the decisions you actually make when sitting down to declare your own.
+This guide develops the practical decisions that arise when writing a schema for a real domain: where the schema lives in a project, how identities are chosen, how cardinalities are picked, how relationships are modelled, how schemas are split across modules, how they are validated before a store is opened, and how they evolve from one version to the next. It assumes familiarity with the conceptual material developed in [entities and fields](../../concepts/entities-and-fields), and concentrates here on the choices that have to be made when one sits down to declare a schema for the first time.
 
 ## Where the schema lives
 
-A schema is a set of `Entity` subclasses. There is no central registry, no manifest file, no decorator that has to run. Put the classes wherever python imports go in your project — typically a `schema/` package next to your application code:
+A schema is a collection of `Entity` subclasses, declared in ordinary python modules and imported as any other class would be. The kernel maintains no central registry, requires no manifest file, and depends on no decorator that has to run for an entity to be recognised. A typical project organises its schema under a `schema/` package alongside the application code, with related entities grouped into modules.
 
 ```
 myapp/
@@ -28,13 +28,13 @@ myapp/
 └── app.py
 ```
 
-Whatever you import and hand to `SDKStore.from_schema_classes(...)` *is* your schema. Everything else is just python.
+Whatever set of classes is supplied to `SDKStore.from_schema_classes(...)` at the moment the store is opened constitutes the schema for the duration of the session, and the kernel sees nothing beyond that list.
 
-## Picking an identity strategy
+## Choosing an identity strategy
 
-The first decision for any entity is how it's addressed. Three patterns cover almost everything.
+The first decision for any entity is how it will be addressed, and three patterns cover almost every case that arises in practice.
 
-**Natural single key.** Use when the domain already has a meaningful unique identifier:
+The first is the *natural single key*, used wherever the domain itself supplies a meaningful unique identifier. An iso code uniquely identifies a country, an order id uniquely identifies an order, and there is no need to invent further structure.
 
 ```python
 class Country(Entity):
@@ -42,9 +42,9 @@ class Country(Entity):
     name: str = Field(cardinality="single")
 ```
 
-`iso_code` is the address. `Country(iso_code="DE")` and `Country(iso_code="FR")` are different entities.
+`iso_code` is the address; `Country(iso_code="DE")` and `Country(iso_code="FR")` are different entities, with separate histories.
 
-**Composite identity.** Use when an entity is naturally scoped — by tenant, region, locale — and the scope should be part of the address rather than a regular field:
+The second is *composite identity*, used wherever an entity is naturally scoped — by tenant, by region, by language — and the scope properly belongs to the entity's name rather than to a field on it. The criterion is whether two such instances should be able to coexist with independent histories: when they should, the distinguishing value belongs in the identity rather than in a field.
 
 ```python
 class User(Entity):
@@ -53,9 +53,9 @@ class User(Entity):
     name: str = Field(cardinality="single")
 ```
 
-Now `(user_id, locale)` together identify a user. `User(user_id="u-1", locale="en")` and `User(user_id="u-1", locale="de")` are *different* entities with separate fact histories. Reach for this when the scope is a real partition of your data; don't reach for it just to add a field to the address.
+The user is now addressed by the pair `(user_id, locale)`, and `User(user_id="u-1", locale="en")` and `User(user_id="u-1", locale="de")` are distinct entities with separate histories of facts. The pattern is appropriate when the scope is a real partition of the data — when the two locales of one user really are two things, with their own names, their own tags, and their own audit trails — and inappropriate when the scope is simply an attribute that happens to vary over time.
 
-**Surrogate key with a factory.** Use when there is no meaningful natural key — typically for entities that exist purely to relate other entities:
+The third is the *surrogate key with a factory*, used wherever there is no meaningful natural key. The typical case is an entity that exists purely in order to relate other entities to one another: a residence, an authorship, a review assignment.
 
 ```python
 class LivesIn(Entity):
@@ -65,15 +65,13 @@ class LivesIn(Entity):
     since: int = Field(cardinality="single")
 ```
 
-`default_factory="uuid4"` lets the SDK assign a fresh identity at write time when none is supplied. Available factories are documented in the reference; `"uuid4"` is the common one.
+The `default_factory="uuid4"` instructs the SDK to assign a fresh identifier whenever none is supplied at write time. The available factories are documented in the reference; `uuid4` is the common one, and is sufficient for nearly all surrogate-key situations. The decision rule between the three patterns reduces to a single question: if removing the field would leave the entity ambiguous in the domain, the field belongs in `Identity`; otherwise it belongs in `Field`.
 
-A useful test: if removing the field would make the entity ambiguous in the domain, it belongs in `Identity`. If two entities can sensibly differ in this field while being "the same thing" in some larger sense, it belongs in `Field`.
+## Choosing cardinality
 
-## Picking cardinality
+Each `Field` is declared as either `cardinality="single"` or `cardinality="multi"`, and the choice affects what the snapshot exposes rather than what the ledger stores. Both cardinalities preserve every assertion in the ledger; they differ only in how the projection reduces multiple assertions to a presented value.
 
-Each `Field` is `cardinality="single"` or `cardinality="multi"`. The choice is about what the *snapshot* should show, not about how the ledger stores history. Both cardinalities preserve every assertion in the ledger; they differ only in what reduces out at read time.
-
-Choose `single` when the entity has at most one current value for the field at any time:
+A single-cardinality field is appropriate wherever the entity has at most one current value at any moment. A name, a home country, a date of birth — each is one thing about the entity, and a new assertion supersedes the previous one in the projection.
 
 ```python
 name: str = Field(cardinality="single")
@@ -81,9 +79,7 @@ home_country: Country = Field(cardinality="single")
 date_of_birth: datetime = Field(cardinality="single")
 ```
 
-A new assertion replaces the old one in the snapshot. The ledger keeps both; the projection shows the latest non-retracted.
-
-Choose `multi` when the entity has a *set* of current values that coexist:
+A multi-cardinality field is appropriate wherever the entity carries a *set* of values that coexist. A tag, an alias, a preferred language — each is something an entity may have any number of, all simultaneously valid.
 
 ```python
 tag: str = Field(cardinality="multi")
@@ -91,15 +87,13 @@ alias: str = Field(cardinality="multi")
 preferred_language: Language = Field(cardinality="multi")
 ```
 
-The snapshot accumulates every asserted-and-not-retracted value into a set. Multiple `add` calls with the same value collapse to one entry in the snapshot but remain distinct ledger entries — which is what makes the *count of times someone added "vip"* still answerable from the audit trail, even though the snapshot just shows `{"vip"}`.
-
-If the field naturally holds a small fixed number of distinct values (a status, a primary contact), it's `single`. If it holds an open-ended set (tags, aliases, roles), it's `multi`.
+Multiple `add` calls with the same value collapse to one entry in the snapshot but remain distinct entries in the ledger, which is what allows the question of *how many times this tag was asserted, and by whom, and when* to be answered from the audit trail without affecting what the snapshot shows. The general guidance is that a field holding a small fixed number of distinct values — a status, a primary contact — is single-cardinality, while a field holding an open-ended set is multi-cardinality.
 
 ## Modelling relationships
 
-factpy gives you two ways to model a connection between entities. Both work; they answer different questions.
+A connection between entities can be modelled in two ways, and the choice depends on whether the relationship has anything to say about itself or merely connects one thing to another.
 
-**Direct entity reference.** When a relationship is purely directional and has no attributes of its own, declare an `entity_ref` field on the source:
+The simpler form is a *direct entity reference*, declared as an `entity_ref` field on the source entity. This is appropriate whenever the relationship is purely directional and carries no attributes of its own.
 
 ```python
 class Person(Entity):
@@ -108,9 +102,9 @@ class Person(Entity):
     home_country: Country = Field(cardinality="single")
 ```
 
-Asserting `home_country` is asserting one fact: a single predicate, with the country's address as the value. Easy to query, easy to reduce. Use this whenever the relationship has no attributes and no independent identity.
+Asserting `home_country` records one fact: a single predicate, with the country's address as the value. The relationship is queryable, the projection straightforward, and no further entity is needed to carry the connection.
 
-**Relationship as entity.** When the relationship has its own attributes, lifecycle, or history, model it as a separate entity:
+The richer form is a *relationship as entity*, used whenever the connection has attributes, a lifecycle, or a history of its own. An entity is declared whose fields are the endpoints of the relationship together with whatever else the relationship needs to carry.
 
 ```python
 class LivesIn(Entity):
@@ -121,13 +115,11 @@ class LivesIn(Entity):
     until: int = Field(cardinality="single")
 ```
 
-Now the relationship is a first-class subject. It can carry its own facts (`since`, `until`), accumulate its own provenance, and be the subject of its own rules. Multiple `LivesIn` instances can exist for the same person — which is exactly what you want for someone who has lived in two countries.
+The relationship is now a first-class subject in the schema. It accumulates its own provenance, can carry its own facts (`since`, `until`), and can be the subject of rules in exactly the way any other entity can. Multiple `LivesIn` instances can exist for the same person, which is the appropriate model for someone who has lived in more than one country over time. The decision criterion reduces to a single question: does the relationship have anything to say about itself? If it does, it deserves an entity; if it does not, an `entity_ref` field on the source is sufficient.
 
-The decision rule is simple: *does this relationship have anything to say about itself?* If no, use a direct reference. If yes, give it an entity.
+## Entity metadata
 
-## Metadata on entities
-
-An inner `Meta` class lets you attach metadata that travels with the entity into authoring artifacts and audit packages:
+An inner `Meta` class allows a small amount of metadata to travel with the entity into authoring artifacts and audit packages.
 
 ```python
 class Person(Entity):
@@ -142,13 +134,11 @@ class Person(Entity):
     name: str = Field(cardinality="single")
 ```
 
-`version` becomes part of the schema digest, so a version bump is visible to anyone opening a ledger. `description` falls back to the docstring if not given. `tags` are free-form string labels — useful for grouping entities by domain, ownership, or compliance scope when you have many of them.
-
-Only `version`, `description`, and `tags` are accepted in `Meta`. Anything else raises at class-definition time.
+The `version` field participates in the schema digest, so that a deliberate version bump is visible to anyone opening a ledger written under a previous version. The `description`, when omitted, defaults to the class docstring. The `tags` are free-form string labels useful for grouping entities by domain, ownership, or compliance scope in larger schemas. `Meta` accepts only these three keys, and any other key raises at class-definition time; the narrowness is intentional, since schema declarations are themselves part of the audit story and the surface that participates in that story is kept small.
 
 ## Splitting across modules
 
-Schemas grow. You can split them along whatever axis makes sense — domain, ownership, layer:
+Schemas grow, and they may be split along whatever axis the project finds natural — by domain, by ownership, by architectural layer.
 
 ```python
 # myapp/schema/identity.py
@@ -167,7 +157,7 @@ class Order(Entity):
     ...
 ```
 
-The schema is then assembled where the store is opened:
+The schema is assembled at the moment the store is opened, by importing the relevant classes and supplying them as a single list.
 
 ```python
 from myapp.schema.identity import Person, Country
@@ -176,13 +166,11 @@ from myapp.schema.commerce import Order, LineItem
 sdk = SDKStore.from_schema_classes([Person, Country, Order, LineItem])
 ```
 
-There is no ceremony to splitting and no ceremony to recombining. An entity referenced as an `entity_ref` in another module just needs to be imported when the dependent module is imported; the kernel doesn't otherwise care where classes come from.
-
-For a library or vendored schema package, expose the entity classes from a top-level `__init__.py` and let consumers compose them with their own.
+There is no further ceremony involved in splitting and recombining: an entity referenced through `entity_ref` in another module need only be importable from where it is referenced, and the kernel has no further interest in where a class was declared. For a vendored schema or a schema published as a library, the entity classes are typically exposed from a top-level `__init__.py`, allowing consumers to compose them with classes of their own.
 
 ## Validating before opening
 
-Before opening a store — especially in tests or CI — `schema_preflight_from_classes` runs the same compilation that `from_schema_classes` does and returns a structured report without touching any ledger:
+`schema_preflight_from_classes` runs the same compilation that `from_schema_classes` performs and returns a structured report without touching any ledger.
 
 ```python
 from kernel.sdk import schema_preflight_from_classes
@@ -190,11 +178,11 @@ from kernel.sdk import schema_preflight_from_classes
 report = schema_preflight_from_classes([Person, Country, Order])
 ```
 
-If anything is wrong — a missing `primary_key`, a circular reference, a type-domain mismatch — it surfaces as a structured error rather than a runtime exception during the first write. Run this in your test suite to catch schema regressions early.
+A missing `primary_key`, a circular reference, a type-domain mismatch — each surfaces as a structured entry in the report rather than as a runtime exception during the first write. Running the preflight in a test suite or in continuous integration is the simplest way to catch schema regressions early, before they reach a ledger that depends on the schema being well-formed.
 
 ## Opening the store
 
-Two modes of operation. **In-memory** for tests and short-lived computation:
+A store can be opened in either of two modes. The in-memory mode is appropriate for tests and short-lived computation: the ledger exists for the lifetime of the process and is discarded when the process exits.
 
 ```python
 from kernel.sdk import SDKStore
@@ -202,9 +190,7 @@ from kernel.sdk import SDKStore
 sdk = SDKStore.from_schema_classes([Person, Country, Order])
 ```
 
-The ledger lives for the lifetime of the process and disappears when it ends.
-
-**Persistent** for a long-running service or any state you want back tomorrow:
+The persistent mode, opt-in through a `ledger_path`, is appropriate for any long-running service or for state that needs to survive a restart.
 
 ```python
 sdk = SDKStore.from_schema_classes(
@@ -213,33 +199,14 @@ sdk = SDKStore.from_schema_classes(
 )
 ```
 
-The first time you open with a `ledger_path`, the schema digest is written into the file. On subsequent opens, the digest of the schema you're opening with is compared against the stored one. If they differ — which means a field, identity, or type domain has changed — the open fails with a clear schema-mismatch error rather than silently misreading old facts.
-
-This is the single guard against schema drift on a persistent ledger. Heed it.
+The first time a store is opened with a given path, the schema's content digest is recorded in the file. On every subsequent open, the digest of the schema being supplied is recomputed and compared against the stored one. A change in any field's cardinality, type domain, or identity composition that would render existing assertions illegible causes the open to fail with an explicit schema-mismatch error rather than to proceed with a silent reinterpretation. This check is the principal guard against unintentional schema drift on a persistent ledger, and it should be respected wherever it triggers.
 
 ## Evolving a schema
 
-What's safe to change without bumping the schema:
+Some changes preserve the schema's ability to read existing assertions and require no version bump and no migration: adding a new entity, adding a new field to an existing entity, relaxing optional metadata, and adding a new `Identity` field that has either a `default` or a `default_factory`. The common property is that no assertion already in the ledger is rendered illegible by the change; the additions extend the vocabulary without altering the meaning of what was previously written.
 
-- Adding a new entity.
-- Adding a new field to an existing entity.
-- Relaxing optional metadata (descriptions, tags).
-- Adding a new `Identity` field that has a `default` or `default_factory`.
-
-What requires a new schema version, and likely a migration:
-
-- Renaming a field or an entity.
-- Changing a field's cardinality (single ↔ multi).
-- Changing a field's type domain.
-- Changing the identity composition of an existing entity.
-- Removing a field that has been written to.
-
-The kernel will refuse to open a ledger written under a different schema digest. Migration is an explicit step: bump the entity's `Meta.version`, write a migration that replays the old ledger into a new one under the new schema, and only then open the new ledger with the new schema.
-
-For first-week-of-development work where the schema is still molten and there's no production ledger, just delete the file and reopen. The digest check is there to protect data that exists; nothing else.
+Other changes do not preserve legibility and constitute a new schema version: renaming a field or an entity, changing a field's cardinality between single and multi, changing a field's type domain, altering the identity composition of an existing entity, and removing a field that has been written to. The kernel refuses to open a ledger written under a different schema digest, and migration is therefore an explicit operation rather than an implicit reinterpretation: the entity's `Meta.version` is bumped, a migration program replays the old ledger into a new one under the new schema, and the new ledger is opened only after the migration has run. For first-week development against a still-molten schema, with no ledger that depends on continuity, deleting the file and reopening is the appropriate course; the digest check exists to protect data that exists, and where there is no such data it imposes no further constraint.
 
 ## Where to next
 
-- The [Reading and writing guide](reading-and-writing.md) (when written) covers the day-to-day ergonomics: `set`, `add`, `retract`, batches, attaching metadata.
-- The [SDK reference](../reference/sdk.md) (when written) lists every entry point with its full signature and options.
-- For background on why the schema looks the way it does, see [entities and fields](../concepts/entities-and-fields.md) and [the ledger](../concepts/the-ledger.md).
+The [reading and writing guide](../reading-and-writing) covers the day-to-day mechanics of `set`, `add`, `retract`, batches, and write-time metadata. The [SDK reference](../reference/sdk) lists every entry point with its full signature and options. For the conceptual background on which these practical decisions rest, see [entities and fields](../../concepts/entities-and-fields) and [the ledger](../../concepts/the-ledger).

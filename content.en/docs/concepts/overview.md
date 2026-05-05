@@ -1,6 +1,6 @@
 ---
 title: "Overview"
-weight: 2
+weight: 1
 # bookFlatSection: false
 # bookToc: true
 # bookHidden: false
@@ -53,7 +53,7 @@ Because provenance is local to each fact, because the rule registry records ever
 
 ```mermaid
 flowchart TD
-    subgraph Audit ["audit package — captures everything inside"]
+    subgraph Audit ["audit package"]
         direction TB
         Write([write facts]) --> Ledger[("LEDGER<br/>append-only,<br/>source of truth")]
         Ledger --> Snapshot["snapshot<br/>(now)"]
@@ -70,4 +70,4 @@ A factpy program of any size combines these elements in some proportion. Most ap
 
 ## Where to next
 
-[Entities and fields](entities-and-fields.md) develops the schema layer. [The ledger](the-ledger.md) develops the append-only model and the mechanics of projection in detail. [Rules and derivations](rules-and-derivations.md) develops the reasoning layer end to end. [Audit and provenance](audit-and-provenance.md) develops what is recorded during a run, what an exported package contains, and how it is read back. The [quickstart](../quickstart.md) covers the same architecture in working code for readers who would rather see it run before reading further about it.
+[Entities and fields](/docs/concepts/entities-and-fields) develops the schema layer. [The ledger](/docs/concepts/the-ledger) develops the append-only model and the mechanics of projection in detail. [Rules and derivations](/docs/concepts/rules-and-derivations) develops the reasoning layer end to end. [Audit and provenance](/docs/concepts/audit-and-provenance) develops what is recorded during a run, what an exported package contains, and how it is read back. The [quickstart](/docs/quickstart) covers the same architecture in working code for readers who would rather see it run before reading further about it.

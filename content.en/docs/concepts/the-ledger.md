@@ -1,6 +1,6 @@
 ---
 title: "The Ledger"
-weight: 4
+weight: 2
 # bookFlatSection: false
 # bookToc: true
 # bookHidden: false
@@ -63,7 +63,7 @@ The ledger lives in memory by default. A store opened as `SDKStore.from_schema_c
 sdk = SDKStore.from_schema_classes([Person], ledger_path="./data/factpy.db")
 ```
 
-The file at the given path is a self-contained store. The first time the file is opened the schema's content digest is recorded into it, and on every subsequent open the kernel re-computes the digest from the schema being supplied and compares the two. If the schema's structurally meaningful parts have changed in a way that would render existing assertions illegible — a renamed field, a changed cardinality, an altered identity composition — the open fails with an explicit error rather than proceeding with a silent reinterpretation of the data. The mechanics of the digest, the distinction between legible and illegible changes, and the migration of old ledgers under new schemas are developed in detail in [persistence](../guides/persistence.md).
+The file at the given path is a self-contained store. The first time the file is opened the schema's content digest is recorded into it, and on every subsequent open the kernel re-computes the digest from the schema being supplied and compares the two. If the schema's structurally meaningful parts have changed in a way that would render existing assertions illegible — a renamed field, a changed cardinality, an altered identity composition — the open fails with an explicit error rather than proceeding with a silent reinterpretation of the data. The mechanics of the digest, the distinction between legible and illegible changes, and the migration of old ledgers under new schemas are developed in detail in [persistence](../../guides/persistence).
 
 ## Why append-only
 
@@ -73,4 +73,4 @@ The append-only ledger is the inversion of that arrangement. Every assertion eve
 
 ## Where to next
 
-[Rules and derivations](rules-and-derivations) develops the reasoning layer that consumes the ledger and proposes additions to it. [Audit and provenance](audit-and-provenance) describes what is exported alongside the ledger when an audit package is produced. The [reading and writing guide](../guides/reading-and-writing) covers the day-to-day mechanics — when `set` is the right call versus `add` versus `retract`, how to use batches, and how to carry write-time metadata coherently across a codebase — for readers approaching the same material from the practical side.
+[Rules and derivations](/docs/concepts/rules-and-derivations) develops the reasoning layer that consumes the ledger and proposes additions to it. [Audit and provenance](/docs/concepts/audit-and-provenance) describes what is exported alongside the ledger when an audit package is produced. The [reading and writing guide](/docs/guides/reading-and-writing) covers the day-to-day mechanics — when `set` is the right call versus `add` versus `retract`, how to use batches, and how to carry write-time metadata coherently across a codebase — for readers approaching the same material from the practical side.

@@ -87,4 +87,4 @@ factpy puts the integration points where they actually need to be by making them
 
 ## Where to next
 
-The [auditing a run guide](../guides/auditing-a-run.md) walks through producing an audit package from a real workflow and reading it back. The reference for `kernel.audit` covers the package layout, every builder DTO, and the evidence-graph node and edge taxonomy in full. For the mechanism by which provenance enters the ledger in the first place, see [the ledger](the-ledger.md) and [rules and derivations](rules-and-derivations.md).
+The [auditing a run guide](/docs/guides/auditing-a-run) walks through producing an audit package from a real workflow and reading it back. The reference for `kernel.audit` covers the package layout, every builder DTO, and the evidence-graph node and edge taxonomy in full. For the mechanism by which provenance enters the ledger in the first place, see [the ledger](/docs/concepts/the-ledger) and [rules and derivations](/docs/concepts/rules-and-derivations).

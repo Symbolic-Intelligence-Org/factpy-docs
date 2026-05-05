@@ -13,11 +13,11 @@ weight: 4
 
 # Writing rules
 
-This guide walks through the rule DSL the way you actually use it: building up bodies from atoms, joining across entities, composing rules into larger rules, handling negation, and running them with the row format that matches your downstream code. For the conceptual picture — projections, derivations, candidates — see [rules and derivations](../concepts/rules-and-derivations.md).
+This guide develops the rule DSL the way it is used in practice: building bodies from atoms, joining across entities through shared variables, composing rules into larger rules, working with negation, and running rules with the row format appropriate to the calling code. For the conceptual material — projections, derivations, candidates — see [rules and derivations](/docs/concepts/rules-and-derivations).
 
 ## The shape of a rule
 
-A `Rule` has an id, a version, a `select` head, and a `where` body. Variables that appear in the body are produced by the `vars(...)` context manager and projected through the head:
+A `Rule` is constructed with four structurally distinguished parts: an id, a version, a `select` head that names what the rule returns for each match, and a `where` body that lists the conditions under which a match is produced. Variables that appear in the body are produced by the `vars(...)` context manager and projected through the head.
 
 ```python
 from kernel.sdk import Rule, Pred, Not, RuleRef, vars
@@ -31,21 +31,21 @@ with vars("p", "n") as (p, n):
     )
 ```
 
-`p` and `n` are placeholders. The body says: *there exists a `Person` `p` whose `name` is `n`*. The head says: *return `n`*. Run it and you get one row per matching binding.
+The variables `p` and `n` are placeholders bound by the body and projected by the head. The body asserts that there exists a `Person` `p` whose `name` is `n`; the head specifies that `n` should be returned for each binding. Running the rule yields one row per binding the body satisfies.
 
-`id` and `version` aren't decoration. They show up in audit records, evidence trees, and `RuleRef` lookups. Treat them like the names of functions in a library — pick stable ones, version them when the body's meaning changes.
+The `id` and `version` are not decorative. They are the identifiers under which the kernel registers the rule and refers to it in audit records, evidence trees, and references from one rule to another. They are best treated as the names of functions in a library — chosen for stability, and bumped in version when the meaning of the body changes.
 
 ## Three body atoms
 
-Almost every body is built from three things.
+Most rule bodies are built from three kinds of atom together with the entity-class declarations that scope variables to particular schemas.
 
-**`Pred(predicate, subject, value)`** asserts a fact must hold. Predicate names are the lowercase `entity:field` form the kernel uses internally:
+The atom `Pred(predicate, subject, value)` requires that the ledger contain an active assertion of the named predicate, with the given subject and value. Predicate names are the lowercase `entity:field` form the kernel uses internally.
 
 ```python
 Pred("person:tag", p, "vip")  # p has tag "vip"
 ```
 
-**Field equality on entity handles** is the typed shorthand for the same idea, scoped to a particular entity class:
+The typed shorthand for the same kind of constraint is *field equality on entity handles*, available wherever a variable has been scoped to a particular entity class. The class declaration `Person(p)` introduces `p` as a variable ranging over `Person` entities, and field references on that variable participate in the body as constraints.
 
 ```python
 Person(p),
@@ -53,13 +53,13 @@ p.name == n,
 p.locale == "en",
 ```
 
-`Person(p)` declares that `p` ranges over `Person` entities. `p.name == n` binds `p`'s name to the variable `n`. `p.locale == "en"` filters to the literal value `"en"`. The two forms — `Pred(...)` and `entity.field == ...` — overlap; use whichever reads more clearly in context. The handle form is preferred when you're already constraining the entity type.
+`p.name == n` binds the variable `n` to `p`'s name; `p.locale == "en"` constrains `p`'s locale to the literal `"en"`. The two forms — `Pred(...)` and `entity.field == ...` — express the same kind of condition, and the choice between them is a question of readability rather than of capability. The handle form is preferable wherever the entity's class is already constrained, since it is shorter and exposes the field types to local typing checks.
 
-**`Not([...])`** says: this set of facts must *not all* hold. We'll come back to it after joins.
+The atom `Not([...])` requires that a list of clauses *not* all hold simultaneously, under the semantics of negation as failure. It is the third atom form, and the section *Negation in practice* below develops its semantics in detail.
 
 ## Joining across entities
 
-Rules join by *sharing a variable* between two atoms. To find people who live in Germany, share the `country` variable:
+A rule joins across entities by sharing a variable between two atoms. To find every person who lives in Germany, expressed as a join over the `LivesIn` relationship and the `Country`, the body shares `p` between the `Person` and the `LivesIn`, and `c` between the `LivesIn` and the `Country`.
 
 ```python
 with vars("p", "rel", "c") as (p, rel, c):
@@ -78,9 +78,9 @@ with vars("p", "rel", "c") as (p, rel, c):
     )
 ```
 
-The `LivesIn` relationship is a separate entity (see [defining a schema](defining-a-schema.md)), so the join walks: every `Person` `p` that appears as the `person` field of some `LivesIn` whose `country` is `c`, where `c` is the country with iso code `DE`.
+The `LivesIn` relationship is a separate entity in the schema (see [defining a schema](/docs/guides/defining-a-schema)), and the join walks: every `Person` `p` that appears as the `person` field of some `LivesIn` whose `country` is `c`, where `c` is the `Country` with iso code `DE`.
 
-For a direct `entity_ref` field — a `Person` with `home_country` declared inline — the join is shorter:
+When the relationship is modelled instead as a direct `entity_ref` field on the source — a `Person` declared with a `home_country: Country` field inline — the join is shorter, since the reference is already part of the source entity's facts.
 
 ```python
 with vars("p", "c") as (p, c):
@@ -97,11 +97,11 @@ with vars("p", "c") as (p, c):
     )
 ```
 
-Either way, the rule is doing the same logical thing: walking the predicate graph and keeping the bindings that satisfy every clause.
+In either form, the rule is doing the same logical work: walking the predicate graph and retaining the bindings that satisfy every clause of the body.
 
 ## Composing rules
 
-Once a rule names a useful concept, you can reuse it inside another rule via `RuleRef`:
+Once a rule names a useful concept, that concept can be referenced from inside another rule's body via `RuleRef`, which injects the named rule's body into the calling rule's body with the variables bound through to the call site.
 
 ```python
 with vars("p") as (p,):
@@ -128,33 +128,27 @@ with vars("p") as (p,):
     )
 ```
 
-`RuleRef(vip_in_good_standing)(p)` injects the body of the named rule with `p` bound to the matching variable. This is composition, not duplication: change `vip_in_good_standing` and `high_priority` changes with it. Both rules' identities are preserved in any downstream evidence record, so an audit reader sees that *high priority* depended on *vip in good standing*, not on a copied-out clause.
+`RuleRef(vip_in_good_standing)(p)` injects the *vip in good standing* condition as a sub-clause of the *high priority* rule's body, with `p` flowing through as the matched person. This is composition rather than duplication: a single definition of *vip in good standing* exists, and any change to it propagates to every rule that references it; both rules' identities are preserved in downstream evidence records, so an audit reader can trace a *high priority* match back through the *vip in good standing* condition that licensed it.
 
-You can also reference a rule by id and version explicitly when the rule object isn't in scope:
+The cross-module form references a rule by id and version explicitly, without requiring the rule object itself to be in scope at the reference site.
 
 ```python
 RuleRef("q.vip_ok", version="1.0.0")(p)
 ```
 
-This is the form to use across module boundaries — it doesn't require importing the rule object, just naming it.
+This is the idiomatic shape for references across module boundaries, and it is what allows a vocabulary of named rules to be assembled from multiple modules without forcing the corresponding python imports.
 
-## Negation, in practice
+## Negation in practice
 
-`Not([...])` reads naturally:
+The atom `Not([...])` reads naturally — *not blocked*, in the example above — but its semantics is precise and worth understanding. A `Not` clause succeeds when the ledger does not currently support its body and fails when the ledger does, under what is called *negation as failure*. There is no representation in the ledger of *not blocked* as a positive claim; what the rule tests is the *absence* of an assertion that the subject is blocked, not the *presence* of an assertion that the subject is unblocked.
 
-```python
-Not([Pred("person:tag", p, "blocked")])
-```
+For most application code this is the right semantics, but the distinction has practical consequences when data arrives over time from multiple sources. A rule that returned *Alice is not blocked* before some ingestion arrived may return the opposite afterwards, with no change to the rule itself: the conclusion was correct against the ledger the rule ran against, but the ledger has since changed. The audit trail preserves the ledger state of each rule run, so the change in conclusion remains visible as a change in inputs rather than an inconsistency between two runs, but the conclusions of `Not`-clauses are by construction defeasible in a way that conclusions of positive clauses are not.
 
-But its semantics is **negation as failure**: the clause succeeds when the ledger does not currently support the negated body. That is *not* the same as *"someone has asserted this is false"*. The ledger has no representation of *"`p` is not blocked"* — only the absence of an assertion that `p` *is*.
-
-For most application code this is the right behaviour. The sharp edge appears when data arrives from multiple sources at different times: a rule that returned *Alice is not blocked* before an ingestion arrived may flip after it. The conclusion was correct given what the system knew, and the audit trail preserves the ledger state the rule ran against — but the conclusion is, by construction, defeasible.
-
-A practical rule of thumb: when you reach for `Not`, ask whether the *absence* of an assertion really means what you want it to mean in your domain. Sometimes yes (no blocked tag → not blocked). Sometimes the right model is an explicit assertion (`status="active"`) and a positive query rather than a negation.
+The practical guidance is that whenever a `Not` is reached for, the modeller should consider whether the *absence* of an assertion is really what is meant in the domain. Sometimes the answer is yes — no `blocked` tag legitimately means not blocked. Sometimes the absence is too weak a basis for the conclusion, and the appropriate model is an explicit positive assertion (`status == "active"`) that some upstream actor is responsible for setting and that the rule queries positively rather than negating its complement.
 
 ## Running a rule
 
-`sdk.run(rule)` returns a list of rows shaped according to `row_format`:
+`sdk.run(rule)` returns a list of rows shaped according to the `row_format` argument.
 
 ```python
 sdk.run(name_lookup, row_format="dict")
@@ -167,19 +161,19 @@ sdk.run(germans, row_format="instance")
 # [<Person snapshot ...>, <Person snapshot ...>]
 ```
 
-`"dict"` is the most ergonomic for ad-hoc work — keys are the variable names from `select`. `"tuple"` is useful when you'll feed the rows to another consumer that wants positional data. `"instance"` returns entity snapshots when the head is a single entity variable, so you can read fields off them as if you'd called `sdk.get` for each.
+The `"dict"` format is the most ergonomic for ad-hoc work, since the keys are the variable names from `select` and the rows can be read fluently by name. The `"tuple"` format omits the names and returns positional rows, which is appropriate when the rows are passed to a downstream consumer that expects positional data. The `"instance"` format is available where the head is a single entity-typed variable, in which case each row is an entity snapshot of the same shape that `sdk.get` would produce, with field access available directly on the row.
 
-A default row format can be set at store-open time:
+A default `row_format` can be set at the moment the store is opened and applies to every subsequent `sdk.run` call that does not specify one.
 
 ```python
 sdk = SDKStore.from_schema_classes([Person, Country], default_row_format="dict")
 ```
 
-Per-call `row_format=` overrides the default.
+Per-call `row_format=` overrides the store-level default.
 
 ## Query: a leaner shape for one-off reads
 
-When you don't need a named, versioned, reusable rule — just a pull from the ledger — `Query` is the lighter alternative:
+`Query` is the lighter alternative for inline reads, used wherever a result is wanted but no named, versioned, reusable rule definition is needed.
 
 ```python
 from kernel.sdk import Query
@@ -193,18 +187,16 @@ with vars("p", "loc", "nm") as (p, loc, nm):
 rows = sdk.run(q)
 ```
 
-`Query` has the same body language as `Rule` but no id, no version, and a richer head that can shape the output directly. Use it for inline reads in application code; reach for `Rule` when the result is something you'll name, version, run again, or compose into other rules.
+`Query` has the same body language as `Rule` but no id, no version, and a richer head that can shape the output directly. It is the appropriate shape for reads embedded in application code; `Rule` is the appropriate shape wherever the result is something to be named, versioned, run again, or composed into further rules.
 
 ## Naming and versioning
 
-Rule ids are flat strings; the convention in factpy codebases is `<kind>.<short_name>` — `q.vip_ok` for queries, `drv.auto_alias` for derivations, `m.<...>` for monitoring rules. The kernel doesn't enforce the prefix; it just helps when the rule list grows.
+Rule ids are flat strings, and the convention across factpy codebases is `<kind>.<short_name>` — `q.vip_ok` for queries, `drv.auto_alias` for derivations, `m.<...>` for monitoring rules. The kernel does not enforce the prefix, but the convention pays off as a rule list grows by making the kind of every rule legible from its name.
 
-Version your rule when the *meaning* of its body changes — when a row that would have matched yesterday no longer does, or vice versa. Don't version it for cosmetic edits (renamed variables, reordered clauses) that don't change the result set. The version travels with every rule run into the audit trail; a version bump is how an audit reader knows an answer set today shouldn't be compared directly to last quarter's.
+A rule's version should be bumped when the *meaning* of its body changes — that is, when a binding that would have matched yesterday no longer does, or when a binding that would not have matched yesterday now does. Cosmetic edits that leave the result set unchanged — renamed variables, reordered clauses — do not warrant a version bump. The version travels with every rule run into the audit trail, and a deliberate bump is the signal by which an audit reader knows that today's result set should not be compared directly to last quarter's.
 
-When two versions of a rule need to coexist — during a migration, or when multiple downstream consumers need different semantics — give them different ids. `q.vip_ok` and `q.vip_ok_v2` is clearer than relying on version-string ordering.
+Where two versions of a rule need to coexist — during a migration, or when multiple downstream consumers need different semantics — they are best given different ids rather than relying on version-string ordering. `q.vip_ok` and `q.vip_ok_v2` is clearer at the call site and clearer in audit records than two versions of the same id.
 
 ## Where to next
 
-- The [Running derivations guide](running-derivations.md) (when written) covers the candidate-and-accept lifecycle for rules whose head writes new facts.
-- The [Using adapters guide](using-adapters.md) (when written) covers running the same rules under PyReason, ProbLog, or Souffle.
-- For the conceptual picture — what a rule is, why it has a version, why a query is a projection — see [rules and derivations](../concepts/rules-and-derivations.md).
+The [running derivations guide](/docs/guides/running-derivations) covers the candidate-and-accept lifecycle for rules whose head proposes new facts. The [using adapters guide](/docs/guides/using-adapters) covers running the same rules under PyReason, ProbLog, or Souffle. For the conceptual picture — what a rule is, why it carries a version, why a query is a projection — see [rules and derivations](/docs/concepts/rules-and-derivations).
