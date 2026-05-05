@@ -1,5 +1,5 @@
 ---
-title: "factpy"
+title: "FactPy"
 type: docs
 # bookFlatSection: false
 # bookToc: false
@@ -11,9 +11,9 @@ type: docs
 # bookIcon: ''
 ---
 
-# factpy
+# FactPy
 
-## the problem
+## The Problem
 
 Most systems that hold facts about the world cannot give an account of how they came to hold them.
 
@@ -25,7 +25,7 @@ This is not a niche failure mode. It's the default state of every system that le
 
 The pieces of an answer exist. Append-only logs preserve history. Knowledge graphs preserve relationships. Rule engines preserve logic. Provenance vocabularies preserve attribution. But each of these solves one slice; nothing in common use binds them together so that *every fact a system holds carries its own justification*, mechanically, without ceremony, across schema changes, across reasoning engines, across team handoffs.
 
-## what factpy does
+## What factpy does
 
 factpy is a deterministic reasoning middleware that holds facts the way you'd hold them if accountability were the default rather than something you bolt on later.
 
@@ -39,13 +39,13 @@ The whole shape of a run — writes, candidates, decisions, evidence — is expo
 
 When the reasoning shape itself outgrows the native evaluator — graph propagation through typed relationships, probabilistic inference over uncertain facts, large-scale Datalog — factpy hands off to engine adapters (PyReason, ProbLog, Souffle) without changing the schema, the DSL, or the audit story. The same `Derivation` object runs under a different engine; the candidates come back; the evidence is preserved.
 
-## what working with it looks like
+## What working with it looks like
 
 You declare entities like dataclasses. You write facts with `sdk.set` or `sdk.batch`. You read them with `sdk.get` or `sdk.find`. You write rules in a small DSL with `vars`, `Pred`, `Not`. You evaluate derivations to get candidates, review them, accept the ones you trust. When something goes wrong or someone needs to review the run, you call `sdk.export_package` and ship the directory.
 
 That's the whole shape. The rest of the docs show what each move costs, what it buys, and where the edges are.
 
-## where to start
+## Where to start
 
 If you'd rather read concepts before writing code, start with the [overview](concepts/overview.md) and follow the concept track.
 

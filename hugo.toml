@@ -22,3 +22,13 @@ copyright = '[© CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcod
   [caches.images]
     dir = ':cacheDir/images'
 
+[languages]
+[languages.en]
+  label = 'English'
+  contentDir = 'content.en'
+  weight = 1
+
+[languages.de]
+label = 'Deutsch'
+contentDir = 'content.de'
+weight = 2

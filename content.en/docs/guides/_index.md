@@ -1,5 +1,5 @@
 ---
-title: "Guids"
+title: "Guides"
 type: docs
 weight: 3
 bookCollapseSection: true
