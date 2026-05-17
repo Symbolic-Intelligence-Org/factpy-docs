@@ -1,12 +1,138 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>FactPy</title>
+    <title>FactPy on factgraph</title>
     <link>http://localhost:1313/de/</link>
-    <description>Recent content on FactPy</description>
+    <description>Recent content in FactPy on factgraph</description>
     <generator>Hugo</generator>
     <language>de</language>
     <copyright>[© CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)</copyright>
     <atom:link href="http://localhost:1313/de/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Schnellstart</title>
+      <link>http://localhost:1313/de/docs/quickstart/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/quickstart/</guid>
+      <description>&lt;h1 id=&#34;quickstart&#34;&gt;Quickstart&lt;a class=&#34;anchor&#34; href=&#34;#quickstart&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;This page works through the smallest factpy program that exercises each of the kernel&amp;rsquo;s central abstractions: a typed schema, an append-only ledger of writes, a logical rule evaluated against those writes, and the recovery of a fact&amp;rsquo;s provenance from the resulting state. Everything below uses only the SDK&amp;rsquo;s public surface, and nothing has been simplified away for presentation.&lt;/p&gt;&#xA;&lt;h2 id=&#34;install&#34;&gt;Install&lt;a class=&#34;anchor&#34; href=&#34;#install&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;factpy requires Python 3.10 or newer.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install factpy-kernel&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The kernel itself has a minimal dependency set, and the adapter engines for PyReason, ProbLog, and Souffle are optional extras that are not needed for what follows.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Überblick</title>
+      <link>http://localhost:1313/de/docs/concepts/overview/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/concepts/overview/</guid>
+      <description>&lt;h1 id=&#34;überblick&#34;&gt;Überblick&lt;a class=&#34;anchor&#34; href=&#34;#%c3%bcberblick&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Die Architektur von factpy beruht auf einer zentralen Entscheidung: Zustand wird nicht direkt gespeichert, sondern aus Fakten berechnet. Jede Aussage über eine Entität wird als eigener Fakt festgehalten. Der aktuelle Zustand einer Entität entsteht erst dann, wenn er gebraucht wird, indem diese Fakten nach den Regeln des Schemas zu einem Snapshot verdichtet werden. Es gibt keine Zeile, die aktualisiert wird, und kein Dokument, das ersetzt wird. Eine Entität ist die Projektion all dessen, was jemals über sie ausgesagt wurde. Die übrigen Komponenten des Kernels — Schema, Regeln, Ableitungen und Audit-Pakete — dienen dazu, diese Arbeitsweise praktikabel zu machen und die dabei entstehende Evidenzspur zu erhalten. Diese Seite beschreibt die Architektur auf einer gemeinsamen Abstraktionsebene; die vier folgenden Konzeptseiten behandeln die einzelnen Bestandteile im Detail.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>01 — SDK Basics</title>
+      <link>http://localhost:1313/de/docs/tutorials/01-sdk-basics/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/tutorials/01-sdk-basics/</guid>
+      <description>&lt;h1 id=&#34;tutorial-01--sdk-basics&#34;&gt;Tutorial 01 — SDK basics&lt;a class=&#34;anchor&#34; href=&#34;#tutorial-01--sdk-basics&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;This tutorial walks from an empty project to a working factpy ledger you can read, write, correct, and persist. By the end you&amp;rsquo;ll have written a small schema, populated it, queried it, fixed a bad assertion, and saved the result to disk. We don&amp;rsquo;t assume any prior factpy code — only that you&amp;rsquo;ve skimmed &lt;a href=&#34;../concepts/overview.md&#34;&gt;the overview&lt;/a&gt; and roughly know what a fact-based store is.&lt;/p&gt;&#xA;&lt;p&gt;The example domain is small on purpose: a registry of people and the countries they live in. The same patterns scale up; starting small makes the moves easier to see.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Das Ledger</title>
+      <link>http://localhost:1313/de/docs/concepts/the-ledger/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/concepts/the-ledger/</guid>
+      <description>&lt;h1 id=&#34;das-ledger&#34;&gt;Das Ledger&lt;a class=&#34;anchor&#34; href=&#34;#das-ledger&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Jede Aussage und jede Retraktion, die über das SDK geschrieben wird, landet als neuer Eintrag im Ledger. Einmal geschrieben, wird ein Eintrag nicht mehr verändert oder entfernt. Snapshots, Query-Ergebnisse und die Eingaben für Regelauswertungen sind Projektionen des Ledgers. Sie werden bei Bedarf berechnet und nirgendwo anders als kanonischer Zustand gehalten. Wenn das Schema das Vokabular ist, in dem Aussagen formuliert werden, dann ist das Ledger der Ort, an dem diese Aussagen sich ansammeln. Diese Seite beschreibt, was ein Ledger-Eintrag enthält, wie Leseoperationen die Einträge in die Formen projizieren, die der Rest des Systems verwendet, und warum das Design auf append-only-Schreiben statt auf dem vertrauteren Überschreiben beruht.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Ein Schema definieren</title>
+      <link>http://localhost:1313/de/docs/guides/defining-a-schema/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/guides/defining-a-schema/</guid>
+      <description>&lt;h1 id=&#34;ein-schema-definieren&#34;&gt;Ein Schema definieren&lt;a class=&#34;anchor&#34; href=&#34;#ein-schema-definieren&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Dieser Guide behandelt die praktischen Entscheidungen, die beim Schreiben eines Schemas für eine reale Domäne anfallen: wo das Schema im Projekt liegt, wie Identitäten gewählt werden, wie Kardinalitäten festgelegt werden, wie Beziehungen modelliert werden, wie ein Schema über Module aufgeteilt wird, wie es vor dem Öffnen eines Stores validiert wird und wie es sich von Version zu Version weiterentwickelt. Vorausgesetzt wird das konzeptionelle Material aus &lt;a href=&#34;../../concepts/entities-and-fields&#34;&gt;Entitäten und Felder&lt;/a&gt;. Hier geht es um die Entscheidungen, die konkret anstehen, wenn man zum ersten Mal ein Schema deklariert.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>02 — Rules and Derivations</title>
+      <link>http://localhost:1313/de/docs/tutorials/02-rules-and-derivations/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/tutorials/02-rules-and-derivations/</guid>
+      <description>&lt;h1 id=&#34;tutorial-02--rules-and-derivations&#34;&gt;Tutorial 02 — Rules and derivations&lt;a class=&#34;anchor&#34; href=&#34;#tutorial-02--rules-and-derivations&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;In &lt;a href=&#34;01-sdk-basics.md&#34;&gt;tutorial 01&lt;/a&gt; we wrote facts directly into the ledger. This tutorial covers the part of factpy that &lt;em&gt;asks questions of the ledger and proposes new facts based on the answers&lt;/em&gt;: the rule DSL and the derivation lifecycle. By the end you&amp;rsquo;ll have written queries, composed rules, and walked a candidate fact from proposal to acceptance with its evidence preserved.&lt;/p&gt;&#xA;&lt;p&gt;Pick up where the last tutorial ended — same schema, same in-memory store. We&amp;rsquo;ll reuse the &lt;code&gt;Person&lt;/code&gt;, &lt;code&gt;Country&lt;/code&gt;, and &lt;code&gt;LivesIn&lt;/code&gt; declarations and add a few more facts to make the rules interesting.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Entitäten und Felder</title>
+      <link>http://localhost:1313/de/docs/concepts/entities-and-fields/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/concepts/entities-and-fields/</guid>
+      <description>&lt;h1 id=&#34;entitäten-und-felder&#34;&gt;Entitäten und Felder&lt;a class=&#34;anchor&#34; href=&#34;#entit%c3%a4ten-und-felder&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Wenn Fakten die atomaren Aussagen sind, die factpy speichert, dann ist das Schema das Vokabular, in dem diese Aussagen formuliert werden. Es legt fest, über welche Arten von Dingen das System Fakten halten kann, welche Aussagen über sie zulässig sind und wie eine Aussage ihrem Subjekt zugeordnet wird. Ein Schema ist keine Tabellendefinition: Es erzwingt kein Speicherlayout, verlangt nicht, dass ein Feld zu einem bestimmten Zeitpunkt einen Wert hat, und macht keine Aussage darüber, wie die Welt aussehen muss. Es beschränkt die Grammatik des Schreibens und Lesens: die Menge der existierenden Prädikate, ihre Typbereiche und die Regeln, nach denen mehrere Aussagen zum selben Prädikat reduziert werden. Der Rest dieser Seite beschreibt die Bestandteile dieser Grammatik, außerdem wie Schemas über Module hinweg zusammengesetzt werden und wie sie sich von Version zu Version weiterentwickeln.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lesen und Schreiben</title>
+      <link>http://localhost:1313/de/docs/guides/reading-and-writing/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/guides/reading-and-writing/</guid>
+      <description>&lt;h1 id=&#34;lesen-und-schreiben&#34;&gt;Lesen und Schreiben&lt;a class=&#34;anchor&#34; href=&#34;#lesen-und-schreiben&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Dieser Guide behandelt die alltägliche Arbeit damit, Fakten ins Ledger zu schreiben und wieder auszulesen: die zwei Schreibwege des SDK, einfache Reads einzelner Entitäten und filterbasierte Reads, Konventionen für Metadaten beim Schreiben, die Semantik von Retraktionen und idempotenten Re-Runs sowie die typisierten Fehler, die bei falschen Aufrufen ausgelöst werden. Vorausgesetzt sind ein definiertes Schema und ein geöffneter Store. Zur Schemaseite siehe &lt;a href=&#34;http://localhost:1313/docs/guides/defining-a-schema&#34;&gt;Ein Schema definieren&lt;/a&gt;, zur konzeptionellen Grundlage von Writes, Projektionen und Retraktionen siehe &lt;a href=&#34;http://localhost:1313/docs/concepts/the-ledger&#34;&gt;Das Ledger&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>03 — PyReason Propagation</title>
+      <link>http://localhost:1313/de/docs/tutorials/03-pyreason-propagation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/tutorials/03-pyreason-propagation/</guid>
+      <description>&lt;h1 id=&#34;tutorial-03--pyreason-propagation&#34;&gt;Tutorial 03 — PyReason propagation&lt;a class=&#34;anchor&#34; href=&#34;#tutorial-03--pyreason-propagation&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The native evaluator from &lt;a href=&#34;02-rules-and-derivations.md&#34;&gt;tutorial 02&lt;/a&gt; is great when reasoning is a one-shot pull from the ledger. It&amp;rsquo;s not the right tool when &lt;em&gt;beliefs propagate through a graph&lt;/em&gt; — when the truth of a fact about one entity &lt;em&gt;depends on what&amp;rsquo;s now true about its neighbours&lt;/em&gt;, and that in turn depends on theirs, and so on, possibly over time. That&amp;rsquo;s what PyReason is for.&lt;/p&gt;&#xA;&lt;p&gt;This tutorial walks through a concrete propagation scenario: an outage in a service dependency graph. We have services that depend on each other; when one is down, services that depend on it become at-risk; when one of those is down, anything depending on &lt;em&gt;it&lt;/em&gt; becomes at-risk; and so on. We&amp;rsquo;ll build the graph, declare propagation rules, run PyReason, and accept the resulting facts back into our ledger.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Regeln schreiben</title>
+      <link>http://localhost:1313/de/docs/guides/writing-rules/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/guides/writing-rules/</guid>
+      <description>&lt;h1 id=&#34;regeln-schreiben&#34;&gt;Regeln schreiben&lt;a class=&#34;anchor&#34; href=&#34;#regeln-schreiben&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Dieser Guide zeigt die Rule-DSL so, wie sie praktisch verwendet wird: Bodys aus Atomen aufbauen, über gemeinsame Variablen zwischen Entitäten joinen, Regeln zu größeren Regeln zusammensetzen, mit Negation arbeiten und Regeln im passenden Row-Format ausführen. Das konzeptionelle Material — Projektionen, Ableitungen, Kandidaten — steht unter &lt;a href=&#34;http://localhost:1313/docs/concepts/rules-and-derivations&#34;&gt;Regeln und Ableitungen&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;h2 id=&#34;aufbau-einer-regel&#34;&gt;Aufbau einer Regel&lt;a class=&#34;anchor&#34; href=&#34;#aufbau-einer-regel&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;Eine &lt;code&gt;Rule&lt;/code&gt; besteht aus vier strukturell wichtigen Teilen: einer ID, einer Version, einem &lt;code&gt;select&lt;/code&gt;-Head, der festlegt, was die Regel pro Match zurückgibt, und einem &lt;code&gt;where&lt;/code&gt;-Body, der die Bedingungen für einen Match enthält. Variablen im Body werden mit dem Context Manager &lt;code&gt;vars(...)&lt;/code&gt; erzeugt und über den Head projiziert.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>04 — ProbLog Probabilistic</title>
+      <link>http://localhost:1313/de/docs/tutorials/04-problog-probabilistic/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/tutorials/04-problog-probabilistic/</guid>
+      <description>&lt;h1 id=&#34;tutorial-04--problog-probabilistic-reasoning&#34;&gt;Tutorial 04 — ProbLog probabilistic reasoning&lt;a class=&#34;anchor&#34; href=&#34;#tutorial-04--problog-probabilistic-reasoning&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The native engine reasons about facts as either-true-or-not-asserted. The &lt;code&gt;Body(..., confidence=...)&lt;/code&gt; shape from &lt;a href=&#34;02-rules-and-derivations.md&#34;&gt;tutorial 02&lt;/a&gt; lets you tag whole bodies with a confidence — useful for review-time filtering, but not the same as actually &lt;em&gt;reasoning probabilistically&lt;/em&gt;. When you need real probabilistic semantics — facts that are true with some probability, rules that combine probabilities properly, queries that return marginal probabilities — you reach for ProbLog.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Ableitungen ausführen</title>
+      <link>http://localhost:1313/de/docs/guides/running-derivations/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/guides/running-derivations/</guid>
+      <description>&lt;h1 id=&#34;ableitungen-ausführen&#34;&gt;Ableitungen ausführen&lt;a class=&#34;anchor&#34; href=&#34;#ableitungen-ausf%c3%bchren&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Eine Ableitung ist eine Regel, deren Head neue Fakten vorschlägt, wenn der Body passt, statt Zeilen zurückzugeben. Der Lebenszyklus einer Ableitung besteht aus drei Schritten: Die Auswertung erzeugt Kandidaten aus dem aktuellen Ledger-Zustand, die Prüfung entscheidet, welche Kandidaten zu Fakten werden sollen, und die Annahme schreibt die akzeptierten Kandidaten als neue Ledger-Einträge, wobei ihre Evidenz als Provenienz erhalten bleibt. Dieser Guide zeigt die einzelnen Schritte in der Praxis. Die konzeptionelle Grundlage steht unter &lt;a href=&#34;http://localhost:1313/docs/concepts/rules-and-derivations&#34;&gt;Regeln und Ableitungen&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Regeln und Ableitungen</title>
+      <link>http://localhost:1313/de/docs/concepts/rules-and-derivations/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/concepts/rules-and-derivations/</guid>
+      <description>&lt;h1 id=&#34;regeln-und-ableitungen&#34;&gt;Regeln und Ableitungen&lt;a class=&#34;anchor&#34; href=&#34;#regeln-und-ableitungen&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Die Reasoning-Schicht von factpy ist eine kleine logische Sprache direkt über dem Ledger. Eine Regel beschreibt, unter welchen Bedingungen ein Body aus Clauses für eine bestimmte Variablenbindung gleichzeitig erfüllt ist, und gibt diese Bindungen als Zeilen zurück. Eine Ableitung ist eine Regel, deren Head keine Zeilen projiziert, sondern neue Fakten benennt, die vorgeschlagen werden, wenn der Body passt. Beide werden vom Kernel gegen das Ledger ausgewertet, beide tragen stabile Identifier und explizite Versionen, und beide hinterlassen eine Auswertungsspur, die Teil der Audit-Story ist. Diese Seite beschreibt den Aufbau einer Regel, die Sprache ihres Bodys, das Verhältnis zwischen einer Regel als Query und einer Regel als Ableitung sowie den Lebenszyklus aus Kandidat und Annahme, der ein auditierbares Inferenzsystem von einem nicht auditierbaren unterscheidet.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>05 — Onboarding Journey</title>
+      <link>http://localhost:1313/de/docs/tutorials/05-onboarding-journey/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/tutorials/05-onboarding-journey/</guid>
+      <description>&lt;h1 id=&#34;tutorial-05--onboarding-journey&#34;&gt;Tutorial 05 — Onboarding journey&lt;a class=&#34;anchor&#34; href=&#34;#tutorial-05--onboarding-journey&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;This tutorial is the capstone. We weave every move from tutorials 01–04 into a single end-to-end scenario: define a schema, write facts, query the ledger, derive new facts, accept them, export the run as an audit package, and read the package back. By the end you&amp;rsquo;ll have a complete factpy workflow you can adapt to a real project.&lt;/p&gt;&#xA;&lt;p&gt;The scenario: a small system that onboards new users into an organisation. We want to track users, their initial roles, and which of them get promoted to &lt;em&gt;audited&lt;/em&gt; status by an automated rule. The rule&amp;rsquo;s output should be reviewable — &lt;em&gt;why&lt;/em&gt; did this user get audited? — through the audit package.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Audit und Provenienz</title>
+      <link>http://localhost:1313/de/docs/concepts/audit-and-provenance/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/concepts/audit-and-provenance/</guid>
+      <description>&lt;h1 id=&#34;audit-und-provenienz&#34;&gt;Audit und Provenienz&lt;a class=&#34;anchor&#34; href=&#34;#audit-und-provenienz&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Provenienz und Audit beantworten zwei verwandte, aber unterschiedliche Fragen. Provenienz fragt, woher ein bestimmter Fakt stammt, und ist eine Eigenschaft jedes einzelnen Ledger-Eintrags. Audit fragt, was in einem bestimmten Lauf des Systems passiert ist und ob ein Dritter diesen Lauf nachvollziehen oder prüfen kann. Beides hängt eng zusammen: Eine Audit-Story aus Fakten ohne erhaltene Provenienz ist kaum eine Audit-Story. Der Kernel behandelt beide Aspekte aber über unterschiedliche Mechanismen. Diese Seite beschreibt die Metadaten, die mit jedem Fakt mitlaufen, die Records zu jedem Lauf, die Evidenzformen von Ableitungen und das Format des Audit-Pakets, das all diese Daten zu einem eigenständigen Artefakt für Archivierung und Offline-Prüfung bündelt.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Auditing a Run</title>
+      <link>http://localhost:1313/de/docs/guides/auditing-a-run/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/guides/auditing-a-run/</guid>
+      <description>&lt;h1 id=&#34;auditing-a-run&#34;&gt;Auditing a run&lt;a class=&#34;anchor&#34; href=&#34;#auditing-a-run&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Every operation a factpy system performs — writes, queries, derivation evaluations, acceptances — leaves records in the store as it goes. Producing an audit package is the act of bundling those records into a self-contained directory that can be shipped, archived, or reviewed elsewhere, independently of the system that produced it. The present guide develops the mechanics of producing such a package, the structure that the package has on disk, the way &lt;code&gt;kernel.audit&lt;/code&gt; reads it back, the views that an audit reader most often constructs from it, and the rhythms in which export is sensibly performed. For the conceptual material on which the package format rests, see &lt;a href=&#34;http://localhost:1313/docs/concepts/audit-and-provenance&#34;&gt;audit and provenance&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Persistenz</title>
+      <link>http://localhost:1313/de/docs/guides/persistence/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/guides/persistence/</guid>
+      <description>&lt;h1 id=&#34;persistenz&#34;&gt;Persistenz&lt;a class=&#34;anchor&#34; href=&#34;#persistenz&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Standardmäßig lebt das Ledger im Speicher. Es existiert nur so lange wie der Prozess, der es geöffnet hat, und wird beim Beenden des Prozesses verworfen. Für Tests und kurzlebige Berechnungen ist das das passende Verhalten; genau das erzeugt &lt;code&gt;SDKStore.from_schema_classes([...])&lt;/code&gt;, wenn keine weiteren Argumente übergeben werden. Für alles andere — langlebige Services, Jobs, deren Zustand einen Neustart überleben muss, oder Schemas, die sich über Zeit weiterentwickeln — wird das Ledger in einer Datei persistiert. Dieser Guide erklärt, wie ein persistenter Store geöffnet wird, was der Schema-Digest ist und wovor er schützt, welche Schemaänderungen über Neustarts hinweg sicher sind und welche Migration verlangen, wie mehrere Prozesse ein persistentes Ledger teilen, ohne die Audit-Story zu verlieren, und wie Sidecar-Artefakte und Backups zur Ledger-Datei selbst stehen.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Adapter verwenden</title>
+      <link>http://localhost:1313/de/docs/guides/using-adapters/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/guides/using-adapters/</guid>
+      <description>&lt;h1 id=&#34;adapter-verwenden&#34;&gt;Adapter verwenden&lt;a class=&#34;anchor&#34; href=&#34;#adapter-verwenden&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Der native Evaluator deckt die Regelform ab, die der meiste Anwendungscode braucht: typisierte Bodys mit Joins, Subregeln und Negation as Failure. Für drei Reasoning-Formen, die der native Evaluator nicht abdeckt — Propagation durch einen Graphen typisierter Beziehungen, probabilistische Inferenz über unsichere Fakten und Datalog-Auswertung in großem Maßstab — delegiert der Kernel an Adapter-Engines. Drei Adapter werden mitgeliefert: PyReason, ProbLog und Souffle. Dieser Guide beschreibt, wann welcher Adapter die richtige Wahl ist und wie die jeweilige Integration grundsätzlich aussieht. Konfigurationsdetails und vollständige APIs stehen auf den Adapter-Referenzseiten.&lt;/p&gt;</description>
+    </item>
   </channel>
 </rss>

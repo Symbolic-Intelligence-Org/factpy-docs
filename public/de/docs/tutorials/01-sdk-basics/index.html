@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Tutorial 01 — SDK basics# This tutorial walks from an empty project to a working factpy ledger you can read, write, correct, and persist. By the end you’ll have written a small schema, populated it, queried it, fixed a bad assertion, and saved the result to disk. We don’t assume any prior factpy code — only that you’ve skimmed the overview and roughly know what a fact-based store is.
+The example domain is small on purpose: a registry of people and the countries they live in. The same patterns scale up; starting small makes the moves easier to see.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/de/docs/tutorials/01-sdk-basics/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="01 — SDK Basics">
+  <meta property="og:description" content="Tutorial 01 — SDK basics# This tutorial walks from an empty project to a working factpy ledger you can read, write, correct, and persist. By the end you’ll have written a small schema, populated it, queried it, fixed a bad assertion, and saved the result to disk. We don’t assume any prior factpy code — only that you’ve skimmed the overview and roughly know what a fact-based store is.
+The example domain is small on purpose: a registry of people and the countries they live in. The same patterns scale up; starting small makes the moves easier to see.">
+  <meta property="og:locale" content="de">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="01 — SDK Basics">
+  <meta itemprop="description" content="Tutorial 01 — SDK basics# This tutorial walks from an empty project to a working factpy ledger you can read, write, correct, and persist. By the end you’ll have written a small schema, populated it, queried it, fixed a bad assertion, and saved the result to disk. We don’t assume any prior factpy code — only that you’ve skimmed the overview and roughly know what a fact-based store is.
+The example domain is small on purpose: a registry of people and the countries they live in. The same patterns scale up; starting small makes the moves easier to see.">
+  <meta itemprop="wordCount" content="1378">
+
+<title>01 — SDK Basics | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/de/docs/tutorials/01-sdk-basics/">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/de.search.min.a92013675f37793ce9c8fb9acdda196dc19f26e429d7c863d62fdef621fe6daa.js" integrity="sha256-qSATZ183eTzpyPuazdoZbcGfJuQp18hj1i/e9iH&#43;bao=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/de/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Suche"
+    aria-label="Suche"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        Deutsch
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/" class="flex flex-auto">
+          English
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/quickstart/" class="">
+      Schnellstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="toggle"  />
+    <label for="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="flex">
+      <a role="button" class="">
+        Konzepte</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/overview/" class="">
+      Überblick</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/the-ledger/" class="">
+      Das Ledger</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/entities-and-fields/" class="">
+      Entitäten und Felder</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/rules-and-derivations/" class="">
+      Regeln und Ableitungen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/audit-and-provenance/" class="">
+      Audit und Provenienz</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-34058d101374bf945fbfadcda1396a3e" class="toggle"  />
+    <label for="section-34058d101374bf945fbfadcda1396a3e" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/defining-a-schema/" class="">
+      Ein Schema definieren</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/reading-and-writing/" class="">
+      Lesen und Schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/writing-rules/" class="">
+      Regeln schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/running-derivations/" class="">
+      Ableitungen ausführen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/persistence/" class="">
+      Persistenz</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/using-adapters/" class="">
+      Adapter verwenden</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-877dfaeda590afb0dbf2967bfa587bd2" class="toggle" checked />
+    <label for="section-877dfaeda590afb0dbf2967bfa587bd2" class="flex">
+      <a href="/de/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/01-sdk-basics/" class="active">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>01 — SDK Basics</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#tutorial-01--sdk-basics">Tutorial 01 — SDK basics</a>
+      <ul>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#a-minimal-schema">A minimal schema</a></li>
+        <li><a href="#validating-the-schema">Validating the schema</a></li>
+        <li><a href="#opening-an-in-memory-store">Opening an in-memory store</a></li>
+        <li><a href="#writing-a-first-batch">Writing a first batch</a></li>
+        <li><a href="#reading-what-we-just-wrote">Reading what we just wrote</a></li>
+        <li><a href="#fixing-a-wrong-fact">Fixing a wrong fact</a></li>
+        <li><a href="#looking-at-the-history">Looking at the history</a></li>
+        <li><a href="#retracting-an-assertion">Retracting an assertion</a></li>
+        <li><a href="#persisting-to-disk">Persisting to disk</a></li>
+        <li><a href="#recap">Recap</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="tutorial-01--sdk-basics">Tutorial 01 — SDK basics<a class="anchor" href="#tutorial-01--sdk-basics">#</a></h1>
+<p>This tutorial walks from an empty project to a working factpy ledger you can read, write, correct, and persist. By the end you&rsquo;ll have written a small schema, populated it, queried it, fixed a bad assertion, and saved the result to disk. We don&rsquo;t assume any prior factpy code — only that you&rsquo;ve skimmed <a href="../concepts/overview.md">the overview</a> and roughly know what a fact-based store is.</p>
+<p>The example domain is small on purpose: a registry of people and the countries they live in. The same patterns scale up; starting small makes the moves easier to see.</p>
+<h2 id="setup">Setup<a class="anchor" href="#setup">#</a></h2>
+<p>Install the kernel:</p>
+<pre tabindex="0"><code>pip install factpy-kernel</code></pre><p>Then in a fresh python file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> (
+</span></span><span style="display:flex;"><span>    SDKStore, Entity, Identity, Field,
+</span></span><span style="display:flex;"><span>    schema_preflight_from_classes,
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div><p>That&rsquo;s the whole import surface for this tutorial. Other entry points (<code>Rule</code>, <code>Derivation</code>, <code>Pred</code>) come in the next tutorial.</p>
+<h2 id="a-minimal-schema">A minimal schema<a class="anchor" href="#a-minimal-schema">#</a></h2>
+<p>Three entities. A <code>Country</code> with a natural key. A <code>Person</code> with a composite identity (id plus locale, so the same person can have a localised view per language). And a <code>LivesIn</code> relationship as its own entity, with a surrogate key:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Country</span>(Entity):
+</span></span><span style="display:flex;"><span>    iso_code: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Person</span>(Entity):
+</span></span><span style="display:flex;"><span>    person_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    locale: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity()
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tag: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">LivesIn</span>(Entity):
+</span></span><span style="display:flex;"><span>    uid: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>, default_factory<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;uuid4&#34;</span>)
+</span></span><span style="display:flex;"><span>    person: Person <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    country: Country <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    since: <span style="color:#ff5c57">int</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p>A few details worth noticing now and revisiting later:</p>
+<ul>
+<li><code>cardinality=&quot;single&quot;</code> for <code>name</code> means the snapshot has at most one current name. A new <code>set</code> doesn&rsquo;t overwrite history; it just changes what reduces into the snapshot.</li>
+<li><code>cardinality=&quot;multi&quot;</code> for <code>tag</code> means a person can carry many tags simultaneously. Multiple <code>add</code>s accumulate.</li>
+<li><code>LivesIn</code> has <code>default_factory=&quot;uuid4&quot;</code> because there&rsquo;s no meaningful natural key for &ldquo;the relationship between this person and that country&rdquo; — we let the SDK assign one.</li>
+</ul>
+<p>If any of this is mysterious, the <a href="../guides/defining-a-schema.md">defining-a-schema guide</a> covers the choices in depth.</p>
+<h2 id="validating-the-schema">Validating the schema<a class="anchor" href="#validating-the-schema">#</a></h2>
+<p>Before opening a store, run <code>schema_preflight_from_classes</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>classes <span style="color:#ff6ac1">=</span> [Country, Person, LivesIn]
+</span></span><span style="display:flex;"><span>report <span style="color:#ff6ac1">=</span> schema_preflight_from_classes(classes)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;preflight:&#34;</span>, report)</span></span></code></pre></div><p>This catches issues — missing primary keys, unresolvable cross-entity references, bad type domains — without ever touching a ledger. You&rsquo;d typically run this in your test suite. If it returns clean, the schema will open as a store.</p>
+<h2 id="opening-an-in-memory-store">Opening an in-memory store<a class="anchor" href="#opening-an-in-memory-store">#</a></h2>
+<p>For this tutorial, an in-memory ledger is fine. We&rsquo;ll persist to disk at the end:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes(classes)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(sdk)
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># SDKStore(entities=3, schema=&#39;...digest...&#39;)</span></span></span></code></pre></div><p>The store is empty. Everything from here is about putting facts in and getting them back.</p>
+<h2 id="writing-a-first-batch">Writing a first batch<a class="anchor" href="#writing-a-first-batch">#</a></h2>
+<p>The batch API groups multiple writes into one atomic unit. Open a transaction with optional metadata that flows onto every assertion the batch produces:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>tx <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>batch(meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;tutorial&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-01&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># Two countries</span>
+</span></span><span style="display:flex;"><span>de <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Country, iso_code<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;DE&#34;</span>)
+</span></span><span style="display:flex;"><span>de<span style="color:#ff6ac1">.</span>name<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;Germany&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fr <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Country, iso_code<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;FR&#34;</span>)
+</span></span><span style="display:flex;"><span>fr<span style="color:#ff6ac1">.</span>name<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;France&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># A person with full identity, in one step</span>
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Person, person_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;p-001&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>alice<span style="color:#ff6ac1">.</span>name<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;Alice&#34;</span>)
+</span></span><span style="display:flex;"><span>alice<span style="color:#ff6ac1">.</span>tag<span style="color:#ff6ac1">.</span>add(<span style="color:#5af78e">&#34;vip&#34;</span>)
+</span></span><span style="display:flex;"><span>alice<span style="color:#ff6ac1">.</span>tag<span style="color:#ff6ac1">.</span>add(<span style="color:#5af78e">&#34;early-adopter&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># A relationship</span>
+</span></span><span style="display:flex;"><span>rel <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(LivesIn)
+</span></span><span style="display:flex;"><span>rel<span style="color:#ff6ac1">.</span>person<span style="color:#ff6ac1">.</span>set(alice)
+</span></span><span style="display:flex;"><span>rel<span style="color:#ff6ac1">.</span>country<span style="color:#ff6ac1">.</span>set(de)
+</span></span><span style="display:flex;"><span>rel<span style="color:#ff6ac1">.</span>since<span style="color:#ff6ac1">.</span>set(<span style="color:#ff9f43">2019</span>)</span></span></code></pre></div><p><code>tx.entity(Cls, **identity)</code> returns a <em>handle</em> on the entity. Method calls on the handle (<code>alice.name.set(...)</code>) queue writes on the batch; nothing reaches the ledger yet. You can preview what&rsquo;s queued:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>plan <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>preview()
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;planned ops:&#34;</span>, <span style="color:#ff5c57">len</span>(plan<span style="color:#ff6ac1">.</span>ops))</span></span></code></pre></div><p>And commit:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>result <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>commit()
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;written assertions:&#34;</span>, <span style="color:#ff5c57">len</span>(result<span style="color:#ff6ac1">.</span>apply_result<span style="color:#ff6ac1">.</span>assertion_ids))</span></span></code></pre></div><p>Commit is atomic. Either every queued write makes it in, or — if the kernel rejects something at commit time — none of them are visible.</p>
+<h2 id="reading-what-we-just-wrote">Reading what we just wrote<a class="anchor" href="#reading-what-we-just-wrote">#</a></h2>
+<p>Two ways to read. For one entity by identity, use <code>sdk.get</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>snap <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>get(Person, person_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;p-001&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;ref:&#34;</span>, snap<span style="color:#ff6ac1">.</span>ref)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;name:&#34;</span>, snap<span style="color:#ff6ac1">.</span>name)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;tags:&#34;</span>, snap<span style="color:#ff6ac1">.</span>tag)</span></span></code></pre></div><p><code>snap</code> is a read-only snapshot — the projection of the ledger for this entity at the active view. Single-cardinality fields read as values, multi-cardinality fields read as sets. If you tried to assign to <code>snap.name</code>, you&rsquo;d get a <code>FrozenSnapshotError</code>; snapshots are immutable.</p>
+<p>For <em>which entities match a filter</em>, use <code>sdk.find</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>vips <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>find(Person, tag<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;vip&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> row <span style="color:#ff6ac1">in</span> vips:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">print</span>(row<span style="color:#ff6ac1">.</span>ref, row<span style="color:#ff6ac1">.</span>name)</span></span></code></pre></div><p><code>find</code> returns a list of rows — each row is a thin entity-shaped object you can read fields off. For richer queries (joins, negation, sub-rules), you&rsquo;d write a <code>Rule</code> and use <code>sdk.run</code> — but that&rsquo;s the next tutorial.</p>
+<h2 id="fixing-a-wrong-fact">Fixing a wrong fact<a class="anchor" href="#fixing-a-wrong-fact">#</a></h2>
+<p>Suppose Alice&rsquo;s name was actually entered with a typo. We thought it was &ldquo;Alice&rdquo;, but it should be &ldquo;Alicia&rdquo;. This is the simplest correction — write a new fact:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>ref <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>ref(Person, person_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;p-001&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>set(Person<span style="color:#ff6ac1">.</span>name, ref, <span style="color:#5af78e">&#34;Alicia&#34;</span>,
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;correction&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-01-fix&#34;</span>})</span></span></code></pre></div><p><code>sdk.ref(Cls, **identity)</code> gets a managed reference for the entity. <code>sdk.set</code> is the low-level write — it writes one assertion and returns its id (we don&rsquo;t need the id here). The metadata distinguishes this assertion from the original; it&rsquo;ll show up that way in any audit package.</p>
+<p>Re-read:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(sdk<span style="color:#ff6ac1">.</span>get(Person, person_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;p-001&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)<span style="color:#ff6ac1">.</span>name)
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># Alicia</span></span></span></code></pre></div><p>The snapshot shows the new value. The original assertion is still in the ledger — we didn&rsquo;t overwrite anything, we appended a new entry.</p>
+<h2 id="looking-at-the-history">Looking at the history<a class="anchor" href="#looking-at-the-history">#</a></h2>
+<p>The snapshot exposes a per-field assertions namespace that lets us inspect what&rsquo;s been asserted, not just what reduced to the snapshot:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>snap <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>get(Person, person_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;p-001&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;active assertions for name:&#34;</span>, <span style="color:#ff5c57">len</span>(snap<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>name<span style="color:#ff6ac1">.</span>active))
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># 1 — only the latest reduces into the snapshot</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;history of name:&#34;</span>, <span style="color:#ff5c57">len</span>(snap<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>name<span style="color:#ff6ac1">.</span>history))
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># 2 — both &#34;Alice&#34; and &#34;Alicia&#34; are in the ledger</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> asrt <span style="color:#ff6ac1">in</span> snap<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>name<span style="color:#ff6ac1">.</span>history:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;  &#34;</span>, asrt<span style="color:#ff6ac1">.</span>value, asrt<span style="color:#ff6ac1">.</span>meta<span style="color:#ff6ac1">.</span>get(<span style="color:#5af78e">&#34;source&#34;</span>))
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># Alice    tutorial</span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># Alicia   correction</span></span></span></code></pre></div><p>This is the audit story in miniature: both assertions are visible, with their sources, in order. If you needed to know <em>who said what when</em>, the answer is here without anything special being set up.</p>
+<h2 id="retracting-an-assertion">Retracting an assertion<a class="anchor" href="#retracting-an-assertion">#</a></h2>
+<p>What if instead of <em>correcting</em> a name, we wanted to express that an assertion <em>should never have been made</em>? That&rsquo;s what retraction is for. It doesn&rsquo;t remove the assertion from the ledger; it appends a new entry that causes future projections to skip the original.</p>
+<p>Suppose Alice&rsquo;s &ldquo;early-adopter&rdquo; tag was added by mistake:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#78787e"># Find the assertion id for the bad tag</span>
+</span></span><span style="display:flex;"><span>snap <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>get(Person, person_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;p-001&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>bad_assertion <span style="color:#ff6ac1">=</span> <span style="color:#ff5c57">next</span>(
+</span></span><span style="display:flex;"><span>    a <span style="color:#ff6ac1">for</span> a <span style="color:#ff6ac1">in</span> snap<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>tag<span style="color:#ff6ac1">.</span>active
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">if</span> a<span style="color:#ff6ac1">.</span>value <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;early-adopter&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># Retract it</span>
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>retract(bad_assertion<span style="color:#ff6ac1">.</span>asrt_id,
+</span></span><span style="display:flex;"><span>            meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;correction&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-01-fix-2&#34;</span>})</span></span></code></pre></div><p>Re-read:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(sdk<span style="color:#ff6ac1">.</span>get(Person, person_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;p-001&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)<span style="color:#ff6ac1">.</span>tag)
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># {&#34;vip&#34;}  — &#34;early-adopter&#34; no longer reduces in</span></span></span></code></pre></div><p>But the history still has it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>snap <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>get(Person, person_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;p-001&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> asrt <span style="color:#ff6ac1">in</span> snap<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>tag<span style="color:#ff6ac1">.</span>history:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;  &#34;</span>, asrt<span style="color:#ff6ac1">.</span>value, asrt<span style="color:#ff6ac1">.</span>retracted)
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># vip              False</span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># early-adopter    True</span></span></span></code></pre></div><p>The audit reader sees both: the assertion happened, and the retraction happened. <em>&ldquo;This was claimed and then withdrawn&rdquo;</em> is a different story from <em>&ldquo;this was never claimed&rdquo;</em>, and the ledger preserves the difference.</p>
+<p>(Use the <code>correction</code> pattern for <em>&ldquo;the value changed&rdquo;</em>, and <code>retract</code> for <em>&ldquo;the original was a mistake&rdquo;</em>. Both are append-only, both honest about what happened — they just tell different stories to whoever reads the audit.)</p>
+<h2 id="persisting-to-disk">Persisting to disk<a class="anchor" href="#persisting-to-disk">#</a></h2>
+<p>So far everything has been in memory. To survive a restart, open the store with a <code>ledger_path</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>sdk_persistent <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes(
+</span></span><span style="display:flex;"><span>    classes,
+</span></span><span style="display:flex;"><span>    ledger_path<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;./tutorial.factpy.db&#34;</span>,
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div><p>The first time you run this, the file is created and the schema&rsquo;s digest is written into it. Re-run the same code with the same schema and the file opens cleanly. Change the schema in a way that makes old facts unreadable (rename a field, change a cardinality), and the open will fail with a clear schema-mismatch error.</p>
+<p>We won&rsquo;t write to <code>sdk_persistent</code> in this tutorial — we leave that for <a href="02-rules-and-derivations.md">tutorial 02</a>, where the persistence will matter. For now, the in-memory store is fine. The <a href="../guides/persistence.md">persistence guide</a> covers the topic in detail when you need it.</p>
+<h2 id="recap">Recap<a class="anchor" href="#recap">#</a></h2>
+<p>In ~50 lines you&rsquo;ve:</p>
+<ul>
+<li>declared a typed schema with three entities, including a composite identity and a relationship,</li>
+<li>validated the schema before opening,</li>
+<li>opened an in-memory store and wrote a batch of facts atomically,</li>
+<li>read entities by identity and filtered them by field,</li>
+<li>corrected a wrong value with a new assertion,</li>
+<li>retracted a mistaken assertion,</li>
+<li>inspected the per-field history to see both the snapshot and the audit story,</li>
+<li>learned how to point the same code at a persistent file when needed.</li>
+</ul>
+<p>Everything from here builds on this surface. The next tutorial introduces the rule DSL and the derivation lifecycle — the part of factpy that <em>infers</em> facts rather than just storing the ones you write.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<ul>
+<li><a href="02-rules-and-derivations.md">Tutorial 02 — Rules and derivations</a> — querying the ledger, named rules, candidates and accepts.</li>
+<li><a href="../guides/reading-and-writing.md">Reading and writing guide</a> — for the ergonomic reference of every move covered above.</li>
+<li><a href="../concepts/the-ledger.md">The ledger concept page</a> — for the conceptual model under all of this.</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/de/docs/tutorials/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Tutorials</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/de/docs/tutorials/02-rules-and-derivations/" class="flex align-center">
+        <span>02 — Rules and Derivations</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#tutorial-01--sdk-basics">Tutorial 01 — SDK basics</a>
+      <ul>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#a-minimal-schema">A minimal schema</a></li>
+        <li><a href="#validating-the-schema">Validating the schema</a></li>
+        <li><a href="#opening-an-in-memory-store">Opening an in-memory store</a></li>
+        <li><a href="#writing-a-first-batch">Writing a first batch</a></li>
+        <li><a href="#reading-what-we-just-wrote">Reading what we just wrote</a></li>
+        <li><a href="#fixing-a-wrong-fact">Fixing a wrong fact</a></li>
+        <li><a href="#looking-at-the-history">Looking at the history</a></li>
+        <li><a href="#retracting-an-assertion">Retracting an assertion</a></li>
+        <li><a href="#persisting-to-disk">Persisting to disk</a></li>
+        <li><a href="#recap">Recap</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

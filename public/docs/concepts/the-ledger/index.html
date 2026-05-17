@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The ledger# Every assertion and every retraction made through the SDK is appended to the ledger as a new entry. Once written, an entry is never modified or removed. Snapshots, query results, and the inputs to rule evaluation are all projections of the ledger, computed on demand and held nowhere else as canonical state. If the schema is the vocabulary in which claims are made, the ledger is the substrate in which the claims accumulate, and the present page describes what an entry actually contains, how reads project the entries into the shapes the rest of the system consumes, and why the design rests on append-only writing rather than on the more familiar overwriting model.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/concepts/the-ledger/">
+  <meta property="og:site_name" content="FactPy">
+  <meta property="og:title" content="The Ledger">
+  <meta property="og:description" content="The ledger# Every assertion and every retraction made through the SDK is appended to the ledger as a new entry. Once written, an entry is never modified or removed. Snapshots, query results, and the inputs to rule evaluation are all projections of the ledger, computed on demand and held nowhere else as canonical state. If the schema is the vocabulary in which claims are made, the ledger is the substrate in which the claims accumulate, and the present page describes what an entry actually contains, how reads project the entries into the shapes the rest of the system consumes, and why the design rests on append-only writing rather than on the more familiar overwriting model.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="The Ledger">
+  <meta itemprop="description" content="The ledger# Every assertion and every retraction made through the SDK is appended to the ledger as a new entry. Once written, an entry is never modified or removed. Snapshots, query results, and the inputs to rule evaluation are all projections of the ledger, computed on demand and held nowhere else as canonical state. If the schema is the vocabulary in which claims are made, the ledger is the substrate in which the claims accumulate, and the present page describes what an entry actually contains, how reads project the entries into the shapes the rest of the system consumes, and why the design rests on append-only writing rather than on the more familiar overwriting model.">
+  <meta itemprop="wordCount" content="1768">
+
+<title>The Ledger | FactPy</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/concepts/the-ledger/">
+  <link rel="alternate" hreflang="de" href="http://localhost:1313/de/docs/concepts/the-ledger/" title="Das Ledger">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.1ca26259c496b7b66f39629503a8d9e08519e8f7c30bb604708e38d619a642a2.js" integrity="sha256-HKJiWcSWt7ZvOWKVA6jZ4IUZ6PfDC7YEcI441hmmQqI=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>FactPy</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        English
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/de/docs/concepts/the-ledger/" class="flex flex-auto">
+          Deutsch
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-903cb365ca4589d060a9e0c4e9cacd7a" class="toggle" checked />
+    <label for="section-903cb365ca4589d060a9e0c4e9cacd7a" class="flex">
+      <a role="button" class="">
+        Concepts</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/overview/" class="">
+      Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/the-ledger/" class="active">
+      The Ledger</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/entities-and-fields/" class="">
+      Entities and Fields</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-derivations/" class="">
+      Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/audit-and-provenance/" class="">
+      Audit and Provenance</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d26c9af1cc2443c595895ff545ee9a45" class="toggle"  />
+    <label for="section-d26c9af1cc2443c595895ff545ee9a45" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/defining-a-schema/" class="">
+      Defining a Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/reading-and-writing/" class="">
+      Reading and Writing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/writing-rules/" class="">
+      Writing Rules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/running-derivations/" class="">
+      Running Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/using-adapters/" class="">
+      Using Adapters</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ca174a65b61b36959d2dfae132eedf04" class="toggle"  />
+    <label for="section-ca174a65b61b36959d2dfae132eedf04" class="flex">
+      <a href="/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>The Ledger</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-ledger">The ledger</a>
+      <ul>
+        <li><a href="#what-an-entry-contains">What an entry contains</a></li>
+        <li><a href="#what-set-add-and-retract-actually-do">What <code>set</code>, <code>add</code>, and <code>retract</code> actually do</a></li>
+        <li><a href="#snapshots-as-projections">Snapshots as projections</a></li>
+        <li><a href="#projections-and-derivations">Projections and derivations</a></li>
+        <li><a href="#persistence">Persistence</a></li>
+        <li><a href="#why-append-only">Why append-only</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="the-ledger">The ledger<a class="anchor" href="#the-ledger">#</a></h1>
+<p>Every assertion and every retraction made through the SDK is appended to the ledger as a new entry. Once written, an entry is never modified or removed. Snapshots, query results, and the inputs to rule evaluation are all projections of the ledger, computed on demand and held nowhere else as canonical state. If the schema is the vocabulary in which claims are made, the ledger is the substrate in which the claims accumulate, and the present page describes what an entry actually contains, how reads project the entries into the shapes the rest of the system consumes, and why the design rests on append-only writing rather than on the more familiar overwriting model.</p>
+<h2 id="what-an-entry-contains">What an entry contains<a class="anchor" href="#what-an-entry-contains">#</a></h2>
+<p>Each entry records a single act of writing, and the kernel preserves enough information about each act to make it interpretable in isolation. An entry carries the predicate the act concerns — that is, the schema field, expressed in its lowercase <code>entity:field</code> form — together with the subject the act is about, identified by the entity&rsquo;s type and identity coordinates. It carries the value being asserted, or, in the case of a retraction, the identifier of the prior assertion being withdrawn. It carries the action being performed, which may be <code>set</code> for a single-valued assertion, <code>add</code> for a multi-valued assertion, or <code>retract</code> for the explicit withdrawal of an earlier assertion. And it carries a metadata block consisting of the timestamp the kernel stamped on the entry, the assertion id by which the entry can be referred to in subsequent operations, and any further keys the writing party supplied — by convention, <code>source</code>, <code>trace_id</code>, <code>version</code>, <code>valid_from</code>, and <code>confidence</code>, though the kernel imposes no such convention beyond requiring that the values be JSON-friendly. Once written, the entry is immutable: a ledger written yesterday and reopened today is byte-for-byte identical to itself.</p>
+<h2 id="what-set-add-and-retract-actually-do">What <code>set</code>, <code>add</code>, and <code>retract</code> actually do<a class="anchor" href="#what-set-add-and-retract-actually-do">#</a></h2>
+<p>The three direct-write entry points of the SDK reduce to the same primitive operation against the ledger, which is the appending of a new entry. They differ in the cardinality of the field they target and in what each is taken to mean by the projection that later reduces the ledger into a snapshot. A call to <code>sdk.set(Person.name, ref, &quot;Alice&quot;)</code> writes an assertion against a single-cardinality field; calling it again with <code>&quot;Alicia&quot;</code> writes a second, separate entry rather than overwriting the first, and both entries remain in the ledger indefinitely. A call to <code>sdk.add(Person.tag, ref, &quot;vip&quot;)</code> writes an assertion against a multi-cardinality field, and a subsequent call with the same value writes a further entry, distinct in metadata and timestamp, even though the projection collapses the two into a single tag in the snapshot. A call to <code>sdk.retract</code> does not remove its target; it appends a retraction entry that refers to the prior assertion by its id, and any later projection skips the targeted assertion when it reduces. The general property holds without exception: writes do not modify earlier entries, and any change in observable state is the consequence of an additional entry that the next read will incorporate.</p>
+<h2 id="snapshots-as-projections">Snapshots as projections<a class="anchor" href="#snapshots-as-projections">#</a></h2>
+<p>A snapshot is the answer the kernel returns when asked for the current state of a particular entity, and it is the most common shape in which the ledger is read. The snapshot is not held anywhere as canonical state. When a call to <code>sdk.get(Person, person_id=&quot;...&quot;)</code> is issued, the kernel walks the entries pertinent to that entity and reduces them according to the cardinality declared on each field in the schema. Single-cardinality fields take the most recent non-retracted assertion; multi-cardinality fields take the union of all non-retracted assertions, with duplicates collapsing in the projection while remaining distinct in the ledger; identity fields are read directly from the entity&rsquo;s address rather than from any assertion, since identity values are not held as facts at all. The snapshot returned is read-only, and an attempt to assign to one of its attributes raises rather than silently mutating projection state that has no canonical existence to mutate.</p>
+<p>The pseudo-timeline below shows the result of six writes against one entity together with the snapshot that the kernel produces from them.</p>
+<pre class="mermaid">flowchart LR
+    A1[&#34;t=1&lt;br/&gt;set name=&#39;Alice&#39;&#34;] --&gt; A2[&#34;t=2&lt;br/&gt;set name=&#39;Alicia&#39;&#34;]
+    A2 --&gt; A3[&#34;t=3&lt;br/&gt;retract name=&#39;Alicia&#39;&#34;]
+    A3 --&gt; A4[&#34;t=4&lt;br/&gt;add tag=&#39;vip&#39;&#34;]
+    A4 --&gt; A5[&#34;t=5&lt;br/&gt;add tag=&#39;blocked&#39;&#34;]
+    A5 --&gt; A6[&#34;t=6&lt;br/&gt;retract tag=&#39;blocked&#39;&#34;]
+    A6 --&gt; Snap[&#34;snapshot&lt;br/&gt;name = &#39;Alice&#39;&lt;br/&gt;tag = [&#39;vip&#39;]&#34;]
+
+    style Snap fill:none</pre><script src="/mermaid.min.js"></script><script>mermaid.initialize({"flowchart":{"useMaxWidth":true},"theme":"default"})</script><p>The retracted assertion of <code>name='Alicia'</code> remains in the ledger; the projection skips it, leaving the older <code>'Alice'</code> as the latest non-retracted single value. The retraction is itself a ledger entry with its own timestamp, its own metadata, and an explicit reference to the assertion it withdrew, so that an audit reader can recover not merely the fact that some assertion was withdrawn but who withdrew it, when, and on what grounds. The snapshot is reproducible: the same ledger fed through the same projection rules yields the same snapshot every time the projection runs, and against any historical cut of the ledger the same procedure yields the snapshot as it stood at that moment. This determinism is what distinguishes the snapshot from canonical state: it carries no information the ledger does not already support, and it can be recomputed at any later time without consulting any other source.</p>
+<p>The default projection follows the cardinality rules above. The kernel additionally supports named <em>views</em>, which apply alternative reduction strategies — different confidence-aggregation policies, time cutoffs, source restrictions — to the same ledger and produce different snapshots from it. Views are introduced where they are needed in the guides; for the purposes of the conceptual track the default reduction is sufficient, and the property that snapshots are projections of the ledger holds for every view alike.</p>
+<p>Query results obtained by running a <code>Rule</code> against the ledger are projections in exactly the same sense. The kernel reduces the ledger under the rule&rsquo;s body and returns the variable bindings that satisfy it; the cardinality of any particular field is one parameter of that reduction, and the rule&rsquo;s logical structure is another. The reasoning layer that builds on this is the subject of <a href="rules-and-derivations.md">rules and derivations</a>.</p>
+<h2 id="projections-and-derivations">Projections and derivations<a class="anchor" href="#projections-and-derivations">#</a></h2>
+<p>The ledger participates in two structurally different operations, and keeping them apart is important because they superficially resemble one another while standing in very different epistemic relations to the data.</p>
+<p>A <em>projection</em> is a pure reduction of the ledger. The kernel computes it without adding any information beyond what the entries themselves carry, and the result, given the same ledger and the same reduction rules, is the same on every run. Snapshots and query rows are projections in this sense, and a system reading them is reading something already implicit in the ledger.</p>
+<p>A <em>derivation</em>, by contrast, is a rule whose head specifies new facts to be proposed when its body is satisfied. Running a derivation against the ledger produces <em>candidates</em> — facts in the shape the head specifies, derived from the ledger under the rule but not contained in the ledger until a separate step explicitly accepts them. Acceptance appends the candidate as a new assertion and preserves the candidate&rsquo;s evidence as provenance on the new entry. The architectural significance of the distinction is that everything in the ledger is either directly written or accepted from a candidate by an identifiable decision, while projections are read-only computations from those entries that introduce nothing new. The candidate-and-acceptance machinery is developed in full on the <a href="rules-and-derivations.md">rules and derivations</a> page.</p>
+<h2 id="persistence">Persistence<a class="anchor" href="#persistence">#</a></h2>
+<p>The ledger lives in memory by default. A store opened as <code>SDKStore.from_schema_classes([Person])</code> discards its contents when the process exits, which is the appropriate behaviour for tests and for short-lived computation. Persistence is opt-in by passing a <code>ledger_path</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes([Person], ledger_path<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;./data/factpy.db&#34;</span>)</span></span></code></pre></div><p>The file at the given path is a self-contained store. The first time the file is opened the schema&rsquo;s content digest is recorded into it, and on every subsequent open the kernel re-computes the digest from the schema being supplied and compares the two. If the schema&rsquo;s structurally meaningful parts have changed in a way that would render existing assertions illegible — a renamed field, a changed cardinality, an altered identity composition — the open fails with an explicit error rather than proceeding with a silent reinterpretation of the data. The mechanics of the digest, the distinction between legible and illegible changes, and the migration of old ledgers under new schemas are developed in detail in <a href="../../guides/persistence">persistence</a>.</p>
+<h2 id="why-append-only">Why append-only<a class="anchor" href="#why-append-only">#</a></h2>
+<p>The cost of append-only writing is that the ledger grows monotonically, and whether that growth is acceptable depends on what one would otherwise be giving up. An overwriting store keeps the current value of each field and discards what came before; a row in a mutable table carries, at most, the metadata of the most recent writer; and the reconstruction of past state under such an arrangement is possible only to the extent that some auxiliary mechanism — a changelog, an audit table, an external log — has been instituted to preserve it independently. None of those mechanisms is fully reliable in practice, and most of them work against the grain of the database&rsquo;s own design, which is to keep one current value as efficiently as possible.</p>
+<p>The append-only ledger is the inversion of that arrangement. Every assertion ever made is preserved with the metadata of its origin, every retraction is preserved as an event in its own right, and the current state of any entity is a projection that can be recomputed at will from the entries below it. Replay forward to any past moment is meaningful, because the entries that produced the state at that moment are still there. Provenance is local to each fact rather than aggregated backwards from a row that several actors may have touched in succession. The audit story factpy is built around — explaining why a fact is true, exporting a complete run for inspection by a third party — rests on these properties without further bookkeeping, and the cost of monotonic growth is the price of having them. For workloads in which none of these properties is relevant factpy is the wrong tool; for workloads in which they are, the design is what makes them tractable.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<p><a href="/docs/concepts/rules-and-derivations">Rules and derivations</a> develops the reasoning layer that consumes the ledger and proposes additions to it. <a href="/docs/concepts/audit-and-provenance">Audit and provenance</a> describes what is exported alongside the ledger when an audit package is produced. The <a href="/docs/guides/reading-and-writing">reading and writing guide</a> covers the day-to-day mechanics — when <code>set</code> is the right call versus <code>add</code> versus <code>retract</code>, how to use batches, and how to carry write-time metadata coherently across a codebase — for readers approaching the same material from the practical side.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/concepts/overview/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Overview</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/concepts/entities-and-fields/" class="flex align-center">
+        <span>Entities and Fields</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>FactPy - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-ledger">The ledger</a>
+      <ul>
+        <li><a href="#what-an-entry-contains">What an entry contains</a></li>
+        <li><a href="#what-set-add-and-retract-actually-do">What <code>set</code>, <code>add</code>, and <code>retract</code> actually do</a></li>
+        <li><a href="#snapshots-as-projections">Snapshots as projections</a></li>
+        <li><a href="#projections-and-derivations">Projections and derivations</a></li>
+        <li><a href="#persistence">Persistence</a></li>
+        <li><a href="#why-append-only">Why append-only</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Auditing a run# Every operation a factpy system performs — writes, queries, derivation evaluations, acceptances — leaves records in the store as it goes. Producing an audit package is the act of bundling those records into a self-contained directory that can be shipped, archived, or reviewed elsewhere, independently of the system that produced it. The present guide develops the mechanics of producing such a package, the structure that the package has on disk, the way kernel.audit reads it back, the views that an audit reader most often constructs from it, and the rhythms in which export is sensibly performed. For the conceptual material on which the package format rests, see audit and provenance.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/de/docs/guides/auditing-a-run/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Auditing a Run">
+  <meta property="og:description" content="Auditing a run# Every operation a factpy system performs — writes, queries, derivation evaluations, acceptances — leaves records in the store as it goes. Producing an audit package is the act of bundling those records into a self-contained directory that can be shipped, archived, or reviewed elsewhere, independently of the system that produced it. The present guide develops the mechanics of producing such a package, the structure that the package has on disk, the way kernel.audit reads it back, the views that an audit reader most often constructs from it, and the rhythms in which export is sensibly performed. For the conceptual material on which the package format rests, see audit and provenance.">
+  <meta property="og:locale" content="de">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Auditing a Run">
+  <meta itemprop="description" content="Auditing a run# Every operation a factpy system performs — writes, queries, derivation evaluations, acceptances — leaves records in the store as it goes. Producing an audit package is the act of bundling those records into a self-contained directory that can be shipped, archived, or reviewed elsewhere, independently of the system that produced it. The present guide develops the mechanics of producing such a package, the structure that the package has on disk, the way kernel.audit reads it back, the views that an audit reader most often constructs from it, and the rhythms in which export is sensibly performed. For the conceptual material on which the package format rests, see audit and provenance.">
+  <meta itemprop="wordCount" content="1512">
+
+<title>Auditing a Run | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/de/docs/guides/auditing-a-run/">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/de.search.min.a92013675f37793ce9c8fb9acdda196dc19f26e429d7c863d62fdef621fe6daa.js" integrity="sha256-qSATZ183eTzpyPuazdoZbcGfJuQp18hj1i/e9iH&#43;bao=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/de/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Suche"
+    aria-label="Suche"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        Deutsch
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/" class="flex flex-auto">
+          English
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/quickstart/" class="">
+      Schnellstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="toggle"  />
+    <label for="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="flex">
+      <a role="button" class="">
+        Konzepte</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/overview/" class="">
+      Überblick</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/the-ledger/" class="">
+      Das Ledger</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/entities-and-fields/" class="">
+      Entitäten und Felder</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/rules-and-derivations/" class="">
+      Regeln und Ableitungen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/audit-and-provenance/" class="">
+      Audit und Provenienz</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-34058d101374bf945fbfadcda1396a3e" class="toggle" checked />
+    <label for="section-34058d101374bf945fbfadcda1396a3e" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/defining-a-schema/" class="">
+      Ein Schema definieren</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/reading-and-writing/" class="">
+      Lesen und Schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/writing-rules/" class="">
+      Regeln schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/running-derivations/" class="">
+      Ableitungen ausführen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/auditing-a-run/" class="active">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/persistence/" class="">
+      Persistenz</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/using-adapters/" class="">
+      Adapter verwenden</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-877dfaeda590afb0dbf2967bfa587bd2" class="toggle"  />
+    <label for="section-877dfaeda590afb0dbf2967bfa587bd2" class="flex">
+      <a href="/de/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Auditing a Run</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#auditing-a-run">Auditing a run</a>
+      <ul>
+        <li><a href="#producing-a-package">Producing a package</a></li>
+        <li><a href="#anatomy-of-a-package">Anatomy of a package</a></li>
+        <li><a href="#reading-a-package-back">Reading a package back</a></li>
+        <li><a href="#common-views">Common views</a></li>
+        <li><a href="#what-a-reviewer-asks-and-where-to-look">What a reviewer asks, and where to look</a></li>
+        <li><a href="#sharing-a-package">Sharing a package</a></li>
+        <li><a href="#when-to-export">When to export</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="auditing-a-run">Auditing a run<a class="anchor" href="#auditing-a-run">#</a></h1>
+<p>Every operation a factpy system performs — writes, queries, derivation evaluations, acceptances — leaves records in the store as it goes. Producing an audit package is the act of bundling those records into a self-contained directory that can be shipped, archived, or reviewed elsewhere, independently of the system that produced it. The present guide develops the mechanics of producing such a package, the structure that the package has on disk, the way <code>kernel.audit</code> reads it back, the views that an audit reader most often constructs from it, and the rhythms in which export is sensibly performed. For the conceptual material on which the package format rests, see <a href="/docs/concepts/audit-and-provenance">audit and provenance</a>.</p>
+<h2 id="producing-a-package">Producing a package<a class="anchor" href="#producing-a-package">#</a></h2>
+<p>A package is produced by calling <code>sdk.export_package</code> with an output directory and an <code>ExportOptions</code> object that selects the package shape.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> pathlib <span style="color:#ff6ac1">import</span> Path
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.adapters.souffle.package <span style="color:#ff6ac1">import</span> ExportOptions
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>out_dir <span style="color:#ff6ac1">=</span> Path(<span style="color:#5af78e">&#34;./audits/run-2024-04-01&#34;</span>)
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>export_package(out_dir, ExportOptions(package_kind<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;audit&#34;</span>))</span></span></code></pre></div><p>The <code>package_kind=&quot;audit&quot;</code> setting selects the audit shape, which includes the run ledger, the candidate ledger, the accept-write ledger, the decision log, and any evidence graphs that were produced during the run. The alternative, <code>&quot;inference&quot;</code>, produces a leaner package suitable for re-execution under another engine but without the audit-side records that make a package interpretable in review. For audit purposes the <code>&quot;audit&quot;</code> shape is always the appropriate choice.</p>
+<p>The export does not modify the store. A package can be produced mid-session, after every commit, or once at the end of a long-running job, and multiple packages from the same store are independent of one another, each being a snapshot of the run records as they stood at the moment of export.</p>
+<h2 id="anatomy-of-a-package">Anatomy of a package<a class="anchor" href="#anatomy-of-a-package">#</a></h2>
+<p>The directory that <code>sdk.export_package</code> writes is structured the same way every time, with a top-level manifest and several subdirectories that separate the run records from the materialised inputs.</p>
+<pre tabindex="0"><code>audits/run-2024-04-01/
+├── manifest.json
+├── schema/
+│   └── schema_ir.json
+├── policy/
+├── facts/
+├── rules/
+├── outputs/
+│   └── run_manifest.json
+└── audit/
+    ├── run_ledger.jsonl
+    ├── candidate_ledger.jsonl
+    ├── accept_write_ledger.jsonl
+    ├── accept_failed.jsonl
+    ├── decision_log.jsonl
+    ├── mapping_resolution.json
+    ├── support_artifacts.jsonl       (optional)
+    ├── rule_trace_artifacts.jsonl    (optional)
+    └── evidence_graphs/              (optional, per-candidate)</code></pre><p><code>manifest.json</code> is the entry point. It declares the package&rsquo;s kind, lists the relative paths of every audit file, and carries the schema and rule versions in use during the run. An audit reader is intended to start there rather than walking the directory blind, since the manifest is the authoritative index of what the package contains and the file against which any subsequent navigation is best resolved.</p>
+<p>The <code>audit/</code> subdirectory is where the run records themselves live. Each <code>*.jsonl</code> file is a stream of JSON-encoded entries, one per line, covering one slice of the run: every write, every candidate, every acceptance, every decision, and every accept that failed. The optional artifacts — rule traces, per-candidate evidence graphs — appear only when the run produced them and are referenced from the manifest where present.</p>
+<p>The remaining top-level directories — <code>schema/</code>, <code>rules/</code>, <code>facts/</code>, <code>outputs/</code> — hold the materialised inputs and outputs of the run. They are useful when the package is to be re-executed under a different engine, but they are not strictly required for reading the audit story; an audit reader interested only in what happened during the run can confine its attention to <code>manifest.json</code> and the <code>audit/</code> subdirectory.</p>
+<h2 id="reading-a-package-back">Reading a package back<a class="anchor" href="#reading-a-package-back">#</a></h2>
+<p><code>kernel.audit</code> reads packages without depending on the rest of factpy. The module is small by design, since the dependency surface required to review an audit is far smaller than the surface required to produce one, and the audit story benefits from being readable on machines that have nothing else of factpy installed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.audit <span style="color:#ff6ac1">import</span> load_audit_package
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pkg <span style="color:#ff6ac1">=</span> load_audit_package(<span style="color:#5af78e">&#34;./audits/run-2024-04-01&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(pkg<span style="color:#ff6ac1">.</span>manifest[<span style="color:#5af78e">&#34;package_kind&#34;</span>])         <span style="color:#78787e"># &#34;audit&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#ff5c57">len</span>(pkg<span style="color:#ff6ac1">.</span>run_ledger))                  <span style="color:#78787e"># writes during the run</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#ff5c57">len</span>(pkg<span style="color:#ff6ac1">.</span>candidate_ledger))            <span style="color:#78787e"># candidates produced</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#ff5c57">len</span>(pkg<span style="color:#ff6ac1">.</span>accept_write_ledger))         <span style="color:#78787e"># candidates accepted</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#ff5c57">len</span>(pkg<span style="color:#ff6ac1">.</span>decision_log))                <span style="color:#78787e"># decisions recorded</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#ff5c57">len</span>(pkg<span style="color:#ff6ac1">.</span>accept_failed))               <span style="color:#78787e"># accepts that failed</span></span></span></code></pre></div><p><code>load_audit_package</code> returns an <code>AuditPackageData</code> instance, a dataclass whose attributes are the parsed contents of every file in the package. The <code>*_ledger</code> attributes are lists of plain dicts decoded from jsonl, the <code>evidence_graphs</code> attribute is a dictionary of <code>EvidenceGraph</code> objects keyed by candidate, and the <code>manifest</code> and <code>run_manifest</code> attributes are the parsed JSON of those two files. From these, an application or a reviewer constructs whatever view the situation calls for.</p>
+<h2 id="common-views">Common views<a class="anchor" href="#common-views">#</a></h2>
+<p>The kernel ships builder functions for the views that audit consumers most often want. They serve two purposes simultaneously: as ready-made navigation surfaces for applications that do not want to write their own, and as worked examples of how each slice of the package is to be assembled by hand when a custom view is wanted.</p>
+<p>For a per-decision walkthrough — <em>what was accepted, by whom, supported by what</em> — <code>build_decision_detail_dto</code> is the appropriate builder.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.audit <span style="color:#ff6ac1">import</span> build_decision_detail_dto
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> entry <span style="color:#ff6ac1">in</span> pkg<span style="color:#ff6ac1">.</span>decision_log:
+</span></span><span style="display:flex;"><span>    dto <span style="color:#ff6ac1">=</span> build_decision_detail_dto(pkg, decision_id<span style="color:#ff6ac1">=</span>entry[<span style="color:#5af78e">&#34;decision_id&#34;</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#78787e"># dto carries the candidate, the accepted assertion, and the evidence</span></span></span></code></pre></div><p>For a per-rule trace — <em>which rule fired, against which ledger state, returning what</em> — <code>build_rule_trace_detail_dto</code> is the appropriate builder. For a candidate&rsquo;s full evidence tree, or the corresponding graph for adapter-produced candidates, <code>build_candidate_evidence_tree_dto</code> is appropriate. For a high-level summary of the run as a whole, <code>build_run_detail_dto</code> is appropriate. The full list of builders is enumerated in <code>kernel.audit.__all__</code>, and each builder takes an <code>AuditPackageData</code> instance together with a key identifying the slice it is to extract.</p>
+<h2 id="what-a-reviewer-asks-and-where-to-look">What a reviewer asks, and where to look<a class="anchor" href="#what-a-reviewer-asks-and-where-to-look">#</a></h2>
+<p>A handful of questions recur whenever an audit package is opened, and the data that answers each is in a known place.</p>
+<p><em>Which facts were written by this run?</em> The answer is <code>pkg.run_ledger</code>. Each entry is one assertion, carrying its predicate, subject, value, and metadata.</p>
+<p><em>Which of those came from a derivation rather than from direct writes?</em> The answer is <code>pkg.accept_write_ledger</code>. These are the entries whose origin was an accepted candidate, and each carries a reference back to the candidate and the rule that produced it.</p>
+<p><em>Why was a particular fact accepted?</em> The path is from <code>pkg.decision_log</code> to the candidate it accepted, and from the candidate to its evidence in <code>pkg.provenance_trees</code> or <code>pkg.evidence_graphs</code>.</p>
+<p><em>Which candidates were proposed but not accepted?</em> The answer is <code>pkg.candidate_ledger</code> minus the candidates referenced from <code>pkg.accept_write_ledger</code>. The package is honest about both directions: candidates that were considered but ultimately not accepted remain visible, and the audit reader can recover not only what the system did but also what it deliberately declined to do.</p>
+<p><em>What schema and rule versions were in use?</em> The answer is <code>pkg.manifest</code>, supplemented by the materialised rule artifacts under <code>rules/</code> for the bodies themselves.</p>
+<p>The decision log is the connective tissue between candidates and writes. Every acceptance produces a log entry, and every log entry references both the candidate it accepted and the writes that resulted; the log can therefore be walked forwards from candidates to the writes they produced, or backwards from writes to the candidates that licensed them, depending on the direction in which a particular question is most naturally answered.</p>
+<h2 id="sharing-a-package">Sharing a package<a class="anchor" href="#sharing-a-package">#</a></h2>
+<p>A package is a directory of plain files, and the means of sharing it are correspondingly ordinary. It can be archived with <code>tar</code> or <code>zip</code> and the archive shipped through any channel; it can be committed to a separate audit repository under version control; it can be written to object storage as a versioned bundle; it can be diffed between two runs with ordinary text tools, since the jsonl files are line-stable.</p>
+<p>A reviewer requires only <code>kernel.audit</code> and the audit subset of factpy in order to read a package back. There is no requirement of a running store, no ledger file to be supplied alongside the package, and no need for the schema or rule code that produced the run. This self-containment is what makes audit packages a deliverable rather than a debugging aid: the bundle stands on its own, interpretable independently of the system that produced it.</p>
+<h2 id="when-to-export">When to export<a class="anchor" href="#when-to-export">#</a></h2>
+<p>Two rhythms of export are appropriate to most use cases.</p>
+<p>The first is <em>export per logical run</em>. A batch import, a nightly derivation pass, a reviewer&rsquo;s accept session — each of these is one logical unit of work, and exporting a package at the end of each gives a single bundle to point at when someone later asks what happened during it. This is the typical case for systems whose work falls into discrete runs.</p>
+<p>The second is <em>baseline plus on-demand export</em>. A long-running service exports a baseline package at each release boundary, and produces an additional package whenever an investigation requires one. The baselines are archived as the system&rsquo;s audit history; the on-demand packages are generated and shared as questions arise.</p>
+<p>For ad-hoc development and for tests, exporting is generally unnecessary. The run records exist in the store regardless of whether they are exported, and the export is only required when the records need to leave the system that produced them.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<p><a href="/docs/concepts/audit-and-provenance">Audit and provenance</a> develops the conceptual picture of what is recorded during a run and why. The reference for <code>kernel.audit</code> covers every builder DTO, the evidence-graph node and edge taxonomy, and the manifest schema in full. <a href="/docs/guides/running-derivations">Running derivations</a> develops the candidate-and-acceptance lifecycle whose records fill an audit package in the first place.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/de/docs/guides/running-derivations/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Ableitungen ausführen</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/de/docs/guides/persistence/" class="flex align-center">
+        <span>Persistenz</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#auditing-a-run">Auditing a run</a>
+      <ul>
+        <li><a href="#producing-a-package">Producing a package</a></li>
+        <li><a href="#anatomy-of-a-package">Anatomy of a package</a></li>
+        <li><a href="#reading-a-package-back">Reading a package back</a></li>
+        <li><a href="#common-views">Common views</a></li>
+        <li><a href="#what-a-reviewer-asks-and-where-to-look">What a reviewer asks, and where to look</a></li>
+        <li><a href="#sharing-a-package">Sharing a package</a></li>
+        <li><a href="#when-to-export">When to export</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Reading and writing# This guide covers the day-to-day mechanics of putting facts into the ledger and reading them back out: the two write paths the SDK provides, the shape of single-entity and filter-based reads, the conventions around write-time metadata, the semantics of retraction and idempotent re-runs, and the typed errors raised when something is wrong with the call. It assumes a schema and an open store; for the schema side, see defining a schema, and for the conceptual underpinning of writes, projections, and retractions, see the ledger.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/guides/reading-and-writing/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Reading and Writing">
+  <meta property="og:description" content="Reading and writing# This guide covers the day-to-day mechanics of putting facts into the ledger and reading them back out: the two write paths the SDK provides, the shape of single-entity and filter-based reads, the conventions around write-time metadata, the semantics of retraction and idempotent re-runs, and the typed errors raised when something is wrong with the call. It assumes a schema and an open store; for the schema side, see defining a schema, and for the conceptual underpinning of writes, projections, and retractions, see the ledger.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Reading and Writing">
+  <meta itemprop="description" content="Reading and writing# This guide covers the day-to-day mechanics of putting facts into the ledger and reading them back out: the two write paths the SDK provides, the shape of single-entity and filter-based reads, the conventions around write-time metadata, the semantics of retraction and idempotent re-runs, and the typed errors raised when something is wrong with the call. It assumes a schema and an open store; for the schema side, see defining a schema, and for the conceptual underpinning of writes, projections, and retractions, see the ledger.">
+  <meta itemprop="wordCount" content="1910">
+
+<title>Reading and Writing | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/guides/reading-and-writing/">
+  <link rel="alternate" hreflang="de" href="http://localhost:1313/de/docs/guides/reading-and-writing/" title="Lesen und Schreiben">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.2d0bb1214ca4979905abe6ff414cee5d5260e17e8f410ecb0cc797cb83587775.js" integrity="sha256-LQuxIUykl5kFq&#43;b/QUzuXVJg4X6PQQ7LDMeXy4NYd3U=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        English
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/de/docs/guides/reading-and-writing/" class="flex flex-auto">
+          Deutsch
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-903cb365ca4589d060a9e0c4e9cacd7a" class="toggle"  />
+    <label for="section-903cb365ca4589d060a9e0c4e9cacd7a" class="flex">
+      <a role="button" class="">
+        Concepts</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d26c9af1cc2443c595895ff545ee9a45" class="toggle" checked />
+    <label for="section-d26c9af1cc2443c595895ff545ee9a45" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/defining-a-schema/" class="">
+      Defining a Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/reading-and-writing/" class="active">
+      Reading and Writing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/writing-rules/" class="">
+      Writing Rules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/running-derivations/" class="">
+      Running Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/using-adapters/" class="">
+      Using Adapters</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ca174a65b61b36959d2dfae132eedf04" class="toggle"  />
+    <label for="section-ca174a65b61b36959d2dfae132eedf04" class="flex">
+      <a href="/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Reading and Writing</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#reading-and-writing">Reading and writing</a>
+      <ul>
+        <li><a href="#the-batch-path">The batch path</a>
+          <ul>
+            <li><a href="#partial-identity">Partial identity</a></li>
+          </ul>
+        </li>
+        <li><a href="#the-direct-path">The direct path</a></li>
+        <li><a href="#reading-single-entities">Reading single entities</a></li>
+        <li><a href="#reading-by-filter">Reading by filter</a></li>
+        <li><a href="#metadata-conventions">Metadata conventions</a></li>
+        <li><a href="#retraction-is-a-new-entry">Retraction is a new entry</a></li>
+        <li><a href="#idempotence-and-re-runs">Idempotence and re-runs</a></li>
+        <li><a href="#errors-worth-knowing">Errors worth knowing</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="reading-and-writing">Reading and writing<a class="anchor" href="#reading-and-writing">#</a></h1>
+<p>This guide covers the day-to-day mechanics of putting facts into the ledger and reading them back out: the two write paths the SDK provides, the shape of single-entity and filter-based reads, the conventions around write-time metadata, the semantics of retraction and idempotent re-runs, and the typed errors raised when something is wrong with the call. It assumes a schema and an open store; for the schema side, see <a href="/docs/guides/defining-a-schema">defining a schema</a>, and for the conceptual underpinning of writes, projections, and retractions, see <a href="/docs/concepts/the-ledger">the ledger</a>.</p>
+<p>The SDK provides two paths for writes. A <em>batch API</em> groups multiple writes into a single transactional unit and is the path most application code uses. A <em>direct API</em> writes one assertion at a time and returns its id, which is appropriate when a particular write needs to be addressed individually after the fact. Both paths produce identical entries in the ledger; the difference is one of ergonomics and of when the kernel applies the writes.</p>
+<h2 id="the-batch-path">The batch path<a class="anchor" href="#the-batch-path">#</a></h2>
+<p>A batch transaction is opened with <code>sdk.batch</code>, populated with entity handles and field operations, and committed atomically.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>tx <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>batch(meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;seed-001&#34;</span>, <span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import_job&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>de <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Country, iso_code<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;DE&#34;</span>)
+</span></span><span style="display:flex;"><span>de<span style="color:#ff6ac1">.</span>name<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;Germany&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Person, person_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;p-001&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>alice<span style="color:#ff6ac1">.</span>name<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;Alice&#34;</span>)
+</span></span><span style="display:flex;"><span>alice<span style="color:#ff6ac1">.</span>tag<span style="color:#ff6ac1">.</span>add(<span style="color:#5af78e">&#34;vip&#34;</span>)
+</span></span><span style="display:flex;"><span>alice<span style="color:#ff6ac1">.</span>home_country<span style="color:#ff6ac1">.</span>set(de)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>result <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>commit()
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;written assertions:&#34;</span>, <span style="color:#ff5c57">len</span>(result<span style="color:#ff6ac1">.</span>apply_result<span style="color:#ff6ac1">.</span>assertion_ids))</span></span></code></pre></div><p>The <code>meta</code> argument supplied to <code>sdk.batch</code> flows onto every assertion the transaction writes, unless overridden on a per-call basis. <code>tx.entity(Cls, **identity)</code> returns a handle on which field operations are queued: <code>.field.set(...)</code> for single-cardinality fields, <code>.field.add(...)</code> for multi-cardinality fields. Handles know the entity&rsquo;s address and the schema&rsquo;s predicates, so writes are typed and validated locally before they are queued, and a typing or cardinality mistake is reported at the call site rather than at commit time.</p>
+<p>Cross-entity references are passed by handle rather than by string. When <code>alice.home_country.set(de)</code> is called with <code>de</code> being the handle to a <code>Country</code>, the SDK records the country&rsquo;s address as the value of <code>alice.home_country</code>. The reference is resolved into a managed string at commit time, and the API rejects values that did not originate as a handle from <code>tx.entity</code> or as a managed reference from <code>sdk.ref</code>. Reference strings are never to be constructed by hand.</p>
+<p>A transaction can be inspected before it is committed. <code>tx.preview()</code> returns a plan listing every operation the commit would perform, without writing anything; it is useful when the transaction is constructed dynamically and some validation is needed before the writes become visible.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>plan <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>preview()
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;planned ops:&#34;</span>, <span style="color:#ff5c57">len</span>(plan<span style="color:#ff6ac1">.</span>ops))</span></span></code></pre></div><p><code>tx.commit()</code> applies the queued operations atomically: either every assertion in the batch reaches the ledger or none of them do. Errors raise before any writes become visible, and a partially-applied batch is not a state the kernel allows.</p>
+<h3 id="partial-identity">Partial identity<a class="anchor" href="#partial-identity">#</a></h3>
+<p>When an entity has a composite identity and only part of it is known at the moment a handle is created, the handle is declared with what is available and the remaining identity values are bound later through <code>bind</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>bob <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Person, person_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;p-002&#34;</span>)
+</span></span><span style="display:flex;"><span>bob <span style="color:#ff6ac1">=</span> bob<span style="color:#ff6ac1">.</span>bind(locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>bob<span style="color:#ff6ac1">.</span>name<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;Bob&#34;</span>)</span></span></code></pre></div><p><code>bind</code> returns a fully-identified handle. Calling field methods on a partially-identified handle raises rather than silently writing to a different address.</p>
+<h2 id="the-direct-path">The direct path<a class="anchor" href="#the-direct-path">#</a></h2>
+<p>The direct API is appropriate wherever a particular write needs to be addressable individually — when the assertion id of a specific write must be retained for a later retraction, when each call carries its own metadata, or when an external stream of events is being translated one assertion at a time.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>ref <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>ref(Person, person_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;p-001&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>asrt_alias <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>add(Person<span style="color:#ff6ac1">.</span>alias, ref, <span style="color:#5af78e">&#34;Alice Cooper&#34;</span>,
+</span></span><span style="display:flex;"><span>                     meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;review&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;rev-44&#34;</span>})
+</span></span><span style="display:flex;"><span>asrt_age   <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>set(Person<span style="color:#ff6ac1">.</span>age, ref, <span style="color:#ff9f43">31</span>,
+</span></span><span style="display:flex;"><span>                     meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;review&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;rev-44&#34;</span>,
+</span></span><span style="display:flex;"><span>                           <span style="color:#5af78e">&#34;version&#34;</span>: <span style="color:#5af78e">&#34;v2&#34;</span>, <span style="color:#5af78e">&#34;valid_from&#34;</span>: <span style="color:#5af78e">&#34;2024-01-01T00:00:00+00:00&#34;</span>})
+</span></span><span style="display:flex;"><span>revoker    <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>retract(asrt_alias,
+</span></span><span style="display:flex;"><span>                         meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;review&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;rev-45&#34;</span>})</span></span></code></pre></div><p><code>sdk.ref(Cls, **identity)</code> registers an identity and returns the managed reference string used by the subsequent calls. <code>sdk.set</code> and <code>sdk.add</code> return the assertion id of the write, which is the value to retain when the assertion may later need to be referred to or retracted. <code>sdk.retract</code> accepts an assertion id rather than a value and returns the retraction&rsquo;s own assertion id, or <code>None</code> when the target assertion has already been retracted.</p>
+<p>The direct API is the appropriate choice when an individual write needs an individual handle — for retraction by id, for per-call metadata that differs across writes, or for translating an external event stream where each event becomes one assertion. For everything else, the batch API is shorter, atomic by default, and the recommended path.</p>
+<h2 id="reading-single-entities">Reading single entities<a class="anchor" href="#reading-single-entities">#</a></h2>
+<p>The simplest read is a snapshot of one entity, addressed by its identity coordinates.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>get(Person, person_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;p-001&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(alice<span style="color:#ff6ac1">.</span>name)         <span style="color:#78787e"># &#34;Alice&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(alice<span style="color:#ff6ac1">.</span>tag)          <span style="color:#78787e"># {&#34;vip&#34;}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(alice<span style="color:#ff6ac1">.</span>home_country) <span style="color:#78787e"># the Country snapshot</span></span></span></code></pre></div><p><code>sdk.get(Cls, **identity)</code> returns a read-only snapshot — the projection of the ledger at the active view, computed on demand from the relevant entries. Single-cardinality fields read as values, multi-cardinality fields as sets, and <code>entity_ref</code> fields as snapshots of the referenced entity, which makes navigation across reference fields a matter of attribute access (<code>alice.home_country.iso_code</code>).</p>
+<p>When the assertion history is needed in addition to the reduced field value, the snapshot exposes a per-field assertions namespace.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(alice<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>age<span style="color:#ff6ac1">.</span>active)         <span style="color:#78787e"># current assertions</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(alice<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>age<span style="color:#ff6ac1">.</span>history)        <span style="color:#78787e"># all assertions ever</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(alice<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>age<span style="color:#ff6ac1">.</span>version(<span style="color:#5af78e">&#34;v2&#34;</span>))  <span style="color:#78787e"># filtered by meta version</span></span></span></code></pre></div><p><code>active</code> returns the assertions that reduced into the snapshot. <code>history</code> returns every assertion the ledger holds for that field on that entity, retracted entries included, with a flag indicating retraction status. <code>version(...)</code> filters by the <code>version</code> meta key, which is the conventional shape for carrying parallel versions of a value — an old and a new tax rate, a draft and a published price — alongside one another in the ledger.</p>
+<p>A snapshot returned by <code>sdk.get</code> is <code>None</code> when no entity exists at the supplied identity in the active view (that is, when no <code>&lt;T&gt;:exists</code> assertion is in scope). The function does not raise on a missing entity; it returns <code>None</code>, and the caller is responsible for handling the absence.</p>
+<h2 id="reading-by-filter">Reading by filter<a class="anchor" href="#reading-by-filter">#</a></h2>
+<p>For entities matching a coarse identity-and-field filter, <code>sdk.find</code> returns a list of entity-shaped rows.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>vips <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>find(Person, tag<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;vip&#34;</span>, limit<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">50</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> row <span style="color:#ff6ac1">in</span> vips:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">print</span>(row<span style="color:#ff6ac1">.</span>ref, row<span style="color:#ff6ac1">.</span>name)</span></span></code></pre></div><p>Each row carries a <code>ref</code> attribute, holding the managed reference string, and exposes the entity&rsquo;s fields as attributes. The function is the ergonomic shape for enumerating entities matching simple criteria and is appropriate where the filter can be expressed as field equalities. For richer queries — joins across entities, negation, composition through sub-rules — a <code>Rule</code> evaluated by <code>sdk.run</code> is the right path; the rule DSL and its mechanics are developed in <a href="/docs/guides/writing-rules">writing rules</a>.</p>
+<h2 id="metadata-conventions">Metadata conventions<a class="anchor" href="#metadata-conventions">#</a></h2>
+<p>The <code>meta</code> argument accepts arbitrary string-keyed values, and the kernel imposes only that the values be JSON-friendly. A small set of keys recurs across factpy codebases by convention rather than by requirement, and adopting them consistently across a codebase makes audit packages easier to navigate later.</p>
+<p>The <code>source</code> key identifies the system or process responsible for the assertion — <code>&quot;import_job&quot;</code>, <code>&quot;reviewer&quot;</code>, <code>&quot;derivation:drv.vip_inference&quot;</code>. The <code>trace_id</code> key ties multiple assertions made under the same logical operation together, which becomes essential when reading audit packages and reconstructing what was done in a single run. The <code>version</code> key carries parallel versions of a value, where multiple variants of the same logical fact need to coexist in the ledger; the snapshot&rsquo;s <code>assertions.&lt;field&gt;.version(...)</code> reads them back. The <code>valid_from</code> and <code>valid_to</code> keys carry semantic time when distinct from the physical timestamp of the assertion. The <code>confidence</code> key is the conventional shape for facts produced from probabilistic sources or model outputs.</p>
+<p>None of these keys is required by the kernel. The conventions above are what most factpy codebases settle on, and following them is the simplest way to ensure that an audit reader, opening a package produced by your system, finds the metadata structured in a familiar way.</p>
+<h2 id="retraction-is-a-new-entry">Retraction is a new entry<a class="anchor" href="#retraction-is-a-new-entry">#</a></h2>
+<p>A retraction does not modify or remove the assertion it targets. It is a new ledger entry that refers to the targeted assertion by its id and that, when the snapshot is computed, causes the targeted assertion to be skipped during reduction. The targeted assertion remains in the ledger, queryable through <code>assertions.&lt;field&gt;.history</code>, and forms part of any audit package the run produces. There is no operation in factpy that modifies a fact in place; what looks like correction is always either a new assertion superseding an earlier one in the projection or a retraction recording the explicit withdrawal of the earlier assertion.</p>
+<p>The two patterns express different things, and the choice between them matters for the audit story. A new assertion expresses <em>the truth has changed</em>: a person&rsquo;s name was Alice, and is now Alicia; both assertions are part of the historical record, and the projection reflects the latest non-retracted value. A retraction expresses <em>the assertion should not have been made</em>: someone wrote that this person had the tag <code>blocked</code>, and now records that this writing was a mistake; the original assertion is preserved alongside the retraction, and the audit trail makes the act of withdrawal as visible as the act of writing. When in doubt, a new assertion is the appropriate choice; retractions are reserved for the case where the <em>prior writing</em> is what is being repudiated.</p>
+<h2 id="idempotence-and-re-runs">Idempotence and re-runs<a class="anchor" href="#idempotence-and-re-runs">#</a></h2>
+<p>Re-running a write that has already been performed is not a no-op. It produces a new ledger entry with the same predicate, subject, and value as the previous one, but with its own assertion id, its own timestamp, and potentially different metadata. The snapshot looks the same after the re-run as before; the ledger has grown by one entry.</p>
+<p>For a multi-cardinality field, the re-run is harmless to the projection, since the snapshot collapses duplicate values to one. For a single-cardinality field, the snapshot is likewise unchanged, since the new assertion takes the place of the previous one as the latest value while retaining the same value. In both cases, the ledger now records that the value was re-asserted at a later time, which can itself be useful information — <em>&ldquo;this value was confirmed again on 2024-04-01 by the import job&rdquo;</em> is a meaningful audit-side observation that an overwriting store would not preserve. Where genuine idempotence is required — <em>&ldquo;only write if not already present&rdquo;</em> — the write is wrapped in a read-then-write check by the application; the alternative is to accept that re-runs accumulate equivalent entries and let the audit story carry the additional records.</p>
+<h2 id="errors-worth-knowing">Errors worth knowing<a class="anchor" href="#errors-worth-knowing">#</a></h2>
+<p>The SDK raises a typed exception hierarchy with stable <code>code</code> attributes that downstream code can pattern-match on. <code>SDKSchemaError</code> is raised when a read or write references something the schema does not permit — an unknown field, missing identity values, or a type-domain mismatch on a value. <code>CardinalityError</code> is raised when <code>sdk.set</code> is called on a multi-cardinality field or <code>sdk.add</code> is called on a single-cardinality field, since the cardinality is part of the field declaration and the error indicates which of the two should have been called. <code>EntityNotFoundError</code> is raised by <code>sdk.edit(...)</code> when no entity exists at the supplied identity; <code>sdk.get(...)</code>, by contrast, does not raise on a missing entity but returns <code>None</code>. <code>SDKStoreError</code> is the catch-all for store-level problems — invalid references, schema-digest mismatches at open time, structural issues with the call. Each exception carries a <code>code</code> attribute, such as <code>&quot;FIELD_CARDINALITY_MISMATCH&quot;</code> or <code>&quot;UNRESOLVABLE_E_REF&quot;</code>, that is stable across patch versions; the full set is enumerated in the <a href="/docs/reference/error-codes">error codes reference</a>.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<p>The <a href="/docs/guides/writing-rules">writing rules guide</a> covers querying the ledger with the rule DSL, including joins across entities, sub-rules, and negation patterns. The <a href="/docs/guides/persistence">persistence guide</a> covers ledger files, the schema digest, and crossing process boundaries. For the conceptual underpinning of every read and write covered above, see <a href="/docs/concepts/the-ledger">the ledger</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/guides/defining-a-schema/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Defining a Schema</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/guides/writing-rules/" class="flex align-center">
+        <span>Writing Rules</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#reading-and-writing">Reading and writing</a>
+      <ul>
+        <li><a href="#the-batch-path">The batch path</a>
+          <ul>
+            <li><a href="#partial-identity">Partial identity</a></li>
+          </ul>
+        </li>
+        <li><a href="#the-direct-path">The direct path</a></li>
+        <li><a href="#reading-single-entities">Reading single entities</a></li>
+        <li><a href="#reading-by-filter">Reading by filter</a></li>
+        <li><a href="#metadata-conventions">Metadata conventions</a></li>
+        <li><a href="#retraction-is-a-new-entry">Retraction is a new entry</a></li>
+        <li><a href="#idempotence-and-re-runs">Idempotence and re-runs</a></li>
+        <li><a href="#errors-worth-knowing">Errors worth knowing</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

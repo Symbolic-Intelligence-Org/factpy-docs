@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Tutorial 05 — Onboarding journey# This tutorial is the capstone. We weave every move from tutorials 01–04 into a single end-to-end scenario: define a schema, write facts, query the ledger, derive new facts, accept them, export the run as an audit package, and read the package back. By the end you’ll have a complete factpy workflow you can adapt to a real project.
+The scenario: a small system that onboards new users into an organisation. We want to track users, their initial roles, and which of them get promoted to audited status by an automated rule. The rule’s output should be reviewable — why did this user get audited? — through the audit package.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/tutorials/05-onboarding-journey/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="05 — Onboarding Journey">
+  <meta property="og:description" content="Tutorial 05 — Onboarding journey# This tutorial is the capstone. We weave every move from tutorials 01–04 into a single end-to-end scenario: define a schema, write facts, query the ledger, derive new facts, accept them, export the run as an audit package, and read the package back. By the end you’ll have a complete factpy workflow you can adapt to a real project.
+The scenario: a small system that onboards new users into an organisation. We want to track users, their initial roles, and which of them get promoted to audited status by an automated rule. The rule’s output should be reviewable — why did this user get audited? — through the audit package.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="05 — Onboarding Journey">
+  <meta itemprop="description" content="Tutorial 05 — Onboarding journey# This tutorial is the capstone. We weave every move from tutorials 01–04 into a single end-to-end scenario: define a schema, write facts, query the ledger, derive new facts, accept them, export the run as an audit package, and read the package back. By the end you’ll have a complete factpy workflow you can adapt to a real project.
+The scenario: a small system that onboards new users into an organisation. We want to track users, their initial roles, and which of them get promoted to audited status by an automated rule. The rule’s output should be reviewable — why did this user get audited? — through the audit package.">
+  <meta itemprop="wordCount" content="1389">
+
+<title>05 — Onboarding Journey | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/tutorials/05-onboarding-journey/">
+  <link rel="alternate" hreflang="de" href="http://localhost:1313/de/docs/tutorials/05-onboarding-journey/" title="05 — Onboarding Journey">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.2d0bb1214ca4979905abe6ff414cee5d5260e17e8f410ecb0cc797cb83587775.js" integrity="sha256-LQuxIUykl5kFq&#43;b/QUzuXVJg4X6PQQ7LDMeXy4NYd3U=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        English
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/de/docs/tutorials/05-onboarding-journey/" class="flex flex-auto">
+          Deutsch
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-903cb365ca4589d060a9e0c4e9cacd7a" class="toggle"  />
+    <label for="section-903cb365ca4589d060a9e0c4e9cacd7a" class="flex">
+      <a role="button" class="">
+        Concepts</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d26c9af1cc2443c595895ff545ee9a45" class="toggle"  />
+    <label for="section-d26c9af1cc2443c595895ff545ee9a45" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/defining-a-schema/" class="">
+      Defining a Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/reading-and-writing/" class="">
+      Reading and Writing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/writing-rules/" class="">
+      Writing Rules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/running-derivations/" class="">
+      Running Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/using-adapters/" class="">
+      Using Adapters</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ca174a65b61b36959d2dfae132eedf04" class="toggle" checked />
+    <label for="section-ca174a65b61b36959d2dfae132eedf04" class="flex">
+      <a href="/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/05-onboarding-journey/" class="active">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>05 — Onboarding Journey</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#tutorial-05--onboarding-journey">Tutorial 05 — Onboarding journey</a>
+      <ul>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#the-schema">The schema</a></li>
+        <li><a href="#writing-the-initial-facts">Writing the initial facts</a></li>
+        <li><a href="#reading-what-we-wrote">Reading what we wrote</a></li>
+        <li><a href="#querying-with-the-dsl">Querying with the DSL</a></li>
+        <li><a href="#deriving-the-audited-tag">Deriving the <em>audited</em> tag</a></li>
+        <li><a href="#verifying-via-a-query">Verifying via a query</a></li>
+        <li><a href="#exporting-an-audit-package">Exporting an audit package</a></li>
+        <li><a href="#reading-the-package-back">Reading the package back</a></li>
+        <li><a href="#inspecting-a-candidates-evidence">Inspecting a candidate&rsquo;s evidence</a></li>
+        <li><a href="#what-we-built">What we built</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="tutorial-05--onboarding-journey">Tutorial 05 — Onboarding journey<a class="anchor" href="#tutorial-05--onboarding-journey">#</a></h1>
+<p>This tutorial is the capstone. We weave every move from tutorials 01–04 into a single end-to-end scenario: define a schema, write facts, query the ledger, derive new facts, accept them, export the run as an audit package, and read the package back. By the end you&rsquo;ll have a complete factpy workflow you can adapt to a real project.</p>
+<p>The scenario: a small system that onboards new users into an organisation. We want to track users, their initial roles, and which of them get promoted to <em>audited</em> status by an automated rule. The rule&rsquo;s output should be reviewable — <em>why</em> did this user get audited? — through the audit package.</p>
+<p>We won&rsquo;t introduce anything that wasn&rsquo;t covered in earlier tutorials. The goal here is to put it all together.</p>
+<h2 id="setup">Setup<a class="anchor" href="#setup">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> pathlib <span style="color:#ff6ac1">import</span> Path
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">import</span> tempfile
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> (
+</span></span><span style="display:flex;"><span>    SDKStore, Entity, Identity, Field,
+</span></span><span style="display:flex;"><span>    Derivation, Query, Pred, <span style="color:#ff5c57">vars</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.adapters.souffle.package <span style="color:#ff6ac1">import</span> ExportOptions
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.audit <span style="color:#ff6ac1">import</span> (
+</span></span><span style="display:flex;"><span>    AuditQuery,
+</span></span><span style="display:flex;"><span>    load_audit_package,
+</span></span><span style="display:flex;"><span>    build_candidate_evidence_tree_dto,
+</span></span><span style="display:flex;"><span>    build_candidate_evidence_tree_summary_dto,
+</span></span><span style="display:flex;"><span>    build_candidate_evidence_tree_narrative_dto,
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div><p>Three blocks. The SDK and DSL we&rsquo;ve been using throughout. The <code>ExportOptions</code> to declare an audit package. The <code>kernel.audit</code> reader to walk the package after export.</p>
+<h2 id="the-schema">The schema<a class="anchor" href="#the-schema">#</a></h2>
+<p>A <code>Country</code> (anchor for users), and a <code>User</code> with an admin tag, a home country, and identity coordinates we&rsquo;ve seen before:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Country</span>(Entity):
+</span></span><span style="display:flex;"><span>    code: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    locale: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity()
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tag: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>    home: Country <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes([Country, User])</span></span></code></pre></div><p><code>User</code> has a composite identity (<code>user_id</code> + <code>locale</code>), a multi-valued tag set, and a single-valued reference to a <code>Country</code>. We&rsquo;ll use the <code>tag</code> field for both directly-asserted and derived tags.</p>
+<h2 id="writing-the-initial-facts">Writing the initial facts<a class="anchor" href="#writing-the-initial-facts">#</a></h2>
+<p>Two countries, three users with various tags:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>de    <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>ref(Country, code<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;DE&#34;</span>)
+</span></span><span style="display:flex;"><span>fr    <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>ref(Country, code<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;FR&#34;</span>)
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>bob   <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u2&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>carol <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u3&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># Countries</span>
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>set(Country<span style="color:#ff6ac1">.</span>name, de, <span style="color:#5af78e">&#34;Germany&#34;</span>,
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-05&#34;</span>})
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>set(Country<span style="color:#ff6ac1">.</span>name, fr, <span style="color:#5af78e">&#34;France&#34;</span>,
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-05&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># Users</span>
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>name, alice, <span style="color:#5af78e">&#34;Alice&#34;</span>,
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-05&#34;</span>})
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>home, alice, de,
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-05&#34;</span>})
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>add(User<span style="color:#ff6ac1">.</span>tag, alice, <span style="color:#5af78e">&#34;admin&#34;</span>,
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;policy&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-05&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>name, bob, <span style="color:#5af78e">&#34;Bob&#34;</span>,
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-05&#34;</span>})
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>home, bob, fr,
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-05&#34;</span>})
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>add(User<span style="color:#ff6ac1">.</span>tag, bob, <span style="color:#5af78e">&#34;admin&#34;</span>,
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;policy&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-05&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>name, carol, <span style="color:#5af78e">&#34;Carol&#34;</span>,
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-05&#34;</span>})
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>home, carol, de,
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-05&#34;</span>})
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>add(User<span style="color:#ff6ac1">.</span>tag, carol, <span style="color:#5af78e">&#34;guest&#34;</span>,
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;policy&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;tut-05&#34;</span>})</span></span></code></pre></div><p>Three users: Alice and Bob are admins, Carol is a guest. We&rsquo;ll use the direct API here (<code>sdk.set</code> / <code>sdk.add</code> with <code>sdk.ref</code> references) to show that pattern; the batch API from tutorial 01 would work just as well.</p>
+<h2 id="reading-what-we-wrote">Reading what we wrote<a class="anchor" href="#reading-what-we-wrote">#</a></h2>
+<p>Sanity-check by snapshot:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>snap <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(snap<span style="color:#ff6ac1">.</span>name, <span style="color:#ff5c57">sorted</span>(snap<span style="color:#ff6ac1">.</span>tag), snap<span style="color:#ff6ac1">.</span>home<span style="color:#ff6ac1">.</span>code)
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># Alice [&#39;admin&#39;] DE</span></span></span></code></pre></div><p>Snapshots reduce the ledger under the schema&rsquo;s cardinality rules. Single-valued fields read as values; multi-valued fields read as sets; entity-reference fields read as nested snapshots so you can navigate (<code>snap.home.code</code>).</p>
+<h2 id="querying-with-the-dsl">Querying with the DSL<a class="anchor" href="#querying-with-the-dsl">#</a></h2>
+<p>A more general read uses a <code>Query</code>. Find every user, returning their ref and name:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;name&#34;</span>) <span style="color:#ff6ac1">as</span> (u, name):
+</span></span><span style="display:flex;"><span>    q <span style="color:#ff6ac1">=</span> Query(
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>[User(u), User<span style="color:#ff6ac1">.</span>name(value<span style="color:#ff6ac1">=</span>name)],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[User(u), u<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> name],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rows <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>run(q)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> row <span style="color:#ff6ac1">in</span> rows:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">print</span>(row)</span></span></code></pre></div><p><code>Query</code> is the lighter-weight cousin of <code>Rule</code>: same body language, no id, no version, with a head that can shape rows directly. Use it for inline reads; reach for <code>Rule</code> when you&rsquo;ll name and version the result.</p>
+<h2 id="deriving-the-audited-tag">Deriving the <em>audited</em> tag<a class="anchor" href="#deriving-the-audited-tag">#</a></h2>
+<p>The policy: every user who carries an <code>admin</code> tag should also carry an <code>audited</code> tag. We could write the audited tags by hand, but that&rsquo;s exactly the kind of derived fact a derivation should produce — so we can audit <em>why</em>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;loc&#34;</span>, <span style="color:#5af78e">&#34;derived&#34;</span>) <span style="color:#ff6ac1">as</span> (u, loc, derived):
+</span></span><span style="display:flex;"><span>    audit_drv <span style="color:#ff6ac1">=</span> Derivation(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;journey.derived_tag&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            User(u),
+</span></span><span style="display:flex;"><span>            u<span style="color:#ff6ac1">.</span>locale <span style="color:#ff6ac1">==</span> loc,
+</span></span><span style="display:flex;"><span>            Pred(<span style="color:#5af78e">&#34;user:tag&#34;</span>, u, <span style="color:#5af78e">&#34;admin&#34;</span>),
+</span></span><span style="display:flex;"><span>            derived <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;audited&#34;</span>,
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>User<span style="color:#ff6ac1">.</span>tag(user_id<span style="color:#ff6ac1">=</span>u<span style="color:#ff6ac1">.</span>identity(<span style="color:#5af78e">&#34;user_id&#34;</span>),
+</span></span><span style="display:flex;"><span>                      locale<span style="color:#ff6ac1">=</span>loc, tag<span style="color:#ff6ac1">=</span>derived),
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>candidates <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>evaluate(audit_drv, mode<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;native&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">f</span><span style="color:#5af78e">&#34;candidates: </span><span style="color:#5af78e">{</span><span style="color:#ff5c57">len</span>(candidates)<span style="color:#5af78e">}</span><span style="color:#5af78e">&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># 2 — Alice and Bob, since both have admin</span></span></span></code></pre></div><p>Two candidates, one per admin user. They are not yet in the ledger. Each candidate carries:</p>
+<ul>
+<li>the proposed fact (an <code>audited</code> tag for that user),</li>
+<li>the rule that produced it (<code>journey.derived_tag</code> v1.0.0),</li>
+<li>the supporting ledger entries (the user, the locale, the admin tag).</li>
+</ul>
+<p>Accept them:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> cand <span style="color:#ff6ac1">in</span> candidates:
+</span></span><span style="display:flex;"><span>    sdk<span style="color:#ff6ac1">.</span>accept(cand, approved_by<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;onboarding-policy&#34;</span>, note<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;auto-audit&#34;</span>)</span></span></code></pre></div><p>Re-read:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#ff5c57">sorted</span>(sdk<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)<span style="color:#ff6ac1">.</span>tag))
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># [&#39;admin&#39;, &#39;audited&#39;]</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#ff5c57">sorted</span>(sdk<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u3&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)<span style="color:#ff6ac1">.</span>tag))
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># [&#39;guest&#39;]</span></span></span></code></pre></div><p>Alice now has both <code>admin</code> (directly asserted) and <code>audited</code> (derived). Carol is unchanged. The derived facts are distinguishable from the directly-asserted ones because the <em>provenance</em> on each tells a different story — but the snapshot doesn&rsquo;t care; both are facts about the user.</p>
+<h2 id="verifying-via-a-query">Verifying via a query<a class="anchor" href="#verifying-via-a-query">#</a></h2>
+<p>If we want to find the <em>audited</em> users specifically, that&rsquo;s just a query:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>) <span style="color:#ff6ac1">as</span> (u,):
+</span></span><span style="display:flex;"><span>    audited_q <span style="color:#ff6ac1">=</span> Query(
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>User(u),
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[User(u), u<span style="color:#ff6ac1">.</span>tag <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;audited&#34;</span>],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rows <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>run(audited_q, row_format<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;instance&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> snap <span style="color:#ff6ac1">in</span> rows:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">print</span>(snap<span style="color:#ff6ac1">.</span>ref, snap<span style="color:#ff6ac1">.</span>name, <span style="color:#ff5c57">sorted</span>(snap<span style="color:#ff6ac1">.</span>tag))
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># user:u1|en  Alice  [&#39;admin&#39;, &#39;audited&#39;]</span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># user:u2|en  Bob    [&#39;admin&#39;, &#39;audited&#39;]</span></span></span></code></pre></div><p>Two users, both correctly audited. The query doesn&rsquo;t know which tags were directly asserted and which were derived — that distinction belongs to provenance, not to the snapshot.</p>
+<h2 id="exporting-an-audit-package">Exporting an audit package<a class="anchor" href="#exporting-an-audit-package">#</a></h2>
+<p>So far the run has happened entirely in memory. To make it reviewable elsewhere — by a colleague, in CI, by a compliance reader — we export an audit package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>package_dir <span style="color:#ff6ac1">=</span> Path(tempfile<span style="color:#ff6ac1">.</span>mkdtemp(prefix<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;factpy_journey_&#34;</span>))
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>export_package(package_dir, ExportOptions(package_kind<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;audit&#34;</span>))
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">f</span><span style="color:#5af78e">&#34;package at: </span><span style="color:#5af78e">{</span>package_dir<span style="color:#5af78e">}</span><span style="color:#5af78e">&#34;</span>)</span></span></code></pre></div><p>That writes a self-contained directory: schema, rules, run records, candidate ledger, accept-write ledger, decision log, evidence trees. The full layout is covered in <a href="../guides/auditing-a-run.md">auditing a run</a>; for the tutorial, the relevant point is that <em>one call gives you a complete review-ready bundle</em>.</p>
+<h2 id="reading-the-package-back">Reading the package back<a class="anchor" href="#reading-the-package-back">#</a></h2>
+<p><code>kernel.audit</code> reads packages without depending on the rest of factpy. Load the package and wrap it in an <code>AuditQuery</code> for ergonomic access:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>package <span style="color:#ff6ac1">=</span> load_audit_package(package_dir)
+</span></span><span style="display:flex;"><span>audit <span style="color:#ff6ac1">=</span> AuditQuery(package)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>runs <span style="color:#ff6ac1">=</span> audit<span style="color:#ff6ac1">.</span>list_runs()
+</span></span><span style="display:flex;"><span>accepted <span style="color:#ff6ac1">=</span> audit<span style="color:#ff6ac1">.</span>list_accepted_candidates()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">f</span><span style="color:#5af78e">&#34;runs in package: </span><span style="color:#5af78e">{</span><span style="color:#ff5c57">len</span>(runs)<span style="color:#5af78e">}</span><span style="color:#5af78e">&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">f</span><span style="color:#5af78e">&#34;accepted candidates: </span><span style="color:#5af78e">{</span><span style="color:#ff5c57">len</span>(accepted)<span style="color:#5af78e">}</span><span style="color:#5af78e">&#34;</span>)</span></span></code></pre></div><p><code>AuditQuery</code> is the navigation surface — it knows how the package is structured and gives you typed accessors for runs, candidates, decisions, and evidence. You don&rsquo;t have to walk JSON files by hand.</p>
+<h2 id="inspecting-a-candidates-evidence">Inspecting a candidate&rsquo;s evidence<a class="anchor" href="#inspecting-a-candidates-evidence">#</a></h2>
+<p>Pick one of the accepted candidates and walk its evidence tree:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>candidate_id <span style="color:#ff6ac1">=</span> accepted[<span style="color:#ff9f43">0</span>]<span style="color:#ff6ac1">.</span>candidate_id
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>raw_tree    <span style="color:#ff6ac1">=</span> build_candidate_evidence_tree_dto(audit, candidate_id)
+</span></span><span style="display:flex;"><span>summary     <span style="color:#ff6ac1">=</span> build_candidate_evidence_tree_summary_dto(audit, candidate_id)
+</span></span><span style="display:flex;"><span>narrative   <span style="color:#ff6ac1">=</span> build_candidate_evidence_tree_narrative_dto(audit, candidate_id)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;=== summary ===&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(summary<span style="color:#ff6ac1">.</span>summary_text)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;</span><span style="color:#5af78e">\n</span><span style="color:#5af78e">=== narrative ===&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(narrative<span style="color:#ff6ac1">.</span>narrative_text)</span></span></code></pre></div><p>Three views of the same evidence:</p>
+<ul>
+<li><strong>Raw tree</strong> — the full structure: candidate at the root, each body match below it, supporting ledger entries at the leaves.</li>
+<li><strong>Summary</strong> — a compact textual rendering for review UIs and dashboards.</li>
+<li><strong>Narrative</strong> — a human-readable English-prose explanation of why the candidate was produced.</li>
+</ul>
+<p>For Alice&rsquo;s <code>audited</code> candidate, the narrative will say something like: <em>&quot;<code>audited</code> was proposed for <code>User(u1, en)</code> by rule <code>journey.derived_tag</code> v1.0.0, supported by the assertion of <code>User(u1, en)</code>&rsquo;s <code>admin</code> tag at entry #5, and the resolution of <code>u1</code>&rsquo;s locale to <code>en</code> at entry #2.&quot;</em> The exact wording is engine-determined; the structure — <em>what got proposed, by what rule, supported by what facts</em> — is what reviewers see.</p>
+<p>This is the property the audit story is built on: <em>every derived fact in the ledger has an evidence trail, and that trail is mechanically inspectable</em>. It&rsquo;s not a log file; it&rsquo;s a structured graph linking conclusions back to the leaf facts that supported them, with the rule that did the linking named explicitly.</p>
+<h2 id="what-we-built">What we built<a class="anchor" href="#what-we-built">#</a></h2>
+<p>A complete factpy workflow:</p>
+<ol>
+<li>A typed schema with two entities, an entity-reference field, and a multi-valued tag.</li>
+<li>Direct fact-writes with provenance metadata.</li>
+<li>Snapshot reads and a <code>Query</code> over the ledger.</li>
+<li>A <code>Derivation</code> that proposes new facts based on existing ones.</li>
+<li>An <code>accept</code> step that turns candidates into ledger writes with evidence preserved.</li>
+<li>An audit package export, capturing the entire run as a self-contained directory.</li>
+<li>An audit-package read, walking from the high-level run down to a specific candidate&rsquo;s evidence tree.</li>
+</ol>
+<p>This is the shape every factpy project ends up having. Different schemas, different rules, possibly different engines (PyReason or ProbLog instead of the native evaluator) — but the same structural arc: write facts, ask questions, derive conclusions deliberately, keep the trail.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<p>The tutorials are done. From here:</p>
+<ul>
+<li>The <a href="../guides/_index.md">guides</a> cover each move in task-oriented depth — pick the one that matches what you&rsquo;re stuck on.</li>
+<li>The <a href="../concepts/_index.md">concepts</a> cover the conceptual model when you want to step back from the <em>how</em> and understand the <em>why</em>.</li>
+<li>The <a href="../reference/_index.md">reference</a> (when written) covers the full API surface — every entry point, every option, every error code.</li>
+</ul>
+<p>Build something with it.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/tutorials/04-problog-probabilistic/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>04 — ProbLog Probabilistic</span>
+      </a>
+    
+    </span>
+    <span>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#tutorial-05--onboarding-journey">Tutorial 05 — Onboarding journey</a>
+      <ul>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#the-schema">The schema</a></li>
+        <li><a href="#writing-the-initial-facts">Writing the initial facts</a></li>
+        <li><a href="#reading-what-we-wrote">Reading what we wrote</a></li>
+        <li><a href="#querying-with-the-dsl">Querying with the DSL</a></li>
+        <li><a href="#deriving-the-audited-tag">Deriving the <em>audited</em> tag</a></li>
+        <li><a href="#verifying-via-a-query">Verifying via a query</a></li>
+        <li><a href="#exporting-an-audit-package">Exporting an audit package</a></li>
+        <li><a href="#reading-the-package-back">Reading the package back</a></li>
+        <li><a href="#inspecting-a-candidates-evidence">Inspecting a candidate&rsquo;s evidence</a></li>
+        <li><a href="#what-we-built">What we built</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,10 +1,11 @@
-baseURL = 'https://factpy.docs.symbolic-intelligence.de/'
+baseURL = 'https://factgraph.docs.symbolic-intelligence.de/'
 locale = 'en-us'
-title = 'FactPy'
+title = 'factgraph'
 theme = 'hugo-book'
 
 disqusShortname = "my-site"
 
+enableGitInfo = true
 
 copyright = '[© CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)'
 
@@ -28,7 +29,7 @@ copyright = '[© CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcod
   contentDir = 'content.en'
   weight = 1
 
-[languages.de]
-label = 'Deutsch'
-contentDir = 'content.de'
-weight = 2
+[params]
+  # (Optional, default light) Sets color theme: light, dark or auto.
+  # Theme 'auto' switches between dark and light modes based on browser/os preferences
+  BookTheme = 'dark'

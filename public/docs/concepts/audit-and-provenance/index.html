@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Audit and provenance# Provenance and audit address two related but distinguishable questions. Provenance is the question of where a particular fact came from, and is a property of every individual entry in the ledger. Audit is the question of what happened in a particular run of the system, and whether a third party can reproduce or check it. The two are intertwined — an audit story made up of facts whose provenance has not been preserved is not much of an audit story — but the kernel handles them through different mechanisms, which the present page describes in turn. The page covers the metadata that travels with each fact, the records that travel with each run, the shape of the evidence that derivations produce, and the audit-package format that bundles all of these into a self-contained artifact suitable for archival and offline review.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/concepts/audit-and-provenance/">
+  <meta property="og:site_name" content="FactPy">
+  <meta property="og:title" content="Audit and Provenance">
+  <meta property="og:description" content="Audit and provenance# Provenance and audit address two related but distinguishable questions. Provenance is the question of where a particular fact came from, and is a property of every individual entry in the ledger. Audit is the question of what happened in a particular run of the system, and whether a third party can reproduce or check it. The two are intertwined — an audit story made up of facts whose provenance has not been preserved is not much of an audit story — but the kernel handles them through different mechanisms, which the present page describes in turn. The page covers the metadata that travels with each fact, the records that travel with each run, the shape of the evidence that derivations produce, and the audit-package format that bundles all of these into a self-contained artifact suitable for archival and offline review.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Audit and Provenance">
+  <meta itemprop="description" content="Audit and provenance# Provenance and audit address two related but distinguishable questions. Provenance is the question of where a particular fact came from, and is a property of every individual entry in the ledger. Audit is the question of what happened in a particular run of the system, and whether a third party can reproduce or check it. The two are intertwined — an audit story made up of facts whose provenance has not been preserved is not much of an audit story — but the kernel handles them through different mechanisms, which the present page describes in turn. The page covers the metadata that travels with each fact, the records that travel with each run, the shape of the evidence that derivations produce, and the audit-package format that bundles all of these into a self-contained artifact suitable for archival and offline review.">
+  <meta itemprop="wordCount" content="1595">
+
+<title>Audit and Provenance | FactPy</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/concepts/audit-and-provenance/">
+  <link rel="alternate" hreflang="de" href="http://localhost:1313/de/docs/concepts/audit-and-provenance/" title="Audit und Provenienz">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.1ca26259c496b7b66f39629503a8d9e08519e8f7c30bb604708e38d619a642a2.js" integrity="sha256-HKJiWcSWt7ZvOWKVA6jZ4IUZ6PfDC7YEcI441hmmQqI=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>FactPy</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        English
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/de/docs/concepts/audit-and-provenance/" class="flex flex-auto">
+          Deutsch
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-903cb365ca4589d060a9e0c4e9cacd7a" class="toggle" checked />
+    <label for="section-903cb365ca4589d060a9e0c4e9cacd7a" class="flex">
+      <a role="button" class="">
+        Concepts</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/overview/" class="">
+      Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/the-ledger/" class="">
+      The Ledger</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/entities-and-fields/" class="">
+      Entities and Fields</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-derivations/" class="">
+      Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/audit-and-provenance/" class="active">
+      Audit and Provenance</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d26c9af1cc2443c595895ff545ee9a45" class="toggle"  />
+    <label for="section-d26c9af1cc2443c595895ff545ee9a45" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/defining-a-schema/" class="">
+      Defining a Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/reading-and-writing/" class="">
+      Reading and Writing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/writing-rules/" class="">
+      Writing Rules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/running-derivations/" class="">
+      Running Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/using-adapters/" class="">
+      Using Adapters</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ca174a65b61b36959d2dfae132eedf04" class="toggle"  />
+    <label for="section-ca174a65b61b36959d2dfae132eedf04" class="flex">
+      <a href="/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Audit and Provenance</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#audit-and-provenance">Audit and provenance</a>
+      <ul>
+        <li><a href="#provenance-on-every-fact">Provenance on every fact</a></li>
+        <li><a href="#records-of-every-run">Records of every run</a></li>
+        <li><a href="#evidence-trees-and-graphs">Evidence: trees and graphs</a></li>
+        <li><a href="#the-audit-package">The audit package</a></li>
+        <li><a href="#reading-audit-packages-offline">Reading audit packages offline</a></li>
+        <li><a href="#why-audit-and-provenance-are-part-of-the-kernel">Why audit and provenance are part of the kernel</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="audit-and-provenance">Audit and provenance<a class="anchor" href="#audit-and-provenance">#</a></h1>
+<p>Provenance and audit address two related but distinguishable questions. Provenance is the question of where a particular fact came from, and is a property of every individual entry in the ledger. Audit is the question of what happened in a particular run of the system, and whether a third party can reproduce or check it. The two are intertwined — an audit story made up of facts whose provenance has not been preserved is not much of an audit story — but the kernel handles them through different mechanisms, which the present page describes in turn. The page covers the metadata that travels with each fact, the records that travel with each run, the shape of the evidence that derivations produce, and the audit-package format that bundles all of these into a self-contained artifact suitable for archival and offline review.</p>
+<h2 id="provenance-on-every-fact">Provenance on every fact<a class="anchor" href="#provenance-on-every-fact">#</a></h2>
+<p>Every entry in the ledger carries metadata describing the act of asserting it. The kernel itself contributes the timestamp at which the assertion was written and the assertion id by which the entry can later be referred to. Beyond that, the metadata is whatever the writing party chose to include, and although the kernel imposes no naming convention, a small set of keys recurs across factpy codebases: <code>source</code>, identifying the system or process responsible for the write; <code>trace_id</code>, tying multiple assertions from the same logical operation together; <code>confidence</code>, where applicable, for facts produced from probabilistic sources or model outputs; and any further keys an application finds useful — a reviewer&rsquo;s name, a request id, a batch identifier.</p>
+<p>Provenance is local to the assertion rather than to the entity. If a person&rsquo;s name was set by an import job at t=10 and corrected by a reviewer at t=50, the ledger holds two distinct assertions with two distinct metadata blocks; the snapshot reduces them to the latest non-retracted value, while the audit story preserves both, with the source, the time, and the further keys of each. This is the property a mutable-row store cannot offer: a row carries at most the metadata of the most recent writer, and the act of overwriting the previous value also overwrites whatever traces of its origin existed alongside it. The append-only ledger is constructed to make that loss impossible.</p>
+<h2 id="records-of-every-run">Records of every run<a class="anchor" href="#records-of-every-run">#</a></h2>
+<p>Provenance accounts for facts; audit accounts for operations. Beyond the metadata of each individual write, the kernel records, for each run of any kind, enough structured information to reconstruct what was done. A rule run records the rule&rsquo;s id and version, the ledger state it ran against, and the rows it returned. A derivation evaluation records the derivation, its body or bodies, the candidates produced, and the supporting ledger entries for each candidate. An acceptance records the candidate accepted, the reviewer or process that accepted it, the new ledger entries that resulted, and the evidence preserved as provenance on those entries. An authoring change to a schema, rule, or derivation records an apply event together with the diff that produced it. The records are structured enough to be replayed: given the same ledger state and the same rule, the same output is produced. Where a step depends on something the kernel cannot itself reproduce — a non-deterministic adapter, an external service called during evaluation — the dependency is itself recorded as part of the run rather than left implicit.</p>
+<h2 id="evidence-trees-and-graphs">Evidence: trees and graphs<a class="anchor" href="#evidence-trees-and-graphs">#</a></h2>
+<p>When a derivation produces a candidate, the kernel attaches an evidence record that names the rule and its version and identifies every ledger entry that supported the match. Under the native evaluator, the record takes the shape of a tree. The candidate is the root, the body matches are its children, sub-rule references via <code>RuleRef</code> produce further children, and the leaves of the tree are the concrete ledger entries that satisfied the body&rsquo;s atoms.</p>
+<pre tabindex="0"><code>candidate:  Person.tag(alice, &#34;vip&#34;)
+└── derivation: drv.vip_inference v1.0.0
+    └── body 1 (confidence=0.95)
+        ├── Person(alice)             ← entry #140
+        ├── Person.locale(alice,&#34;en&#34;) ← entry #141
+        └── profile:vip(alice, true)  ← entry #142</code></pre><p>Under engines whose reasoning is not tree-shaped — PyReason, with its propagation through a graph over discrete time steps; ProbLog, with the proof structures it produces for some queries — the evidence record is itself a graph rather than a tree. A tree cannot faithfully represent a propagation in which beliefs reach the same conclusion through several routes, nor a probabilistic inference whose argument structure is a directed acyclic graph rather than a hierarchy. The kernel exposes the graph form as an <code>EvidenceGraph</code> with typed nodes — <code>seed</code>, <code>premise</code>, <code>conclusion</code> — and typed edges — <code>supports</code>, <code>derives</code>, <code>updates</code> — together with a layout hint that lets renderers choose between tree and timeline displays. The shape of the graph is engine-agnostic; the content is engine-specific, since a native trace, a PyReason propagation, and a ProbLog inference each say different things about how their conclusions were reached, even when those conclusions happen to be the same fact.</p>
+<h2 id="the-audit-package">The audit package<a class="anchor" href="#the-audit-package">#</a></h2>
+<p>An audit package is a self-contained directory that bundles a run, or a set of runs, into an artifact suitable for archival, transfer, or offline review. It is the format in which a factpy system makes its audit story portable, and it is produced by a single call to <code>sdk.export_package</code>.</p>
+<pre class="mermaid">flowchart TD
+    Pkg[(&#34;audit package&#34;)]
+    Pkg --&gt; Manifest[&#34;manifest.json&lt;br/&gt;(self-describing)&#34;]
+    Pkg --&gt; RunLedger[&#34;run ledger&lt;br/&gt;what was written&#34;]
+    Pkg --&gt; Cands[&#34;candidate ledger&lt;br/&gt;what was proposed&#34;]
+    Pkg --&gt; Accepts[&#34;accept-write ledger&lt;br/&gt;what was accepted&#34;]
+    Pkg --&gt; Decisions[&#34;decision log&lt;br/&gt;who accepted what&#34;]
+    Pkg --&gt; Failed[&#34;accept-failed&lt;br/&gt;and why&#34;]
+    Pkg --&gt; Mapping[&#34;mapping resolution&lt;br/&gt;schema lens used&#34;]
+    Pkg --&gt; Evidence[&#34;evidence graphs&lt;br/&gt;per candidate&#34;]
+    Pkg --&gt; Authoring[&#34;authoring events&lt;br/&gt;schema/rule diffs&#34;]
+
+    style Pkg fill:none</pre><script src="/mermaid.min.js"></script><script>mermaid.initialize({"flowchart":{"useMaxWidth":true},"theme":"default"})</script><p>The package separates four concerns into distinct files. The facts are in the run ledger. The candidates produced by derivations during the run, together with the evidence supporting each, are in the candidate ledger and in the per-candidate evidence records. The decisions made about those candidates — which were accepted, by whom, which were rejected and why — are in the decision log and the accept-write ledger. The schema and rule versions in use during the run, together with any authoring changes, are recorded as machinery alongside the rest. A top-level manifest declares the package&rsquo;s kind and lists the relative paths of every component, so that a reader does not need to know the internal layout in order to navigate the package; the manifest is the authoritative index and is the file an audit reader should open first.</p>
+<p>A package is reproducible to the extent its inputs are. Schema and rule versions are captured exactly. Run ledgers and candidate ledgers are deterministic outputs of the writes and the rules. Evidence graphs are deterministic outputs of the engine that produced them. Where an adapter engine admits a non-deterministic component — a wall-clock timeout, a stochastic solver — the relevant configuration is captured alongside the result, so that the conditions of the run remain recoverable even where the output is not bit-for-bit reproducible.</p>
+<h2 id="reading-audit-packages-offline">Reading audit packages offline<a class="anchor" href="#reading-audit-packages-offline">#</a></h2>
+<p>The <code>kernel.audit</code> module reads audit packages without depending on the rest of the kernel.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.audit <span style="color:#ff6ac1">import</span> load_audit_package
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pkg <span style="color:#ff6ac1">=</span> load_audit_package(<span style="color:#5af78e">&#34;./audits/run-2024-04-01&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(pkg<span style="color:#ff6ac1">.</span>manifest[<span style="color:#5af78e">&#34;package_kind&#34;</span>])    <span style="color:#78787e"># &#34;audit&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#ff5c57">len</span>(pkg<span style="color:#ff6ac1">.</span>candidate_ledger))       <span style="color:#78787e"># candidates produced</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#ff5c57">len</span>(pkg<span style="color:#ff6ac1">.</span>accept_write_ledger))    <span style="color:#78787e"># candidates accepted</span></span></span></code></pre></div><p><code>load_audit_package</code> returns the package&rsquo;s contents as plain data: the manifest as a parsed JSON object, the various ledgers as lists of jsonl-decoded entries, the evidence graphs as <code>EvidenceGraph</code> instances, the decision log as a list of decision entries. From these, applications and reviewers construct whatever views the situation calls for — a compliance summary tabulating decisions by reviewer, a per-rule trace showing which versions ran when, a single candidate&rsquo;s full evidence tree, a timeline reconstructing how a particular fact came to be true. The kernel ships builder functions for the most common of these views, among them <code>build_decision_detail_dto</code>, <code>build_rule_trace_detail_dto</code>, and <code>build_candidate_evidence_tree_dto</code>, both as ready-made navigation for applications that do not want to write their own and as worked examples of what each slice of the package contains.</p>
+<h2 id="why-audit-and-provenance-are-part-of-the-kernel">Why audit and provenance are part of the kernel<a class="anchor" href="#why-audit-and-provenance-are-part-of-the-kernel">#</a></h2>
+<p>Audit features attached to a system after its core has been built tend to be partial in a characteristic way. They record what could be observed at the integration points the system already had — a database trigger here, a request log there, a periodic snapshot of state — and the result is a reconstruction rather than a record, with gaps wherever an operation happened to fall between the available observation points and with no guarantee that the observed pieces fit together into a coherent story.</p>
+<p>factpy puts the integration points where they actually need to be by making them part of the core. Every fact is an assertion with provenance, every rule run is an operation with a record, every derivation produces a candidate with evidence, every acceptance creates a decision log entry. The audit package is no more than these records collected into a directory; nothing in it is reconstructed after the fact, because nothing was discarded as the records were being made. The cost of this design — the additional metadata travelling with every operation, the additional structure travelling with every candidate — is what buys an audit story that is not a separate report but the same data structure used during the run, written out to a directory afterwards.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<p>The <a href="/docs/guides/auditing-a-run">auditing a run guide</a> walks through producing an audit package from a real workflow and reading it back. The reference for <code>kernel.audit</code> covers the package layout, every builder DTO, and the evidence-graph node and edge taxonomy in full. For the mechanism by which provenance enters the ledger in the first place, see <a href="/docs/concepts/the-ledger">the ledger</a> and <a href="/docs/concepts/rules-and-derivations">rules and derivations</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/concepts/rules-and-derivations/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Rules and Derivations</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/guides/defining-a-schema/" class="flex align-center">
+        <span>Defining a Schema</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>FactPy - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#audit-and-provenance">Audit and provenance</a>
+      <ul>
+        <li><a href="#provenance-on-every-fact">Provenance on every fact</a></li>
+        <li><a href="#records-of-every-run">Records of every run</a></li>
+        <li><a href="#evidence-trees-and-graphs">Evidence: trees and graphs</a></li>
+        <li><a href="#the-audit-package">The audit package</a></li>
+        <li><a href="#reading-audit-packages-offline">Reading audit packages offline</a></li>
+        <li><a href="#why-audit-and-provenance-are-part-of-the-kernel">Why audit and provenance are part of the kernel</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

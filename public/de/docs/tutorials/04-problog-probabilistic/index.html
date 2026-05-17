@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Tutorial 04 — ProbLog probabilistic reasoning# The native engine reasons about facts as either-true-or-not-asserted. The Body(..., confidence=...) shape from tutorial 02 lets you tag whole bodies with a confidence — useful for review-time filtering, but not the same as actually reasoning probabilistically. When you need real probabilistic semantics — facts that are true with some probability, rules that combine probabilities properly, queries that return marginal probabilities — you reach for ProbLog.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/de/docs/tutorials/04-problog-probabilistic/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="04 — ProbLog Probabilistic">
+  <meta property="og:description" content="Tutorial 04 — ProbLog probabilistic reasoning# The native engine reasons about facts as either-true-or-not-asserted. The Body(..., confidence=...) shape from tutorial 02 lets you tag whole bodies with a confidence — useful for review-time filtering, but not the same as actually reasoning probabilistically. When you need real probabilistic semantics — facts that are true with some probability, rules that combine probabilities properly, queries that return marginal probabilities — you reach for ProbLog.">
+  <meta property="og:locale" content="de">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="04 — ProbLog Probabilistic">
+  <meta itemprop="description" content="Tutorial 04 — ProbLog probabilistic reasoning# The native engine reasons about facts as either-true-or-not-asserted. The Body(..., confidence=...) shape from tutorial 02 lets you tag whole bodies with a confidence — useful for review-time filtering, but not the same as actually reasoning probabilistically. When you need real probabilistic semantics — facts that are true with some probability, rules that combine probabilities properly, queries that return marginal probabilities — you reach for ProbLog.">
+  <meta itemprop="wordCount" content="1331">
+
+<title>04 — ProbLog Probabilistic | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/de/docs/tutorials/04-problog-probabilistic/">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/de.search.min.a92013675f37793ce9c8fb9acdda196dc19f26e429d7c863d62fdef621fe6daa.js" integrity="sha256-qSATZ183eTzpyPuazdoZbcGfJuQp18hj1i/e9iH&#43;bao=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/de/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Suche"
+    aria-label="Suche"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        Deutsch
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/" class="flex flex-auto">
+          English
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/quickstart/" class="">
+      Schnellstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="toggle"  />
+    <label for="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="flex">
+      <a role="button" class="">
+        Konzepte</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/overview/" class="">
+      Überblick</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/the-ledger/" class="">
+      Das Ledger</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/entities-and-fields/" class="">
+      Entitäten und Felder</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/rules-and-derivations/" class="">
+      Regeln und Ableitungen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/audit-and-provenance/" class="">
+      Audit und Provenienz</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-34058d101374bf945fbfadcda1396a3e" class="toggle"  />
+    <label for="section-34058d101374bf945fbfadcda1396a3e" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/defining-a-schema/" class="">
+      Ein Schema definieren</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/reading-and-writing/" class="">
+      Lesen und Schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/writing-rules/" class="">
+      Regeln schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/running-derivations/" class="">
+      Ableitungen ausführen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/persistence/" class="">
+      Persistenz</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/using-adapters/" class="">
+      Adapter verwenden</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-877dfaeda590afb0dbf2967bfa587bd2" class="toggle" checked />
+    <label for="section-877dfaeda590afb0dbf2967bfa587bd2" class="flex">
+      <a href="/de/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/04-problog-probabilistic/" class="active">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>04 — ProbLog Probabilistic</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#tutorial-04--problog-probabilistic-reasoning">Tutorial 04 — ProbLog probabilistic reasoning</a>
+      <ul>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#a-minimal-probabilistic-schema">A minimal probabilistic schema</a></li>
+        <li><a href="#writing-facts-with-probabilities">Writing facts with probabilities</a></li>
+        <li><a href="#a-problog-derivation">A ProbLog derivation</a></li>
+        <li><a href="#evaluating">Evaluating</a></li>
+        <li><a href="#accepting">Accepting</a></li>
+        <li><a href="#verifying">Verifying</a></li>
+        <li><a href="#what-problog-buys-you">What ProbLog buys you</a></li>
+        <li><a href="#what-problog-costs-you">What ProbLog costs you</a></li>
+        <li><a href="#recap">Recap</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="tutorial-04--problog-probabilistic-reasoning">Tutorial 04 — ProbLog probabilistic reasoning<a class="anchor" href="#tutorial-04--problog-probabilistic-reasoning">#</a></h1>
+<p>The native engine reasons about facts as either-true-or-not-asserted. The <code>Body(..., confidence=...)</code> shape from <a href="02-rules-and-derivations.md">tutorial 02</a> lets you tag whole bodies with a confidence — useful for review-time filtering, but not the same as actually <em>reasoning probabilistically</em>. When you need real probabilistic semantics — facts that are true with some probability, rules that combine probabilities properly, queries that return marginal probabilities — you reach for ProbLog.</p>
+<p>This tutorial walks through a small probabilistic-reasoning scenario: inferring researcher expertise from noisy signals about their work. Each signal is a probabilistic observation; the rule combining them produces probabilities, not certainties. We&rsquo;ll write the derivation, run it under ProbLog, and accept the resulting probabilistic facts back into the ledger.</p>
+<p>Reach for this tutorial when:</p>
+<ul>
+<li>your input data has <em>probabilities</em>, not just confidence labels,</li>
+<li>you need rules to combine probabilities in a principled way (not just take the max or average),</li>
+<li>you want to ask &ldquo;what is <code>P(X)</code> given everything we know?&rdquo; rather than &ldquo;is <code>X</code> derivable?&rdquo;,</li>
+<li>the <code>Body(..., confidence=...)</code> shape feels too coarse for your problem.</li>
+</ul>
+<p>If you only need <em>&ldquo;some confidence value travels with the answer&rdquo;</em>, the native engine with weighted bodies is enough.</p>
+<h2 id="setup">Setup<a class="anchor" href="#setup">#</a></h2>
+<p>ProbLog ships as an optional dependency:</p>
+<pre tabindex="0"><code>pip install factpy-kernel[problog]</code></pre><p>ProbLog also requires the <code>problog</code> Python package and (under the hood) a working install of its solver. The <code>factpy-kernel[problog]</code> extra pulls these in.</p>
+<p>The imports for this tutorial:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> SDKStore, Entity, Identity, Field
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk.dsl <span style="color:#ff6ac1">import</span> Derivation, Pred, <span style="color:#ff5c57">vars</span> <span style="color:#ff6ac1">as</span> sdk_vars
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">import</span> kernel.adapters.problog                      <span style="color:#78787e"># registers the engine</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.adapters.problog.rule_ext <span style="color:#ff6ac1">import</span> ProbLogRuleExt
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.adapters.problog.accept <span style="color:#ff6ac1">import</span> persist_problog_annotations</span></span></code></pre></div><p>The <code>import kernel.adapters.problog</code> line is doing real work: it registers the ProbLog evaluator with <code>sdk.evaluate</code>, so subsequent <code>mode=&quot;problog&quot;</code> calls find an implementation. Without that import, evaluating a ProbLog derivation raises a <em>no engine registered</em> error.</p>
+<h2 id="a-minimal-probabilistic-schema">A minimal probabilistic schema<a class="anchor" href="#a-minimal-probabilistic-schema">#</a></h2>
+<p>A <code>Researcher</code> with a few signal-shaped fields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Researcher</span>(Entity):
+</span></span><span style="display:flex;"><span>    researcher_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    expertise: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    impact_score: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes([Researcher])</span></span></code></pre></div><p>Nothing schema-specific to ProbLog so far. The probability information enters through write-time metadata.</p>
+<h2 id="writing-facts-with-probabilities">Writing facts with probabilities<a class="anchor" href="#writing-facts-with-probabilities">#</a></h2>
+<p>Each assertion gets a <code>confidence</code> in its metadata, which ProbLog will read as the probability of the observation:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>tx <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>batch(meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;tutorial-04&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>r1 <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Researcher, researcher_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;r-001&#34;</span>)
+</span></span><span style="display:flex;"><span>r1<span style="color:#ff6ac1">.</span>name<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;Alice&#34;</span>)
+</span></span><span style="display:flex;"><span>r1<span style="color:#ff6ac1">.</span>impact_score<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;high&#34;</span>,
+</span></span><span style="display:flex;"><span>                    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;confidence&#34;</span>: <span style="color:#ff9f43">0.85</span>, <span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;citations&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>r2 <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Researcher, researcher_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;r-002&#34;</span>)
+</span></span><span style="display:flex;"><span>r2<span style="color:#ff6ac1">.</span>name<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;Bob&#34;</span>)
+</span></span><span style="display:flex;"><span>r2<span style="color:#ff6ac1">.</span>impact_score<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;medium&#34;</span>,
+</span></span><span style="display:flex;"><span>                    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;confidence&#34;</span>: <span style="color:#ff9f43">0.62</span>, <span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;citations&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tx<span style="color:#ff6ac1">.</span>commit()</span></span></code></pre></div><p><code>confidence: 0.85</code> says: <em>we observed Alice&rsquo;s impact score is &ldquo;high&rdquo;, and we are 85% sure of that observation</em>. ProbLog will treat this as the input probability when reasoning.</p>
+<p>This is the same <code>confidence</code> key you&rsquo;d use in any other factpy code; ProbLog just <em>also</em> knows to read it. Code that writes facts doesn&rsquo;t have to care that something downstream might reason about them probabilistically.</p>
+<h2 id="a-problog-derivation">A ProbLog derivation<a class="anchor" href="#a-problog-derivation">#</a></h2>
+<p>The derivation looks like a regular <code>Derivation</code> with two extras: <code>mode=&quot;problog&quot;</code> and an <code>engine_ext</code> that carries probabilistic configuration:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> sdk_vars(<span style="color:#5af78e">&#34;r&#34;</span>, <span style="color:#5af78e">&#34;name&#34;</span>) <span style="color:#ff6ac1">as</span> (r, name):
+</span></span><span style="display:flex;"><span>    expertise_drv <span style="color:#ff6ac1">=</span> Derivation(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;drv.expertise_discovery&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Pred(<span style="color:#5af78e">&#34;researcher:name&#34;</span>, r, name)],
+</span></span><span style="display:flex;"><span>        target<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;researcher:expertise&#34;</span>,
+</span></span><span style="display:flex;"><span>        head_vars<span style="color:#ff6ac1">=</span>[r, name],
+</span></span><span style="display:flex;"><span>        mode<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;problog&#34;</span>,
+</span></span><span style="display:flex;"><span>        engine_ext<span style="color:#ff6ac1">=</span>ProbLogRuleExt(branch_probabilities<span style="color:#ff6ac1">=</span>(<span style="color:#ff9f43">0.85</span>,)),
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p>A few things to unpack.</p>
+<p><code>mode=&quot;problog&quot;</code> tells <code>sdk.evaluate</code> which engine to dispatch to.</p>
+<p><code>engine_ext=ProbLogRuleExt(...)</code> carries engine-specific configuration. <code>branch_probabilities=(0.85,)</code> is the probability of the rule&rsquo;s disjunctive branch — <em>how often, given that the body matches, should the head be considered to follow?</em> A regular logical rule has an implicit branch probability of 1.0; lowering it expresses <em>&ldquo;this rule fires with some probability, not always&rdquo;</em>.</p>
+<p><code>target=</code> and <code>head_vars=</code> are the ProbLog-specific way to declare the head (the predicate it concludes about, and the variables that flow into it). For derivations that only run under ProbLog, this is the natural shape. Native-mode derivations use the field-call head shown in tutorial 02.</p>
+<p>The body — <code>where=[Pred(&quot;researcher:name&quot;, r, name)]</code> — is a regular DSL body. Same atoms, same join semantics. The engine reading it differs.</p>
+<h2 id="evaluating">Evaluating<a class="anchor" href="#evaluating">#</a></h2>
+<p><code>sdk.evaluate</code> dispatches to the registered ProbLog evaluator:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>candidates <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>evaluate(
+</span></span><span style="display:flex;"><span>    expertise_drv,
+</span></span><span style="display:flex;"><span>    engine_options<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;timeout&#34;</span>: <span style="color:#ff9f43">10</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">f</span><span style="color:#5af78e">&#34;ProbLog candidates: </span><span style="color:#5af78e">{</span><span style="color:#ff5c57">len</span>(candidates)<span style="color:#5af78e">}</span><span style="color:#5af78e">&#34;</span>)</span></span></code></pre></div><p>Behind the scenes, the adapter:</p>
+<ol>
+<li>exports the relevant ledger facts and the rule into ProbLog program text,</li>
+<li>runs ProbLog (with <code>--trace</code> enabled, so we get reasoning traces),</li>
+<li>parses the output probabilities and proofs,</li>
+<li>returns a <code>CandidateSet</code> with each candidate carrying its probability and provenance.</li>
+</ol>
+<p><code>engine_options</code> is for engine-specific tuning — timeouts, solver flags, search depth limits. The exact keys are documented in the <a href="../reference/adapters.md">adapters reference</a> (when written).</p>
+<p>You can inspect what came back:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> cand <span style="color:#ff6ac1">in</span> candidates:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">print</span>(<span style="color:#5af78e">f</span><span style="color:#5af78e">&#34;  </span><span style="color:#5af78e">{</span>cand<span style="color:#ff6ac1">.</span>head<span style="color:#5af78e">}</span><span style="color:#5af78e">: P=</span><span style="color:#5af78e">{</span>cand<span style="color:#ff6ac1">.</span>confidence<span style="color:#5af78e">:</span><span style="color:#5af78e">.3f</span><span style="color:#5af78e">}</span><span style="color:#5af78e">&#34;</span>)</span></span></code></pre></div><p>Each candidate&rsquo;s <code>confidence</code> is now a <em>probability</em>, not just an arbitrary label. Combined with the ledger entries that supported it (the input probabilities), you have a full probabilistic-reasoning trace.</p>
+<h2 id="accepting">Accepting<a class="anchor" href="#accepting">#</a></h2>
+<p>Acceptance works the same as it does for native or PyReason candidates:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> cand <span style="color:#ff6ac1">in</span> candidates:
+</span></span><span style="display:flex;"><span>    result <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>accept(cand, approved_by<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;demo&#34;</span>, note<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;problog demo&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">print</span>(<span style="color:#5af78e">f</span><span style="color:#5af78e">&#34;Accepted: </span><span style="color:#5af78e">{</span>result<span style="color:#5af78e">}</span><span style="color:#5af78e">&#34;</span>)</span></span></code></pre></div><p>The probability is preserved as confidence metadata on the resulting ledger assertion. The reasoning trace ProbLog produced becomes part of the audit story:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>persist_problog_annotations(sdk, candidates)</span></span></code></pre></div><p>That second call writes the engine-specific reasoning trace alongside the regular evidence — proofs, probability calculations, branch resolutions. When a reviewer later asks <em>&ldquo;why does the system think Alice&rsquo;s expertise probability is 0.72?&rdquo;</em>, the trace is available, not just the final number.</p>
+<h2 id="verifying">Verifying<a class="anchor" href="#verifying">#</a></h2>
+<p>The accepted facts are now in the ledger like any other:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>get(Researcher, researcher_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;r-001&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(alice<span style="color:#ff6ac1">.</span>expertise)
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># (whatever ProbLog inferred, with its probability as confidence)</span></span></span></code></pre></div><p>If you read the assertion metadata, the probability is there:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>asrt <span style="color:#ff6ac1">=</span> alice<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>expertise<span style="color:#ff6ac1">.</span>active[<span style="color:#ff9f43">0</span>]
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(asrt<span style="color:#ff6ac1">.</span>value, asrt<span style="color:#ff6ac1">.</span>meta<span style="color:#ff6ac1">.</span>get(<span style="color:#5af78e">&#34;confidence&#34;</span>))</span></span></code></pre></div><p>Same shape as any other derived fact, with the difference that the confidence is grounded in real probabilistic reasoning rather than a heuristic.</p>
+<h2 id="what-problog-buys-you">What ProbLog buys you<a class="anchor" href="#what-problog-buys-you">#</a></h2>
+<p>A few things that the native engine simply cannot give you, principally:</p>
+<p><strong>Joint probabilities.</strong> When two probabilistic facts both feed into a conclusion, ProbLog combines them properly. The native engine treats confidence labels as opaque; ProbLog treats them as probabilities and produces correct joint probability for the conclusion.</p>
+<p><strong>Marginalisation.</strong> <em>&ldquo;What&rsquo;s the probability of <code>X</code>, integrating over all the ways it could be true?&rdquo;</em> is a question ProbLog answers natively. The native engine has no notion of integrating over alternatives.</p>
+<p><strong>Probabilistic disjunction.</strong> Rules with multiple branches — <em>&ldquo;the system became unhealthy because either A happened (with prob p) or B happened (with prob q)&rdquo;</em> — combine into the right marginal under ProbLog. Under the native engine, the best you can do is take whichever fired and label it.</p>
+<p><strong>Learning.</strong> ProbLog has machinery for learning probabilities from data. We don&rsquo;t cover it in this tutorial, but the same <code>Derivation</code> shape feeds into ProbLog&rsquo;s learning entry points — useful when you have labelled outcomes and want to fit rule probabilities rather than hand-tune them.</p>
+<h2 id="what-problog-costs-you">What ProbLog costs you<a class="anchor" href="#what-problog-costs-you">#</a></h2>
+<p><strong>Operational complexity.</strong> ProbLog is a heavier dependency than the native engine. The <code>factpy-kernel[problog]</code> extra brings in the solver and its dependencies; in production you have to manage them.</p>
+<p><strong>Speed.</strong> Probabilistic inference is harder than logical inference. For large fact bases, ProbLog can be substantially slower than the native engine. For genuinely probabilistic problems this is unavoidable; just don&rsquo;t reach for ProbLog when the native engine is enough.</p>
+<p><strong>Modelling care.</strong> Garbage probabilities in produces garbage probabilities out, and the result still <em>looks</em> like a sober probabilistic answer. ProbLog won&rsquo;t catch the mistake of feeding in poorly-calibrated input probabilities. Probabilistic reasoning amplifies whatever quality you bring to the inputs, in both directions.</p>
+<h2 id="recap">Recap<a class="anchor" href="#recap">#</a></h2>
+<p>In this tutorial you&rsquo;ve:</p>
+<ul>
+<li>written facts with <code>confidence</code> metadata that ProbLog reads as observation probabilities,</li>
+<li>declared a <code>Derivation</code> with <code>mode=&quot;problog&quot;</code> and a <code>ProbLogRuleExt</code> carrying engine config,</li>
+<li>evaluated under ProbLog with a timeout and inspected the resulting probabilistic candidates,</li>
+<li>accepted candidates back into the ledger with probabilities preserved as confidence,</li>
+<li>persisted ProbLog-specific reasoning traces as part of the audit story.</li>
+</ul>
+<p>ProbLog is the right tool when the reasoning <em>is</em> probabilistic — not when you happen to have a confidence number you&rsquo;d like to carry around. For the latter, the native engine with weighted bodies is simpler and fast enough.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<ul>
+<li><a href="05-onboarding-journey.md">Tutorial 05 — Onboarding journey</a> for an end-to-end scenario weaving native rules, derivations, and adapters.</li>
+<li><a href="../guides/using-adapters.md">Using adapters guide</a> for the comparative reference of all three adapter engines.</li>
+<li><a href="../concepts/audit-and-provenance.md">Audit and provenance</a> for how engine-specific traces (here, ProbLog proofs) fit into the broader audit story.</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/de/docs/tutorials/03-pyreason-propagation/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>03 — PyReason Propagation</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/de/docs/tutorials/05-onboarding-journey/" class="flex align-center">
+        <span>05 — Onboarding Journey</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#tutorial-04--problog-probabilistic-reasoning">Tutorial 04 — ProbLog probabilistic reasoning</a>
+      <ul>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#a-minimal-probabilistic-schema">A minimal probabilistic schema</a></li>
+        <li><a href="#writing-facts-with-probabilities">Writing facts with probabilities</a></li>
+        <li><a href="#a-problog-derivation">A ProbLog derivation</a></li>
+        <li><a href="#evaluating">Evaluating</a></li>
+        <li><a href="#accepting">Accepting</a></li>
+        <li><a href="#verifying">Verifying</a></li>
+        <li><a href="#what-problog-buys-you">What ProbLog buys you</a></li>
+        <li><a href="#what-problog-costs-you">What ProbLog costs you</a></li>
+        <li><a href="#recap">Recap</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

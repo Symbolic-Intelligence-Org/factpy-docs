@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Writing rules# This guide develops the rule DSL the way it is used in practice: building bodies from atoms, joining across entities through shared variables, composing rules into larger rules, working with negation, and running rules with the row format appropriate to the calling code. For the conceptual material — projections, derivations, candidates — see rules and derivations.
+The shape of a rule# A Rule is constructed with four structurally distinguished parts: an id, a version, a select head that names what the rule returns for each match, and a where body that lists the conditions under which a match is produced. Variables that appear in the body are produced by the vars(...) context manager and projected through the head.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/guides/writing-rules/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Writing Rules">
+  <meta property="og:description" content="Writing rules# This guide develops the rule DSL the way it is used in practice: building bodies from atoms, joining across entities through shared variables, composing rules into larger rules, working with negation, and running rules with the row format appropriate to the calling code. For the conceptual material — projections, derivations, candidates — see rules and derivations.
+The shape of a rule# A Rule is constructed with four structurally distinguished parts: an id, a version, a select head that names what the rule returns for each match, and a where body that lists the conditions under which a match is produced. Variables that appear in the body are produced by the vars(...) context manager and projected through the head.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Writing Rules">
+  <meta itemprop="description" content="Writing rules# This guide develops the rule DSL the way it is used in practice: building bodies from atoms, joining across entities through shared variables, composing rules into larger rules, working with negation, and running rules with the row format appropriate to the calling code. For the conceptual material — projections, derivations, candidates — see rules and derivations.
+The shape of a rule# A Rule is constructed with four structurally distinguished parts: an id, a version, a select head that names what the rule returns for each match, and a where body that lists the conditions under which a match is produced. Variables that appear in the body are produced by the vars(...) context manager and projected through the head.">
+  <meta itemprop="wordCount" content="1744">
+
+<title>Writing Rules | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/guides/writing-rules/">
+  <link rel="alternate" hreflang="de" href="http://localhost:1313/de/docs/guides/writing-rules/" title="Regeln schreiben">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.2d0bb1214ca4979905abe6ff414cee5d5260e17e8f410ecb0cc797cb83587775.js" integrity="sha256-LQuxIUykl5kFq&#43;b/QUzuXVJg4X6PQQ7LDMeXy4NYd3U=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        English
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/de/docs/guides/writing-rules/" class="flex flex-auto">
+          Deutsch
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-903cb365ca4589d060a9e0c4e9cacd7a" class="toggle"  />
+    <label for="section-903cb365ca4589d060a9e0c4e9cacd7a" class="flex">
+      <a role="button" class="">
+        Concepts</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d26c9af1cc2443c595895ff545ee9a45" class="toggle" checked />
+    <label for="section-d26c9af1cc2443c595895ff545ee9a45" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/defining-a-schema/" class="">
+      Defining a Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/reading-and-writing/" class="">
+      Reading and Writing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/writing-rules/" class="active">
+      Writing Rules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/running-derivations/" class="">
+      Running Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/using-adapters/" class="">
+      Using Adapters</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ca174a65b61b36959d2dfae132eedf04" class="toggle"  />
+    <label for="section-ca174a65b61b36959d2dfae132eedf04" class="flex">
+      <a href="/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Writing Rules</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#writing-rules">Writing rules</a>
+      <ul>
+        <li><a href="#the-shape-of-a-rule">The shape of a rule</a></li>
+        <li><a href="#three-body-atoms">Three body atoms</a></li>
+        <li><a href="#joining-across-entities">Joining across entities</a></li>
+        <li><a href="#composing-rules">Composing rules</a></li>
+        <li><a href="#negation-in-practice">Negation in practice</a></li>
+        <li><a href="#running-a-rule">Running a rule</a></li>
+        <li><a href="#query-a-leaner-shape-for-one-off-reads">Query: a leaner shape for one-off reads</a></li>
+        <li><a href="#naming-and-versioning">Naming and versioning</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="writing-rules">Writing rules<a class="anchor" href="#writing-rules">#</a></h1>
+<p>This guide develops the rule DSL the way it is used in practice: building bodies from atoms, joining across entities through shared variables, composing rules into larger rules, working with negation, and running rules with the row format appropriate to the calling code. For the conceptual material — projections, derivations, candidates — see <a href="/docs/concepts/rules-and-derivations">rules and derivations</a>.</p>
+<h2 id="the-shape-of-a-rule">The shape of a rule<a class="anchor" href="#the-shape-of-a-rule">#</a></h2>
+<p>A <code>Rule</code> is constructed with four structurally distinguished parts: an id, a version, a <code>select</code> head that names what the rule returns for each match, and a <code>where</code> body that lists the conditions under which a match is produced. Variables that appear in the body are produced by the <code>vars(...)</code> context manager and projected through the head.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Rule, Pred, Not, RuleRef, <span style="color:#ff5c57">vars</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;p&#34;</span>, <span style="color:#5af78e">&#34;n&#34;</span>) <span style="color:#ff6ac1">as</span> (p, n):
+</span></span><span style="display:flex;"><span>    name_lookup <span style="color:#ff6ac1">=</span> Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;q.name&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[n],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Person(p), p<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> n],
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p>The variables <code>p</code> and <code>n</code> are placeholders bound by the body and projected by the head. The body asserts that there exists a <code>Person</code> <code>p</code> whose <code>name</code> is <code>n</code>; the head specifies that <code>n</code> should be returned for each binding. Running the rule yields one row per binding the body satisfies.</p>
+<p>The <code>id</code> and <code>version</code> are not decorative. They are the identifiers under which the kernel registers the rule and refers to it in audit records, evidence trees, and references from one rule to another. They are best treated as the names of functions in a library — chosen for stability, and bumped in version when the meaning of the body changes.</p>
+<h2 id="three-body-atoms">Three body atoms<a class="anchor" href="#three-body-atoms">#</a></h2>
+<p>Most rule bodies are built from three kinds of atom together with the entity-class declarations that scope variables to particular schemas.</p>
+<p>The atom <code>Pred(predicate, subject, value)</code> requires that the ledger contain an active assertion of the named predicate, with the given subject and value. Predicate names are the lowercase <code>entity:field</code> form the kernel uses internally.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>Pred(<span style="color:#5af78e">&#34;person:tag&#34;</span>, p, <span style="color:#5af78e">&#34;vip&#34;</span>)  <span style="color:#78787e"># p has tag &#34;vip&#34;</span></span></span></code></pre></div><p>The typed shorthand for the same kind of constraint is <em>field equality on entity handles</em>, available wherever a variable has been scoped to a particular entity class. The class declaration <code>Person(p)</code> introduces <code>p</code> as a variable ranging over <code>Person</code> entities, and field references on that variable participate in the body as constraints.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>Person(p),
+</span></span><span style="display:flex;"><span>p<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> n,
+</span></span><span style="display:flex;"><span>p<span style="color:#ff6ac1">.</span>locale <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;en&#34;</span>,</span></span></code></pre></div><p><code>p.name == n</code> binds the variable <code>n</code> to <code>p</code>&rsquo;s name; <code>p.locale == &quot;en&quot;</code> constrains <code>p</code>&rsquo;s locale to the literal <code>&quot;en&quot;</code>. The two forms — <code>Pred(...)</code> and <code>entity.field == ...</code> — express the same kind of condition, and the choice between them is a question of readability rather than of capability. The handle form is preferable wherever the entity&rsquo;s class is already constrained, since it is shorter and exposes the field types to local typing checks.</p>
+<p>The atom <code>Not([...])</code> requires that a list of clauses <em>not</em> all hold simultaneously, under the semantics of negation as failure. It is the third atom form, and the section <em>Negation in practice</em> below develops its semantics in detail.</p>
+<h2 id="joining-across-entities">Joining across entities<a class="anchor" href="#joining-across-entities">#</a></h2>
+<p>A rule joins across entities by sharing a variable between two atoms. To find every person who lives in Germany, expressed as a join over the <code>LivesIn</code> relationship and the <code>Country</code>, the body shares <code>p</code> between the <code>Person</code> and the <code>LivesIn</code>, and <code>c</code> between the <code>LivesIn</code> and the <code>Country</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;p&#34;</span>, <span style="color:#5af78e">&#34;rel&#34;</span>, <span style="color:#5af78e">&#34;c&#34;</span>) <span style="color:#ff6ac1">as</span> (p, rel, c):
+</span></span><span style="display:flex;"><span>    germans <span style="color:#ff6ac1">=</span> Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;q.germans&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[p],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            Person(p),
+</span></span><span style="display:flex;"><span>            LivesIn(rel),
+</span></span><span style="display:flex;"><span>            rel<span style="color:#ff6ac1">.</span>person <span style="color:#ff6ac1">==</span> p,
+</span></span><span style="display:flex;"><span>            rel<span style="color:#ff6ac1">.</span>country <span style="color:#ff6ac1">==</span> c,
+</span></span><span style="display:flex;"><span>            Country(c),
+</span></span><span style="display:flex;"><span>            c<span style="color:#ff6ac1">.</span>iso_code <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;DE&#34;</span>,
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p>The <code>LivesIn</code> relationship is a separate entity in the schema (see <a href="/docs/guides/defining-a-schema">defining a schema</a>), and the join walks: every <code>Person</code> <code>p</code> that appears as the <code>person</code> field of some <code>LivesIn</code> whose <code>country</code> is <code>c</code>, where <code>c</code> is the <code>Country</code> with iso code <code>DE</code>.</p>
+<p>When the relationship is modelled instead as a direct <code>entity_ref</code> field on the source — a <code>Person</code> declared with a <code>home_country: Country</code> field inline — the join is shorter, since the reference is already part of the source entity&rsquo;s facts.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;p&#34;</span>, <span style="color:#5af78e">&#34;c&#34;</span>) <span style="color:#ff6ac1">as</span> (p, c):
+</span></span><span style="display:flex;"><span>    germans <span style="color:#ff6ac1">=</span> Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;q.germans_direct&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[p],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            Person(p),
+</span></span><span style="display:flex;"><span>            p<span style="color:#ff6ac1">.</span>home_country <span style="color:#ff6ac1">==</span> c,
+</span></span><span style="display:flex;"><span>            Country(c),
+</span></span><span style="display:flex;"><span>            c<span style="color:#ff6ac1">.</span>iso_code <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;DE&#34;</span>,
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p>In either form, the rule is doing the same logical work: walking the predicate graph and retaining the bindings that satisfy every clause of the body.</p>
+<h2 id="composing-rules">Composing rules<a class="anchor" href="#composing-rules">#</a></h2>
+<p>Once a rule names a useful concept, that concept can be referenced from inside another rule&rsquo;s body via <code>RuleRef</code>, which injects the named rule&rsquo;s body into the calling rule&rsquo;s body with the variables bound through to the call site.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;p&#34;</span>) <span style="color:#ff6ac1">as</span> (p,):
+</span></span><span style="display:flex;"><span>    vip_in_good_standing <span style="color:#ff6ac1">=</span> Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;q.vip_ok&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[p],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            Person(p),
+</span></span><span style="display:flex;"><span>            Pred(<span style="color:#5af78e">&#34;person:tag&#34;</span>, p, <span style="color:#5af78e">&#34;vip&#34;</span>),
+</span></span><span style="display:flex;"><span>            Not([Pred(<span style="color:#5af78e">&#34;person:tag&#34;</span>, p, <span style="color:#5af78e">&#34;blocked&#34;</span>)]),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;p&#34;</span>) <span style="color:#ff6ac1">as</span> (p,):
+</span></span><span style="display:flex;"><span>    high_priority <span style="color:#ff6ac1">=</span> Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;q.high_priority&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[p],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            RuleRef(vip_in_good_standing)(p),
+</span></span><span style="display:flex;"><span>            Pred(<span style="color:#5af78e">&#34;person:tag&#34;</span>, p, <span style="color:#5af78e">&#34;active&#34;</span>),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p><code>RuleRef(vip_in_good_standing)(p)</code> injects the <em>vip in good standing</em> condition as a sub-clause of the <em>high priority</em> rule&rsquo;s body, with <code>p</code> flowing through as the matched person. This is composition rather than duplication: a single definition of <em>vip in good standing</em> exists, and any change to it propagates to every rule that references it; both rules&rsquo; identities are preserved in downstream evidence records, so an audit reader can trace a <em>high priority</em> match back through the <em>vip in good standing</em> condition that licensed it.</p>
+<p>The cross-module form references a rule by id and version explicitly, without requiring the rule object itself to be in scope at the reference site.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>RuleRef(<span style="color:#5af78e">&#34;q.vip_ok&#34;</span>, version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>)(p)</span></span></code></pre></div><p>This is the idiomatic shape for references across module boundaries, and it is what allows a vocabulary of named rules to be assembled from multiple modules without forcing the corresponding python imports.</p>
+<h2 id="negation-in-practice">Negation in practice<a class="anchor" href="#negation-in-practice">#</a></h2>
+<p>The atom <code>Not([...])</code> reads naturally — <em>not blocked</em>, in the example above — but its semantics is precise and worth understanding. A <code>Not</code> clause succeeds when the ledger does not currently support its body and fails when the ledger does, under what is called <em>negation as failure</em>. There is no representation in the ledger of <em>not blocked</em> as a positive claim; what the rule tests is the <em>absence</em> of an assertion that the subject is blocked, not the <em>presence</em> of an assertion that the subject is unblocked.</p>
+<p>For most application code this is the right semantics, but the distinction has practical consequences when data arrives over time from multiple sources. A rule that returned <em>Alice is not blocked</em> before some ingestion arrived may return the opposite afterwards, with no change to the rule itself: the conclusion was correct against the ledger the rule ran against, but the ledger has since changed. The audit trail preserves the ledger state of each rule run, so the change in conclusion remains visible as a change in inputs rather than an inconsistency between two runs, but the conclusions of <code>Not</code>-clauses are by construction defeasible in a way that conclusions of positive clauses are not.</p>
+<p>The practical guidance is that whenever a <code>Not</code> is reached for, the modeller should consider whether the <em>absence</em> of an assertion is really what is meant in the domain. Sometimes the answer is yes — no <code>blocked</code> tag legitimately means not blocked. Sometimes the absence is too weak a basis for the conclusion, and the appropriate model is an explicit positive assertion (<code>status == &quot;active&quot;</code>) that some upstream actor is responsible for setting and that the rule queries positively rather than negating its complement.</p>
+<h2 id="running-a-rule">Running a rule<a class="anchor" href="#running-a-rule">#</a></h2>
+<p><code>sdk.run(rule)</code> returns a list of rows shaped according to the <code>row_format</code> argument.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>run(name_lookup, row_format<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;dict&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># [{&#34;n&#34;: &#34;Alice&#34;}, {&#34;n&#34;: &#34;Bob&#34;}]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>run(name_lookup, row_format<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;tuple&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># [(&#34;Alice&#34;,), (&#34;Bob&#34;,)]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>run(germans, row_format<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;instance&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># [&lt;Person snapshot ...&gt;, &lt;Person snapshot ...&gt;]</span></span></span></code></pre></div><p>The <code>&quot;dict&quot;</code> format is the most ergonomic for ad-hoc work, since the keys are the variable names from <code>select</code> and the rows can be read fluently by name. The <code>&quot;tuple&quot;</code> format omits the names and returns positional rows, which is appropriate when the rows are passed to a downstream consumer that expects positional data. The <code>&quot;instance&quot;</code> format is available where the head is a single entity-typed variable, in which case each row is an entity snapshot of the same shape that <code>sdk.get</code> would produce, with field access available directly on the row.</p>
+<p>A default <code>row_format</code> can be set at the moment the store is opened and applies to every subsequent <code>sdk.run</code> call that does not specify one.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes([Person, Country], default_row_format<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;dict&#34;</span>)</span></span></code></pre></div><p>Per-call <code>row_format=</code> overrides the store-level default.</p>
+<h2 id="query-a-leaner-shape-for-one-off-reads">Query: a leaner shape for one-off reads<a class="anchor" href="#query-a-leaner-shape-for-one-off-reads">#</a></h2>
+<p><code>Query</code> is the lighter alternative for inline reads, used wherever a result is wanted but no named, versioned, reusable rule definition is needed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Query
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;p&#34;</span>, <span style="color:#5af78e">&#34;loc&#34;</span>, <span style="color:#5af78e">&#34;nm&#34;</span>) <span style="color:#ff6ac1">as</span> (p, loc, nm):
+</span></span><span style="display:flex;"><span>    q <span style="color:#ff6ac1">=</span> Query(
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>[Person(p), Person<span style="color:#ff6ac1">.</span>name(locale<span style="color:#ff6ac1">=</span>loc, name<span style="color:#ff6ac1">=</span>nm)],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Person(p), p<span style="color:#ff6ac1">.</span>locale <span style="color:#ff6ac1">==</span> loc, p<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> nm],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rows <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>run(q)</span></span></code></pre></div><p><code>Query</code> has the same body language as <code>Rule</code> but no id, no version, and a richer head that can shape the output directly. It is the appropriate shape for reads embedded in application code; <code>Rule</code> is the appropriate shape wherever the result is something to be named, versioned, run again, or composed into further rules.</p>
+<h2 id="naming-and-versioning">Naming and versioning<a class="anchor" href="#naming-and-versioning">#</a></h2>
+<p>Rule ids are flat strings, and the convention across factpy codebases is <code>&lt;kind&gt;.&lt;short_name&gt;</code> — <code>q.vip_ok</code> for queries, <code>drv.auto_alias</code> for derivations, <code>m.&lt;...&gt;</code> for monitoring rules. The kernel does not enforce the prefix, but the convention pays off as a rule list grows by making the kind of every rule legible from its name.</p>
+<p>A rule&rsquo;s version should be bumped when the <em>meaning</em> of its body changes — that is, when a binding that would have matched yesterday no longer does, or when a binding that would not have matched yesterday now does. Cosmetic edits that leave the result set unchanged — renamed variables, reordered clauses — do not warrant a version bump. The version travels with every rule run into the audit trail, and a deliberate bump is the signal by which an audit reader knows that today&rsquo;s result set should not be compared directly to last quarter&rsquo;s.</p>
+<p>Where two versions of a rule need to coexist — during a migration, or when multiple downstream consumers need different semantics — they are best given different ids rather than relying on version-string ordering. <code>q.vip_ok</code> and <code>q.vip_ok_v2</code> is clearer at the call site and clearer in audit records than two versions of the same id.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<p>The <a href="/docs/guides/running-derivations">running derivations guide</a> covers the candidate-and-accept lifecycle for rules whose head proposes new facts. The <a href="/docs/guides/using-adapters">using adapters guide</a> covers running the same rules under PyReason, ProbLog, or Souffle. For the conceptual picture — what a rule is, why it carries a version, why a query is a projection — see <a href="/docs/concepts/rules-and-derivations">rules and derivations</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/guides/reading-and-writing/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Reading and Writing</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/guides/running-derivations/" class="flex align-center">
+        <span>Running Derivations</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#writing-rules">Writing rules</a>
+      <ul>
+        <li><a href="#the-shape-of-a-rule">The shape of a rule</a></li>
+        <li><a href="#three-body-atoms">Three body atoms</a></li>
+        <li><a href="#joining-across-entities">Joining across entities</a></li>
+        <li><a href="#composing-rules">Composing rules</a></li>
+        <li><a href="#negation-in-practice">Negation in practice</a></li>
+        <li><a href="#running-a-rule">Running a rule</a></li>
+        <li><a href="#query-a-leaner-shape-for-one-off-reads">Query: a leaner shape for one-off reads</a></li>
+        <li><a href="#naming-and-versioning">Naming and versioning</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

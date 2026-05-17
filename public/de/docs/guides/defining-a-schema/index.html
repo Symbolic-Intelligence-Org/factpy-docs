@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Ein Schema definieren# Dieser Guide behandelt die praktischen Entscheidungen, die beim Schreiben eines Schemas für eine reale Domäne anfallen: wo das Schema im Projekt liegt, wie Identitäten gewählt werden, wie Kardinalitäten festgelegt werden, wie Beziehungen modelliert werden, wie ein Schema über Module aufgeteilt wird, wie es vor dem Öffnen eines Stores validiert wird und wie es sich von Version zu Version weiterentwickelt. Vorausgesetzt wird das konzeptionelle Material aus Entitäten und Felder. Hier geht es um die Entscheidungen, die konkret anstehen, wenn man zum ersten Mal ein Schema deklariert.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/de/docs/guides/defining-a-schema/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Ein Schema definieren">
+  <meta property="og:description" content="Ein Schema definieren# Dieser Guide behandelt die praktischen Entscheidungen, die beim Schreiben eines Schemas für eine reale Domäne anfallen: wo das Schema im Projekt liegt, wie Identitäten gewählt werden, wie Kardinalitäten festgelegt werden, wie Beziehungen modelliert werden, wie ein Schema über Module aufgeteilt wird, wie es vor dem Öffnen eines Stores validiert wird und wie es sich von Version zu Version weiterentwickelt. Vorausgesetzt wird das konzeptionelle Material aus Entitäten und Felder. Hier geht es um die Entscheidungen, die konkret anstehen, wenn man zum ersten Mal ein Schema deklariert.">
+  <meta property="og:locale" content="de">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Ein Schema definieren">
+  <meta itemprop="description" content="Ein Schema definieren# Dieser Guide behandelt die praktischen Entscheidungen, die beim Schreiben eines Schemas für eine reale Domäne anfallen: wo das Schema im Projekt liegt, wie Identitäten gewählt werden, wie Kardinalitäten festgelegt werden, wie Beziehungen modelliert werden, wie ein Schema über Module aufgeteilt wird, wie es vor dem Öffnen eines Stores validiert wird und wie es sich von Version zu Version weiterentwickelt. Vorausgesetzt wird das konzeptionelle Material aus Entitäten und Felder. Hier geht es um die Entscheidungen, die konkret anstehen, wenn man zum ersten Mal ein Schema deklariert.">
+  <meta itemprop="wordCount" content="1807">
+
+<title>Ein Schema definieren | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/de/docs/guides/defining-a-schema/">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/de.search.min.a92013675f37793ce9c8fb9acdda196dc19f26e429d7c863d62fdef621fe6daa.js" integrity="sha256-qSATZ183eTzpyPuazdoZbcGfJuQp18hj1i/e9iH&#43;bao=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/de/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Suche"
+    aria-label="Suche"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        Deutsch
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/" class="flex flex-auto">
+          English
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/quickstart/" class="">
+      Schnellstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="toggle"  />
+    <label for="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="flex">
+      <a role="button" class="">
+        Konzepte</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/overview/" class="">
+      Überblick</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/the-ledger/" class="">
+      Das Ledger</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/entities-and-fields/" class="">
+      Entitäten und Felder</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/rules-and-derivations/" class="">
+      Regeln und Ableitungen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/audit-and-provenance/" class="">
+      Audit und Provenienz</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-34058d101374bf945fbfadcda1396a3e" class="toggle" checked />
+    <label for="section-34058d101374bf945fbfadcda1396a3e" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/defining-a-schema/" class="active">
+      Ein Schema definieren</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/reading-and-writing/" class="">
+      Lesen und Schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/writing-rules/" class="">
+      Regeln schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/running-derivations/" class="">
+      Ableitungen ausführen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/persistence/" class="">
+      Persistenz</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/using-adapters/" class="">
+      Adapter verwenden</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-877dfaeda590afb0dbf2967bfa587bd2" class="toggle"  />
+    <label for="section-877dfaeda590afb0dbf2967bfa587bd2" class="flex">
+      <a href="/de/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Ein Schema definieren</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#ein-schema-definieren">Ein Schema definieren</a>
+      <ul>
+        <li><a href="#wo-das-schema-liegt">Wo das Schema liegt</a></li>
+        <li><a href="#eine-identity-strategie-wählen">Eine Identity-Strategie wählen</a></li>
+        <li><a href="#kardinalität-wählen">Kardinalität wählen</a></li>
+        <li><a href="#beziehungen-modellieren">Beziehungen modellieren</a></li>
+        <li><a href="#entitätsmetadaten">Entitätsmetadaten</a></li>
+        <li><a href="#auf-module-aufteilen">Auf Module aufteilen</a></li>
+        <li><a href="#vor-dem-öffnen-validieren">Vor dem Öffnen validieren</a></li>
+        <li><a href="#den-store-öffnen">Den Store öffnen</a></li>
+        <li><a href="#ein-schema-weiterentwickeln">Ein Schema weiterentwickeln</a></li>
+        <li><a href="#nächste-schritte">Nächste Schritte</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="ein-schema-definieren">Ein Schema definieren<a class="anchor" href="#ein-schema-definieren">#</a></h1>
+<p>Dieser Guide behandelt die praktischen Entscheidungen, die beim Schreiben eines Schemas für eine reale Domäne anfallen: wo das Schema im Projekt liegt, wie Identitäten gewählt werden, wie Kardinalitäten festgelegt werden, wie Beziehungen modelliert werden, wie ein Schema über Module aufgeteilt wird, wie es vor dem Öffnen eines Stores validiert wird und wie es sich von Version zu Version weiterentwickelt. Vorausgesetzt wird das konzeptionelle Material aus <a href="../../concepts/entities-and-fields">Entitäten und Felder</a>. Hier geht es um die Entscheidungen, die konkret anstehen, wenn man zum ersten Mal ein Schema deklariert.</p>
+<h2 id="wo-das-schema-liegt">Wo das Schema liegt<a class="anchor" href="#wo-das-schema-liegt">#</a></h2>
+<p>Ein Schema ist eine Sammlung von <code>Entity</code>-Subklassen, deklariert in gewöhnlichen Python-Modulen und importiert wie jede andere Klasse. Der Kernel pflegt kein zentrales Registry, braucht keine Manifestdatei und hängt von keinem Decorator ab, der ausgeführt werden müsste, damit eine Entität erkannt wird. Ein typisches Projekt legt sein Schema in einem <code>schema/</code>-Package neben dem Anwendungscode ab und gruppiert zusammengehörige Entitäten in Module.</p>
+<pre tabindex="0"><code>myapp/
+├── schema/
+│   ├── __init__.py
+│   ├── identity.py      # Person, Country
+│   └── commerce.py      # Order, LineItem
+└── app.py</code></pre><p>Welche Klassen beim Öffnen des Stores an <code>SDKStore.from_schema_classes(...)</code> übergeben werden, ist für die Dauer der Session das Schema. Mehr sieht der Kernel nicht.</p>
+<h2 id="eine-identity-strategie-wählen">Eine Identity-Strategie wählen<a class="anchor" href="#eine-identity-strategie-w%c3%a4hlen">#</a></h2>
+<p>Die erste Entscheidung für jede Entität ist, wie sie adressiert wird. Drei Muster decken fast alle Fälle ab, die in der Praxis vorkommen.</p>
+<p>Das erste Muster ist der <em>natürliche Einzelschlüssel</em>. Er passt immer dann, wenn die Domäne selbst einen sinnvollen eindeutigen Identifier liefert. Ein ISO-Code identifiziert ein Land eindeutig, eine Order-ID identifiziert eine Bestellung eindeutig, und es muss keine weitere Struktur erfunden werden.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Country</span>(Entity):
+</span></span><span style="display:flex;"><span>    iso_code: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p><code>iso_code</code> ist die Adresse. <code>Country(iso_code=&quot;DE&quot;)</code> und <code>Country(iso_code=&quot;FR&quot;)</code> sind verschiedene Entitäten mit getrennten Historien.</p>
+<p>Das zweite Muster ist die <em>zusammengesetzte Identity</em>. Sie passt, wenn eine Entität natürlich scoped ist — etwa nach Tenant, Region oder Sprache — und dieser Scope wirklich zum Namen der Entität gehört, statt nur ein Feld an ihr zu sein. Das Kriterium ist, ob zwei solche Instanzen mit unabhängigen Historien nebeneinander existieren sollen. Wenn ja, gehört der unterscheidende Wert in die Identity und nicht in ein Feld.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    locale: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity()
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p>Der User wird nun über das Paar <code>(user_id, locale)</code> adressiert. <code>User(user_id=&quot;u-1&quot;, locale=&quot;en&quot;)</code> und <code>User(user_id=&quot;u-1&quot;, locale=&quot;de&quot;)</code> sind verschiedene Entitäten mit getrennten Fakt-Historien. Dieses Muster ist passend, wenn der Scope eine echte Partition der Daten ist — wenn die zwei Locales eines Users wirklich zwei Dinge sind, mit eigenen Namen, eigenen Tags und eigenen Audit-Trails. Es ist unpassend, wenn der Scope nur ein Attribut ist, das sich über die Zeit ändern kann.</p>
+<p>Das dritte Muster ist der <em>Surrogatschlüssel mit Factory</em>. Er passt, wenn es keinen sinnvollen natürlichen Schlüssel gibt. Der typische Fall ist eine Entität, die nur existiert, um andere Entitäten miteinander zu verbinden: ein Wohnsitz, eine Autorenschaft, eine Review-Zuweisung.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">LivesIn</span>(Entity):
+</span></span><span style="display:flex;"><span>    uid: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>, default_factory<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;uuid4&#34;</span>)
+</span></span><span style="display:flex;"><span>    person: Person <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    country: Country <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    since: <span style="color:#ff5c57">int</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p><code>default_factory=&quot;uuid4&quot;</code> weist das SDK an, automatisch einen frischen Identifier zu vergeben, wenn beim Schreiben keiner angegeben wird. Die verfügbaren Factories sind in der Referenz dokumentiert; <code>uuid4</code> ist die übliche und reicht für fast alle Surrogatschlüssel-Fälle. Die Entscheidung zwischen den drei Mustern lässt sich auf eine Frage reduzieren: Würde das Entfernen des Feldes die Entität in der Domäne uneindeutig machen, gehört das Feld in <code>Identity</code>; sonst gehört es in <code>Field</code>.</p>
+<h2 id="kardinalität-wählen">Kardinalität wählen<a class="anchor" href="#kardinalit%c3%a4t-w%c3%a4hlen">#</a></h2>
+<p>Jedes <code>Field</code> wird entweder mit <code>cardinality=&quot;single&quot;</code> oder mit <code>cardinality=&quot;multi&quot;</code> deklariert. Die Wahl betrifft das, was der Snapshot zeigt, nicht das, was das Ledger speichert. Beide Kardinalitäten erhalten jede Assertion im Ledger. Sie unterscheiden sich nur darin, wie die Projektion mehrere Assertions zu einem sichtbaren Wert reduziert.</p>
+<p>Ein Feld mit einfacher Kardinalität passt, wenn eine Entität zu einem Zeitpunkt höchstens einen aktuellen Wert für dieses Feld hat. Ein Name, ein Heimatland, ein Geburtsdatum: jeweils eine Eigenschaft der Entität, bei der eine neue Assertion die vorherige in der Projektion ersetzt.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>home_country: Country <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>date_of_birth: datetime <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p>Ein Feld mit mehrfacher Kardinalität passt, wenn eine Entität eine <em>Menge</em> von Werten trägt, die gleichzeitig gelten. Ein Tag, ein Alias, eine bevorzugte Sprache: davon kann eine Entität beliebig viele gleichzeitig haben.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>tag: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>alias: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>preferred_language: Language <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)</span></span></code></pre></div><p>Mehrere <code>add</code>-Aufrufe mit demselben Wert fallen im Snapshot zu einem Eintrag zusammen, bleiben im Ledger aber getrennte Einträge. Dadurch lässt sich aus dem Audit-Trail beantworten, wie oft ein bestimmter Tag behauptet wurde, von wem und wann, ohne dass sich die Snapshot-Ansicht verändert. Als Faustregel gilt: Ein Feld mit einer kleinen festen Zahl unterscheidbarer Werte — etwa Status oder primärer Kontakt — ist single-cardinality. Ein Feld mit einer offenen Menge von Werten ist multi-cardinality.</p>
+<h2 id="beziehungen-modellieren">Beziehungen modellieren<a class="anchor" href="#beziehungen-modellieren">#</a></h2>
+<p>Eine Verbindung zwischen Entitäten kann auf zwei Arten modelliert werden. Die Wahl hängt davon ab, ob die Beziehung selbst etwas aussagen muss oder ob sie nur eine Entität mit einer anderen verbindet.</p>
+<p>Die einfachere Form ist eine <em>direkte Entitätsreferenz</em>, deklariert als <code>entity_ref</code>-Feld auf der Ausgangsentität. Sie passt, wenn die Beziehung rein gerichtet ist und keine eigenen Attribute trägt.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Person</span>(Entity):
+</span></span><span style="display:flex;"><span>    person_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    home_country: Country <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p>Eine Assertion auf <code>home_country</code> zeichnet einen Fakt auf: ein einzelnes Prädikat mit der Adresse des Landes als Wert. Die Beziehung ist querybar, die Projektion ist direkt, und es wird keine weitere Entität gebraucht, um die Verbindung zu tragen.</p>
+<p>Die reichere Form ist die <em>Beziehung als Entität</em>. Sie passt, wenn die Verbindung eigene Attribute, einen eigenen Lebenszyklus oder eine eigene Historie hat. Dafür wird eine Entität deklariert, deren Felder die Endpunkte der Beziehung und alle weiteren Eigenschaften der Beziehung tragen.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">LivesIn</span>(Entity):
+</span></span><span style="display:flex;"><span>    uid: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>, default_factory<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;uuid4&#34;</span>)
+</span></span><span style="display:flex;"><span>    person: Person <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    country: Country <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    since: <span style="color:#ff5c57">int</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    until: <span style="color:#ff5c57">int</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p>Die Beziehung ist nun ein eigenes Subjekt im Schema. Sie sammelt eigene Provenienz, kann eigene Fakten tragen (<code>since</code>, <code>until</code>) und kann Gegenstand von Regeln sein wie jede andere Entität. Für dieselbe Person können mehrere <code>LivesIn</code>-Instanzen existieren, was das passende Modell ist, wenn jemand über die Zeit in mehr als einem Land gelebt hat. Das Entscheidungskriterium ist einfach: Hat die Beziehung selbst etwas auszusagen? Dann verdient sie eine Entität. Wenn nicht, reicht ein <code>entity_ref</code>-Feld auf der Ausgangsentität.</p>
+<h2 id="entitätsmetadaten">Entitätsmetadaten<a class="anchor" href="#entit%c3%a4tsmetadaten">#</a></h2>
+<p>Über eine innere <code>Meta</code>-Klasse kann eine Entität eine kleine Menge Metadaten in Authoring-Artefakte und Audit-Pakete mitgeben.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Person</span>(Entity):
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;&#34;&#34;A natural person known to the system.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Meta</span>:
+</span></span><span style="display:flex;"><span>        version <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;1.0.0&#34;</span>
+</span></span><span style="display:flex;"><span>        description <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;Natural person&#34;</span>
+</span></span><span style="display:flex;"><span>        tags <span style="color:#ff6ac1">=</span> [<span style="color:#5af78e">&#34;domain:identity&#34;</span>, <span style="color:#5af78e">&#34;owner:platform&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    person_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p><code>version</code> ist Teil des Schema-Digests. Ein bewusster Versionssprung ist dadurch für jeden sichtbar, der ein Ledger öffnet, das unter einer früheren Version geschrieben wurde. <code>description</code> fällt, wenn es fehlt, auf den Docstring der Klasse zurück. <code>tags</code> sind freie String-Labels, nützlich zum Gruppieren von Entitäten nach Domäne, Ownership oder Compliance-Scope in größeren Schemas. <code>Meta</code> akzeptiert nur diese drei Schlüssel. Jeder andere Schlüssel löst bereits bei der Klassendefinition einen Fehler aus. Diese Enge ist Absicht, weil Schemadeklarationen selbst Teil der Audit-Story sind und die daran beteiligte Oberfläche klein gehalten wird.</p>
+<h2 id="auf-module-aufteilen">Auf Module aufteilen<a class="anchor" href="#auf-module-aufteilen">#</a></h2>
+<p>Schemas wachsen und können entlang jeder Achse aufgeteilt werden, die für das Projekt natürlich ist: nach Domäne, Ownership oder Architekturschicht.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#78787e"># myapp/schema/identity.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Person</span>(Entity):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Country</span>(Entity):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># myapp/schema/commerce.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> myapp.schema.identity <span style="color:#ff6ac1">import</span> Person
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Order</span>(Entity):
+</span></span><span style="display:flex;"><span>    order_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    customer: Person <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">...</span></span></span></code></pre></div><p>Das Schema wird in dem Moment zusammengesetzt, in dem der Store geöffnet wird: Die relevanten Klassen werden importiert und als eine Liste übergeben.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> myapp.schema.identity <span style="color:#ff6ac1">import</span> Person, Country
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> myapp.schema.commerce <span style="color:#ff6ac1">import</span> Order, LineItem
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes([Person, Country, Order, LineItem])</span></span></code></pre></div><p>Mehr Zeremonie gibt es nicht. Eine Entität, die über <code>entity_ref</code> in einem anderen Modul referenziert wird, muss nur dort importierbar sein, wo sie verwendet wird. Der Kernel interessiert sich nicht dafür, wo eine Klasse deklariert wurde. Bei einem vendored Schema oder einem als Library veröffentlichten Schema werden die Entitätsklassen typischerweise über ein Top-Level-<code>__init__.py</code> exportiert, damit Verbraucher sie mit eigenen Klassen kombinieren können.</p>
+<h2 id="vor-dem-öffnen-validieren">Vor dem Öffnen validieren<a class="anchor" href="#vor-dem-%c3%b6ffnen-validieren">#</a></h2>
+<p><code>schema_preflight_from_classes</code> führt dieselbe Kompilierung aus wie <code>from_schema_classes</code>, gibt aber nur einen strukturierten Report zurück und berührt kein Ledger.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> schema_preflight_from_classes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>report <span style="color:#ff6ac1">=</span> schema_preflight_from_classes([Person, Country, Order])</span></span></code></pre></div><p>Ein fehlender <code>primary_key</code>, eine zirkuläre Referenz oder ein Type-Domain-Mismatch erscheinen als strukturierte Einträge im Report, statt erst beim ersten Write als Runtime-Exception aufzutauchen. Den Preflight in Tests oder CI laufen zu lassen, ist der einfachste Weg, Schema-Regressionen früh zu finden, bevor sie ein Ledger erreichen, das auf ein wohlgeformtes Schema angewiesen ist.</p>
+<h2 id="den-store-öffnen">Den Store öffnen<a class="anchor" href="#den-store-%c3%b6ffnen">#</a></h2>
+<p>Ein Store kann in zwei Modi geöffnet werden. Der In-Memory-Modus ist für Tests und kurzlebige Berechnungen gedacht. Das Ledger existiert nur für die Lebensdauer des Prozesses und wird beim Beenden verworfen.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> SDKStore
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes([Person, Country, Order])</span></span></code></pre></div><p>Der persistente Modus wird explizit über <code>ledger_path</code> aktiviert und ist für langlebige Services oder Zustand gedacht, der einen Restart überleben muss.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes(
+</span></span><span style="display:flex;"><span>    [Person, Country, Order],
+</span></span><span style="display:flex;"><span>    ledger_path<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;./data/factpy.db&#34;</span>,
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div><p>Beim ersten Öffnen eines Stores mit einem bestimmten Pfad wird der Content-Digest des Schemas in der Datei gespeichert. Bei jedem späteren Öffnen wird der Digest des übergebenen Schemas neu berechnet und mit dem gespeicherten verglichen. Wenn sich Kardinalität, Typbereich oder Identity-Zusammensetzung eines Feldes so geändert haben, dass bestehende Assertions nicht mehr lesbar wären, schlägt das Öffnen mit einem expliziten Schema-Mismatch-Fehler fehl, statt die Daten stillschweigend neu zu interpretieren. Diese Prüfung ist der wichtigste Schutz gegen unbeabsichtigten Schema-Drift auf einem persistenten Ledger und sollte ernst genommen werden, wenn sie auslöst.</p>
+<h2 id="ein-schema-weiterentwickeln">Ein Schema weiterentwickeln<a class="anchor" href="#ein-schema-weiterentwickeln">#</a></h2>
+<p>Einige Änderungen erhalten die Fähigkeit des Schemas, bestehende Assertions zu lesen, und brauchen weder Versionssprung noch Migration: eine neue Entität hinzufügen, ein neues Feld zu einer bestehenden Entität hinzufügen, optionale Metadaten lockern oder ein neues <code>Identity</code>-Feld hinzufügen, das entweder <code>default</code> oder <code>default_factory</code> hat. Gemeinsam ist diesen Änderungen, dass keine bereits im Ledger liegende Assertion unlesbar wird. Sie erweitern das Vokabular, ohne die Bedeutung des bereits Geschriebenen zu verändern.</p>
+<p>Andere Änderungen erhalten die Lesbarkeit nicht und sind eine neue Schemaversion: ein Feld oder eine Entität umbenennen, die Kardinalität eines Feldes zwischen single und multi ändern, den Typbereich eines Feldes ändern, die Identity-Zusammensetzung einer bestehenden Entität ändern oder ein Feld entfernen, auf das bereits geschrieben wurde. Der Kernel verweigert das Öffnen eines Ledgers, das unter einem anderen Schema-Digest geschrieben wurde. Migration ist deshalb eine explizite Operation und keine implizite Neuinterpretation: <code>Meta.version</code> der Entität wird erhöht, ein Migrationsprogramm spielt das alte Ledger unter dem neuen Schema in ein neues Ledger ein, und das neue Ledger wird erst geöffnet, nachdem die Migration gelaufen ist. In der ersten Entwicklungswoche mit einem noch flüssigen Schema und ohne Ledger, dessen Kontinuität erhalten werden muss, ist das Löschen der Datei und erneute Öffnen der richtige Weg. Der Digest-Check schützt vorhandene Daten; wo keine solchen Daten existieren, legt er keine weitere Einschränkung auf.</p>
+<h2 id="nächste-schritte">Nächste Schritte<a class="anchor" href="#n%c3%a4chste-schritte">#</a></h2>
+<p>Der <a href="../reading-and-writing">Guide zum Lesen und Schreiben</a> behandelt die alltägliche Arbeit mit <code>set</code>, <code>add</code>, <code>retract</code>, Batches und Write-Time-Metadaten. Die <a href="../reference/sdk">SDK-Referenz</a> listet alle Entry Points mit vollständiger Signatur und Optionen. Den konzeptionellen Hintergrund zu diesen praktischen Entscheidungen bieten <a href="../../concepts/entities-and-fields">Entitäten und Felder</a> und <a href="../../concepts/the-ledger">Das Ledger</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/de/docs/concepts/audit-and-provenance/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Audit und Provenienz</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/de/docs/guides/reading-and-writing/" class="flex align-center">
+        <span>Lesen und Schreiben</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#ein-schema-definieren">Ein Schema definieren</a>
+      <ul>
+        <li><a href="#wo-das-schema-liegt">Wo das Schema liegt</a></li>
+        <li><a href="#eine-identity-strategie-wählen">Eine Identity-Strategie wählen</a></li>
+        <li><a href="#kardinalität-wählen">Kardinalität wählen</a></li>
+        <li><a href="#beziehungen-modellieren">Beziehungen modellieren</a></li>
+        <li><a href="#entitätsmetadaten">Entitätsmetadaten</a></li>
+        <li><a href="#auf-module-aufteilen">Auf Module aufteilen</a></li>
+        <li><a href="#vor-dem-öffnen-validieren">Vor dem Öffnen validieren</a></li>
+        <li><a href="#den-store-öffnen">Den Store öffnen</a></li>
+        <li><a href="#ein-schema-weiterentwickeln">Ein Schema weiterentwickeln</a></li>
+        <li><a href="#nächste-schritte">Nächste Schritte</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,6 @@
 {
-  "name": "FactPy",
-  "short_name": "FactPy",
+  "name": "factgraph",
+  "short_name": "factgraph",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

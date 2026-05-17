@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Evidence: what-if and audit# The earlier pages wrote facts and ran rules. This page covers the read-only side: asking the graph whether a hypothetical fact would hold, why a check failed, what would happen under an imagined fact or rule edit, and how to compare two persisted rounds.
+Every method on this page is read-only. None of them writes to the ledger, mutates the registry, or changes schema. The two top-level taxonomies are:
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/concepts/evidence/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Evidence">
+  <meta property="og:description" content="Evidence: what-if and audit# The earlier pages wrote facts and ran rules. This page covers the read-only side: asking the graph whether a hypothetical fact would hold, why a check failed, what would happen under an imagined fact or rule edit, and how to compare two persisted rounds.
+Every method on this page is read-only. None of them writes to the ledger, mutates the registry, or changes schema. The two top-level taxonomies are:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Evidence">
+  <meta itemprop="description" content="Evidence: what-if and audit# The earlier pages wrote facts and ran rules. This page covers the read-only side: asking the graph whether a hypothetical fact would hold, why a check failed, what would happen under an imagined fact or rule edit, and how to compare two persisted rounds.
+Every method on this page is read-only. None of them writes to the ledger, mutates the registry, or changes schema. The two top-level taxonomies are:">
+  <meta itemprop="wordCount" content="2107">
+
+<title>Evidence | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/concepts/evidence/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.f2649702e93cd1a98c670a367e867d65e997b099e0d56919036121e2b932509f.js" integrity="sha256-8mSXAuk80amMZwo2foZ9ZemXsJng1WkZA2Eh4rkyUJ8=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/" class="">
+      Concepts</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="active">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Evidence</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#evidence-what-if-and-audit">Evidence: what-if and audit</a>
+      <ul>
+        <li><a href="#inspect-a-candidate-evidence-tree-from-an-audit-package">Inspect a candidate evidence tree from an audit package</a></li>
+        <li><a href="#a-slightly-richer-schema">A slightly richer schema</a></li>
+        <li><a href="#check-a-binding-fgwhat_ifcheck">Check a binding: <code>fg.what_if.check</code></a></li>
+        <li><a href="#diagnose-a-failure-fgwhat_ifdiagnose">Diagnose a failure: <code>fg.what_if.diagnose</code></a></li>
+        <li><a href="#why-not-over-a-candidate-universe-fgwhat_ifwhy_not">Why-not over a candidate universe: <code>fg.what_if.why_not</code></a></li>
+        <li><a href="#the-evidence-chain-extracting-supportartifact">The evidence chain: extracting <code>SupportArtifact</code></a></li>
+        <li><a href="#fact-overlay-what-if-facts-changed">Fact overlay: what if facts changed?</a></li>
+        <li><a href="#rule-overlay-what-if-the-rule-changed">Rule overlay: what if the rule changed?</a>
+          <ul>
+            <li><a href="#disable-an-atom">Disable an atom</a></li>
+            <li><a href="#replace-a-literal">Replace a literal</a></li>
+            <li><a href="#add-a-condition">Add a condition</a></li>
+          </ul>
+        </li>
+        <li><a href="#compare-two-recorded-rounds-fgauditdiff_proof_frames">Compare two recorded rounds: <code>fg.audit.diff_proof_frames</code></a></li>
+        <li><a href="#what-evidence-does-not-do">What evidence does not do</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="evidence-what-if-and-audit">Evidence: what-if and audit<a class="anchor" href="#evidence-what-if-and-audit">#</a></h1>
+<p>The earlier pages wrote facts and ran rules. This page covers the read-only
+side: asking the graph whether a hypothetical fact would hold, why a check
+failed, what would happen under an imagined fact or rule edit, and how to
+compare two persisted rounds.</p>
+<p>Every method on this page is read-only. None of them writes to the ledger,
+mutates the registry, or changes schema. The two top-level taxonomies are:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Namespace</th>
+          <th>Use it for</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>fg.what_if</code></td>
+          <td>Live counterfactual checks against the current snapshot.</td>
+      </tr>
+      <tr>
+          <td><code>fg.audit</code></td>
+          <td>Inspection of persisted facts and recorded rounds.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="inspect-a-candidate-evidence-tree-from-an-audit-package">Inspect a candidate evidence tree from an audit package<a class="anchor" href="#inspect-a-candidate-evidence-tree-from-an-audit-package">#</a></h2>
+<p>The most direct evidence-tree reader is the audit package query surface.
+Use it after a graph has evaluated an inference, accepted a candidate, and
+exported an audit package.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.audit <span style="color:#ff6ac1">import</span> AuditQuery, load_audit_package
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>package <span style="color:#ff6ac1">=</span> load_audit_package(<span style="color:#5af78e">&#34;path/to/audit-package&#34;</span>)
+</span></span><span style="display:flex;"><span>query <span style="color:#ff6ac1">=</span> AuditQuery(package)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tree <span style="color:#ff6ac1">=</span> query<span style="color:#ff6ac1">.</span>get_candidate_evidence_tree(candidate_id)
+</span></span><span style="display:flex;"><span>summary <span style="color:#ff6ac1">=</span> query<span style="color:#ff6ac1">.</span>get_candidate_evidence_tree_summary(candidate_id)
+</span></span><span style="display:flex;"><span>narrative <span style="color:#ff6ac1">=</span> query<span style="color:#ff6ac1">.</span>get_candidate_evidence_tree_narrative(candidate_id)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> tree <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> summary <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> narrative <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span></span></span></code></pre></div><p><code>tree</code> is the machine-readable nested structure. It explains why one
+accepted candidate was supported:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>root <span style="color:#ff6ac1">=</span> tree[<span style="color:#5af78e">&#34;root&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> tree[<span style="color:#5af78e">&#34;kind&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;candidate_evidence_tree&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> root[<span style="color:#5af78e">&#34;node_kind&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;candidate_result&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> root[<span style="color:#5af78e">&#34;binding&#34;</span>]  <span style="color:#78787e"># logic-variable bindings for this candidate</span></span></span></code></pre></div><p>The useful nodes inside <code>root[&quot;children&quot;]</code> are:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Node kind</th>
+          <th>Meaning</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>support_section</code></td>
+          <td>The support collected for this candidate.</td>
+      </tr>
+      <tr>
+          <td><code>predicate_witness_group</code></td>
+          <td>A body predicate that was supported by ledger assertions.</td>
+      </tr>
+      <tr>
+          <td><code>assertion_fact</code></td>
+          <td>The exact assertion that witnessed a predicate.</td>
+      </tr>
+      <tr>
+          <td><code>non_fact_check</code></td>
+          <td>A satisfied non-fact condition such as <code>not</code>, equality, comparison, or arithmetic.</td>
+      </tr>
+      <tr>
+          <td><code>rule_ref</code> / <code>referenced_support</code></td>
+          <td>Recursive support through a <code>RuleRef</code>.</td>
+      </tr>
+      <tr>
+          <td><code>unresolved_support</code> / <code>recursion_boundary</code></td>
+          <td>A missing child support artifact or recursion boundary.</td>
+      </tr>
+  </tbody>
+</table>
+<p>For a simple inference, the tree often looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>support_section <span style="color:#ff6ac1">=</span> root[<span style="color:#5af78e">&#34;children&#34;</span>][<span style="color:#ff9f43">0</span>]
+</span></span><span style="display:flex;"><span>predicate_group <span style="color:#ff6ac1">=</span> support_section[<span style="color:#5af78e">&#34;children&#34;</span>][<span style="color:#ff9f43">0</span>]
+</span></span><span style="display:flex;"><span>assertion_leaf <span style="color:#ff6ac1">=</span> predicate_group[<span style="color:#5af78e">&#34;children&#34;</span>][<span style="color:#ff9f43">0</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> predicate_group[<span style="color:#5af78e">&#34;node_kind&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;predicate_witness_group&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> assertion_leaf[<span style="color:#5af78e">&#34;node_kind&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;assertion_fact&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> assertion_leaf[<span style="color:#5af78e">&#34;pred_id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;user:tag_seed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> assertion_leaf[<span style="color:#5af78e">&#34;claim_args&#34;</span>][<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;val&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;engineer&#34;</span></span></span></code></pre></div><p><code>summary</code> is a compact machine-readable rollup:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> summary[<span style="color:#5af78e">&#34;support_kind&#34;</span>] <span style="color:#ff6ac1">==</span> tree[<span style="color:#5af78e">&#34;support_kind&#34;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> summary[<span style="color:#5af78e">&#34;witness_assertion_count&#34;</span>] <span style="color:#ff6ac1">&gt;=</span> <span style="color:#ff9f43">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> summary[<span style="color:#5af78e">&#34;has_unresolved&#34;</span>] <span style="color:#ff6ac1">in</span> {<span style="color:#ff6ac1">True</span>, <span style="color:#ff6ac1">False</span>}</span></span></code></pre></div><p><code>narrative</code> is a deterministic text-oriented rendering:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> narrative[<span style="color:#5af78e">&#34;headline&#34;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> narrative[<span style="color:#5af78e">&#34;evidence_lines&#34;</span>]</span></span></code></pre></div><p>This is a <strong>positive evidence tree</strong>. It shows the successful support path
+for a candidate that exists. It does not record the full search process:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>branch 1 -&gt; true -&gt; true -&gt; false
+</span></span><span style="display:flex;"><span>switch branch 2 -&gt; true -&gt; supported</span></span></code></pre></div><p>That failed-branch trace is a different capability. Native evaluation can
+theoretically record it because the branch and atom checks happen inside
+the kernel, but the current candidate evidence tree is intentionally
+focused on the candidate that was produced.</p>
+<h2 id="a-slightly-richer-schema">A slightly richer schema<a class="anchor" href="#a-slightly-richer-schema">#</a></h2>
+<p>The examples on this page use a <code>Person</code> schema with three single-valued
+scalar fields. It is small enough to read and rich enough to write
+inferences that fail in interesting ways.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> (
+</span></span><span style="display:flex;"><span>    Entity,
+</span></span><span style="display:flex;"><span>    FactGraph,
+</span></span><span style="display:flex;"><span>    Field,
+</span></span><span style="display:flex;"><span>    Identity,
+</span></span><span style="display:flex;"><span>    Inference,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">vars</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Person</span>(Entity):
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    age: <span style="color:#ff5c57">int</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    region: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[Person])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(Person, name<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;alice&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(Person<span style="color:#ff6ac1">.</span>age, alice, <span style="color:#ff9f43">30</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(Person<span style="color:#ff6ac1">.</span>region, alice, <span style="color:#5af78e">&#34;us&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>bob <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(Person, name<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;bob&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(Person<span style="color:#ff6ac1">.</span>age, bob, <span style="color:#ff9f43">30</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(Person<span style="color:#ff6ac1">.</span>region, bob, <span style="color:#5af78e">&#34;eu&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>carol <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(Person, name<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;carol&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(Person<span style="color:#ff6ac1">.</span>age, carol, <span style="color:#ff9f43">25</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(Person<span style="color:#ff6ac1">.</span>region, carol, <span style="color:#5af78e">&#34;us&#34;</span>)</span></span></code></pre></div><p>We will reuse one inference: &ldquo;this <code>Person.age</code> fact for this person with
+this age is derivable from the ledger&rdquo;. The body looks like a structural
+echo of the head, which is what <code>check</code> needs.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;p&#34;</span>, <span style="color:#5af78e">&#34;age&#34;</span>) <span style="color:#ff6ac1">as</span> (p, age):
+</span></span><span style="display:flex;"><span>    age_inference <span style="color:#ff6ac1">=</span> Inference(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;quickstart.evidence.age&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Person(p), p<span style="color:#ff6ac1">.</span>age <span style="color:#ff6ac1">==</span> age],
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>Person<span style="color:#ff6ac1">.</span>age(value<span style="color:#ff6ac1">=</span>age),
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><h2 id="check-a-binding-fgwhat_ifcheck">Check a binding: <code>fg.what_if.check</code><a class="anchor" href="#check-a-binding-fgwhat_ifcheck">#</a></h2>
+<p><code>fg.what_if.check(inference, binding)</code> asks &ldquo;given this concrete binding of
+the inference&rsquo;s variables, does the inference fire against the current
+ledger?&rdquo; The binding maps each <code>$</code>-prefixed variable to a Python value.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>result <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>what_if<span style="color:#ff6ac1">.</span>check(age_inference, {<span style="color:#5af78e">&#34;$p&#34;</span>: alice, <span style="color:#5af78e">&#34;$age&#34;</span>: <span style="color:#ff9f43">30</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> result<span style="color:#ff6ac1">.</span>status <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;passed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> result<span style="color:#ff6ac1">.</span>matched_count <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> result<span style="color:#ff6ac1">.</span>evidence_envelope <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span></span></span></code></pre></div><p><code>status</code> is one of <code>&quot;passed&quot;</code>, <code>&quot;failed&quot;</code>, <code>&quot;unsupported&quot;</code>, or
+<code>&quot;invalid_request&quot;</code>. The full nullable matrix is locked in the application
+protocol; the short version is:</p>
+<table>
+  <thead>
+      <tr>
+          <th><code>status</code></th>
+          <th><code>matched_count</code></th>
+          <th><code>matched_binding</code></th>
+          <th><code>evidence_envelope</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>&quot;passed&quot;</code></td>
+          <td><code>&gt;= 1</code></td>
+          <td>populated</td>
+          <td>populated</td>
+      </tr>
+      <tr>
+          <td><code>&quot;failed&quot;</code></td>
+          <td><code>0</code></td>
+          <td><code>None</code></td>
+          <td><code>None</code></td>
+      </tr>
+      <tr>
+          <td><code>&quot;unsupported&quot;</code> / <code>&quot;invalid_request&quot;</code></td>
+          <td><code>None</code></td>
+          <td><code>None</code></td>
+          <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p>A binding that no row supports produces <code>&quot;failed&quot;</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fail <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>what_if<span style="color:#ff6ac1">.</span>check(age_inference, {<span style="color:#5af78e">&#34;$p&#34;</span>: alice, <span style="color:#5af78e">&#34;$age&#34;</span>: <span style="color:#ff9f43">99</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> fail<span style="color:#ff6ac1">.</span>status <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;failed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> fail<span style="color:#ff6ac1">.</span>matched_count <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> fail<span style="color:#ff6ac1">.</span>evidence_envelope <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">None</span></span></span></code></pre></div><p><code>engine=&quot;native&quot;</code> is the default. The check method accepts <code>engine</code> as a
+literal from <code>{&quot;native&quot;, &quot;souffle&quot;, &quot;problog&quot;, &quot;pyreason&quot;}</code>; only the
+native engine produces a <code>SupportArtifact</code> (see &ldquo;The evidence chain&rdquo;
+below). The shells reject <code>semantics=</code> and <code>semantics_profile=</code> keywords on
+purpose — engine selection here is by name, not by <code>*Semantics</code> wrapper.</p>
+<h2 id="diagnose-a-failure-fgwhat_ifdiagnose">Diagnose a failure: <code>fg.what_if.diagnose</code><a class="anchor" href="#diagnose-a-failure-fgwhat_ifdiagnose">#</a></h2>
+<p>When a check returns <code>&quot;failed&quot;</code>, <code>fg.what_if.diagnose(inference, binding)</code>
+localizes the failure. It is a sibling of check, not a wrapper around it;
+calling diagnose does not internally call check.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>diag <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>what_if<span style="color:#ff6ac1">.</span>diagnose(age_inference, {<span style="color:#5af78e">&#34;$p&#34;</span>: alice, <span style="color:#5af78e">&#34;$age&#34;</span>: <span style="color:#ff9f43">99</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> diag<span style="color:#ff6ac1">.</span>status <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;failed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> diag<span style="color:#ff6ac1">.</span>failure_kind <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;atom_localized&#34;</span>
+</span></span><span style="display:flex;"><span>locator <span style="color:#ff6ac1">=</span> diag<span style="color:#ff6ac1">.</span>diagnostic_payload
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> locator <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> locator<span style="color:#ff6ac1">.</span>branch_index <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> locator<span style="color:#ff6ac1">.</span>failed_atom_index <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">1</span></span></span></code></pre></div><p>The body has two atoms: <code>Person(p)</code> at index 0 and <code>p.age == age</code> at
+index 1. Alice exists, so atom 0 passes; her age is 30, not 99, so atom 1
+fails — <code>failed_atom_index == 1</code>.</p>
+<p><code>failure_kind</code> distinguishes <code>&quot;no_candidate&quot;</code> (no row even reached the
+body) from <code>&quot;atom_localized&quot;</code> (a row was tried and a specific atom
+rejected it). Only <code>&quot;atom_localized&quot;</code> populates <code>diagnostic_payload</code>.</p>
+<h2 id="why-not-over-a-candidate-universe-fgwhat_ifwhy_not">Why-not over a candidate universe: <code>fg.what_if.why_not</code><a class="anchor" href="#why-not-over-a-candidate-universe-fgwhat_ifwhy_not">#</a></h2>
+<p><code>fg.what_if.why_not(inference, candidates)</code> lifts diagnose to a finite set
+of bindings. You supply the universe explicitly; the SDK does not crawl
+the store for you.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>candidates <span style="color:#ff6ac1">=</span> [
+</span></span><span style="display:flex;"><span>    {<span style="color:#5af78e">&#34;$p&#34;</span>: alice, <span style="color:#5af78e">&#34;$age&#34;</span>: <span style="color:#ff9f43">30</span>},
+</span></span><span style="display:flex;"><span>    {<span style="color:#5af78e">&#34;$p&#34;</span>: bob, <span style="color:#5af78e">&#34;$age&#34;</span>: <span style="color:#ff9f43">30</span>},
+</span></span><span style="display:flex;"><span>    {<span style="color:#5af78e">&#34;$p&#34;</span>: carol, <span style="color:#5af78e">&#34;$age&#34;</span>: <span style="color:#ff9f43">30</span>},
+</span></span><span style="display:flex;"><span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>board <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>what_if<span style="color:#ff6ac1">.</span>why_not(age_inference, candidates)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> board<span style="color:#ff6ac1">.</span>status <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;completed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">len</span>(board<span style="color:#ff6ac1">.</span>green) <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">len</span>(board<span style="color:#ff6ac1">.</span>red) <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">1</span></span></span></code></pre></div><p><code>board.green</code> is a tuple of bindings that passed. <code>board.red</code> is a tuple of
+<code>WhyNotRedRow</code> items, each carrying the binding plus the same kind of
+atom-level diagnostic as <code>diagnose</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>red_row <span style="color:#ff6ac1">=</span> board<span style="color:#ff6ac1">.</span>red[<span style="color:#ff9f43">0</span>]
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">dict</span>(red_row<span style="color:#ff6ac1">.</span>binding)[<span style="color:#5af78e">&#34;$p&#34;</span>] <span style="color:#ff6ac1">==</span> carol
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> red_row<span style="color:#ff6ac1">.</span>diagnostic<span style="color:#ff6ac1">.</span>status <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;failed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> red_row<span style="color:#ff6ac1">.</span>diagnostic<span style="color:#ff6ac1">.</span>failure_kind <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;atom_localized&#34;</span></span></span></code></pre></div><p>Each candidate row may be a mapping (<code>{&quot;$p&quot;: ..., &quot;$age&quot;: ...}</code>) or a
+positional sequence in the head-variable order. Rows must cover exactly
+the plan&rsquo;s head variables; missing or extra variables produce
+<code>&quot;invalid_request&quot;</code>.</p>
+<h2 id="the-evidence-chain-extracting-supportartifact">The evidence chain: extracting <code>SupportArtifact</code><a class="anchor" href="#the-evidence-chain-extracting-supportartifact">#</a></h2>
+<p>A passed native-engine check produces a <code>SupportArtifact</code> inside
+<code>result.evidence_envelope.engine_payload</code>. That artifact is the canonical
+&ldquo;proof receipt&rdquo; — every downstream rechecker and rule-overlay method on
+this page consumes it explicitly.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.core.store._support <span style="color:#ff6ac1">import</span> SupportArtifact
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>passed <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>what_if<span style="color:#ff6ac1">.</span>check(age_inference, {<span style="color:#5af78e">&#34;$p&#34;</span>: alice, <span style="color:#5af78e">&#34;$age&#34;</span>: <span style="color:#ff9f43">30</span>})
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> passed<span style="color:#ff6ac1">.</span>status <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;passed&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>support <span style="color:#ff6ac1">=</span> passed<span style="color:#ff6ac1">.</span>evidence_envelope<span style="color:#ff6ac1">.</span>engine_payload
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">isinstance</span>(support, SupportArtifact)</span></span></code></pre></div><p>The handoff is always explicit. The SDK never threads a check result into
+an overlay method for you; you read <code>result.evidence_envelope.engine_payload</code>,
+verify the type, and pass it to the next method yourself.</p>
+<p>For non-native engines, <code>engine_payload</code> is a <code>ProvenanceEnvelope</code> instead
+of a <code>SupportArtifact</code>. The recheck and rule-overlay methods that need a
+support artifact only accept native results.</p>
+<h2 id="fact-overlay-what-if-facts-changed">Fact overlay: what if facts changed?<a class="anchor" href="#fact-overlay-what-if-facts-changed">#</a></h2>
+<p>Fact overlays describe imagined fact edits. The overlay is a frozen value;
+it is never written to the ledger.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.application.protocol <span style="color:#ff6ac1">import</span> (
+</span></span><span style="display:flex;"><span>    EvaluationOverlay,
+</span></span><span style="display:flex;"><span>    FactValueOverride,
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div><p>A <code>FactValueOverride</code> rewrites a single active fact. You supply the
+existing assertion id, predicate id, entity ref, the old tuple, and the
+new tuple. The assertion id and current value come from the regular
+assertion surface introduced earlier:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>carol_age_record <span style="color:#ff6ac1">=</span> (
+</span></span><span style="display:flex;"><span>    fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(Person, name<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;carol&#34;</span>)<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;age&#34;</span>)<span style="color:#ff6ac1">.</span>active()<span style="color:#ff6ac1">.</span>one()
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>raise_carol_to_30 <span style="color:#ff6ac1">=</span> FactValueOverride(
+</span></span><span style="display:flex;"><span>    asrt_id<span style="color:#ff6ac1">=</span>carol_age_record<span style="color:#ff6ac1">.</span>asrt_id,
+</span></span><span style="display:flex;"><span>    pred_id<span style="color:#ff6ac1">=</span>carol_age_record<span style="color:#ff6ac1">.</span>pred_id,
+</span></span><span style="display:flex;"><span>    e_ref<span style="color:#ff6ac1">=</span>carol_age_record<span style="color:#ff6ac1">.</span>e_ref,
+</span></span><span style="display:flex;"><span>    old_fact_tuple<span style="color:#ff6ac1">=</span>(carol_age_record<span style="color:#ff6ac1">.</span>e_ref, carol_age_record<span style="color:#ff6ac1">.</span>value),
+</span></span><span style="display:flex;"><span>    new_fact_tuple<span style="color:#ff6ac1">=</span>(carol_age_record<span style="color:#ff6ac1">.</span>e_ref, <span style="color:#ff9f43">30</span>),
+</span></span><span style="display:flex;"><span>    note<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;hypothetical: Carol turns 30&#34;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>overlay <span style="color:#ff6ac1">=</span> EvaluationOverlay(fact_actions<span style="color:#ff6ac1">=</span>(raise_carol_to_30,))</span></span></code></pre></div><p><code>fg.what_if.fact_overlay.check</code> runs check twice — once against the
+current ledger and once against the ledger with the overlay applied — and
+returns both phases plus a diff.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>overlay_result <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>what_if<span style="color:#ff6ac1">.</span>fact_overlay<span style="color:#ff6ac1">.</span>check(
+</span></span><span style="display:flex;"><span>    age_inference, {<span style="color:#5af78e">&#34;$p&#34;</span>: carol, <span style="color:#5af78e">&#34;$age&#34;</span>: <span style="color:#ff9f43">30</span>}, overlay
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> overlay_result<span style="color:#ff6ac1">.</span>status <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;passed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> overlay_result<span style="color:#ff6ac1">.</span>before<span style="color:#ff6ac1">.</span>status <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;failed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> overlay_result<span style="color:#ff6ac1">.</span>after<span style="color:#ff6ac1">.</span>status <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;passed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> overlay_result<span style="color:#ff6ac1">.</span>diff<span style="color:#ff6ac1">.</span>status_changed <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">True</span></span></span></code></pre></div><p><code>fg.what_if.fact_overlay.recheck_proof_frame(support, overlay)</code> answers a
+different question: given a proof we already captured, would it still
+hold under this overlay?</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>recheck <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>what_if<span style="color:#ff6ac1">.</span>fact_overlay<span style="color:#ff6ac1">.</span>recheck_proof_frame(support, overlay)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> recheck<span style="color:#ff6ac1">.</span>status <span style="color:#ff6ac1">in</span> {<span style="color:#5af78e">&#34;still_valid&#34;</span>, <span style="color:#5af78e">&#34;invalidated&#34;</span>, <span style="color:#5af78e">&#34;unknown&#34;</span>}
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> verdict <span style="color:#ff6ac1">in</span> recheck<span style="color:#ff6ac1">.</span>atom_verdicts:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">assert</span> verdict<span style="color:#ff6ac1">.</span>verdict <span style="color:#ff6ac1">in</span> {<span style="color:#5af78e">&#34;still_valid&#34;</span>, <span style="color:#5af78e">&#34;invalidated&#34;</span>, <span style="color:#5af78e">&#34;unknown&#34;</span>}</span></span></code></pre></div><p>Recheck takes only <code>SupportArtifact</code> plus <code>EvaluationOverlay</code>. It has no
+<code>engine=</code> and no <code>registry=</code> — by design, it does not lower an inference
+or talk to the rule registry.</p>
+<p><code>FactRemoveAction</code> is the other available fact-side action; its shape
+mirrors <code>FactValueOverride</code> minus <code>new_fact_tuple</code>.</p>
+<h2 id="rule-overlay-what-if-the-rule-changed">Rule overlay: what if the rule changed?<a class="anchor" href="#rule-overlay-what-if-the-rule-changed">#</a></h2>
+<p>Rule overlays let you ask the same question about hypothetical rule edits.
+Each rule overlay shell consumes a <code>Rule</code> (not an <code>Inference</code>), a
+<code>SupportArtifact</code> from a prior check, and the edit-specific arguments.</p>
+<p>The three shells are read-only on the rule registry; nothing is mutated.</p>
+<h3 id="disable-an-atom">Disable an atom<a class="anchor" href="#disable-an-atom">#</a></h3>
+<p><code>fg.what_if.rule.disable(rule, support, branch_index=..., atom_index=...)</code>
+asks what happens if a single atom in a single branch were dropped.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Pred, Rule
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;p&#34;</span>, <span style="color:#5af78e">&#34;age&#34;</span>, <span style="color:#5af78e">&#34;region&#34;</span>) <span style="color:#ff6ac1">as</span> (p, age, region):
+</span></span><span style="display:flex;"><span>    age_in_us <span style="color:#ff6ac1">=</span> Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;quickstart.evidence.age_in_us&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[p, age],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Person(p), p<span style="color:#ff6ac1">.</span>age <span style="color:#ff6ac1">==</span> age, p<span style="color:#ff6ac1">.</span>region <span style="color:#ff6ac1">==</span> region],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rule_support <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>what_if<span style="color:#ff6ac1">.</span>check(
+</span></span><span style="display:flex;"><span>    age_inference, {<span style="color:#5af78e">&#34;$p&#34;</span>: alice, <span style="color:#5af78e">&#34;$age&#34;</span>: <span style="color:#ff9f43">30</span>}
+</span></span><span style="display:flex;"><span>)<span style="color:#ff6ac1">.</span>evidence_envelope<span style="color:#ff6ac1">.</span>engine_payload
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>disabled <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>what_if<span style="color:#ff6ac1">.</span>rule<span style="color:#ff6ac1">.</span>disable(
+</span></span><span style="display:flex;"><span>    age_in_us,
+</span></span><span style="display:flex;"><span>    rule_support,
+</span></span><span style="display:flex;"><span>    branch_index<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">0</span>,
+</span></span><span style="display:flex;"><span>    atom_index<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">1</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> disabled <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>  <span style="color:#78787e"># RuleDisableResult</span></span></span></code></pre></div><h3 id="replace-a-literal">Replace a literal<a class="anchor" href="#replace-a-literal">#</a></h3>
+<p><code>fg.what_if.rule.literal_replace(...)</code> swaps one constant for another at
+one position inside one atom. <code>RuleLiteralPath</code> names the position:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.application.protocol <span style="color:#ff6ac1">import</span> RuleLiteralPath
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>replaced <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>what_if<span style="color:#ff6ac1">.</span>rule<span style="color:#ff6ac1">.</span>literal_replace(
+</span></span><span style="display:flex;"><span>    age_in_us,
+</span></span><span style="display:flex;"><span>    rule_support,
+</span></span><span style="display:flex;"><span>    branch_index<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">0</span>,
+</span></span><span style="display:flex;"><span>    atom_index<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">2</span>,
+</span></span><span style="display:flex;"><span>    literal_path<span style="color:#ff6ac1">=</span>RuleLiteralPath(kind<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;pred_term&#34;</span>, index<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">2</span>),
+</span></span><span style="display:flex;"><span>    old_literal<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;us&#34;</span>,
+</span></span><span style="display:flex;"><span>    new_literal<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;de&#34;</span>,
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div><p><code>RuleLiteralPath.kind</code> is <code>&quot;pred_term&quot;</code>, <code>&quot;lhs&quot;</code>, <code>&quot;rhs&quot;</code>, <code>&quot;in_value&quot;</code>,
+or <code>&quot;const_operand&quot;</code>. <code>pred_term</code> and <code>in_value</code> require <code>index</code>; the
+others require <code>index=None</code>.</p>
+<h3 id="add-a-condition">Add a condition<a class="anchor" href="#add-a-condition">#</a></h3>
+<p><code>fg.what_if.rule.add_condition(...)</code> tightens a branch with one extra
+atom. <code>RuleAddedAtom</code> carries a tuple whose first element is the atom kind
+(<code>&quot;eq&quot;</code>, <code>&quot;ne&quot;</code>, <code>&quot;gt&quot;</code>, <code>&quot;ge&quot;</code>, <code>&quot;lt&quot;</code>, <code>&quot;le&quot;</code>, or <code>&quot;in&quot;</code>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.application.protocol <span style="color:#ff6ac1">import</span> RuleAddedAtom
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tightened <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>what_if<span style="color:#ff6ac1">.</span>rule<span style="color:#ff6ac1">.</span>add_condition(
+</span></span><span style="display:flex;"><span>    age_in_us,
+</span></span><span style="display:flex;"><span>    rule_support,
+</span></span><span style="display:flex;"><span>    branch_index<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">0</span>,
+</span></span><span style="display:flex;"><span>    added_atom<span style="color:#ff6ac1">=</span>RuleAddedAtom((<span style="color:#5af78e">&#34;lt&#34;</span>, <span style="color:#5af78e">&#34;$age&#34;</span>, <span style="color:#ff9f43">65</span>)),
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div><p>All three rule-overlay shells accept the same optional <code>overlay=</code> and
+<code>note=</code> keywords. <code>overlay</code> lets you stack a fact overlay on top of the
+rule edit in one call. <code>note</code> is a free-form annotation that travels with
+the result and any recorded round event.</p>
+<h2 id="compare-two-recorded-rounds-fgauditdiff_proof_frames">Compare two recorded rounds: <code>fg.audit.diff_proof_frames</code><a class="anchor" href="#compare-two-recorded-rounds-fgauditdiff_proof_frames">#</a></h2>
+<p><code>fg.audit.diff_proof_frames(...)</code> compares the proof-frame events from two
+previously recorded rounds and returns a structured per-frame delta.</p>
+<p>Round capture itself is not part of this quickstart surface — it lives at
+<code>kernel.audit.round_events</code>, which exposes <code>start_round</code>,
+<code>record_round_event</code>, and <code>finalize_round</code> as advanced importables.
+Persisted rounds are loaded with <code>kernel.audit.load_audit_package</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.audit <span style="color:#ff6ac1">import</span> load_audit_package
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>events_a <span style="color:#ff6ac1">=</span> load_audit_package(<span style="color:#5af78e">&#34;rounds/round-a/&#34;</span>)<span style="color:#ff6ac1">.</span>events
+</span></span><span style="display:flex;"><span>events_b <span style="color:#ff6ac1">=</span> load_audit_package(<span style="color:#5af78e">&#34;rounds/round-b/&#34;</span>)<span style="color:#ff6ac1">.</span>events
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>diff <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>audit<span style="color:#ff6ac1">.</span>diff_proof_frames(
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;round-a&#34;</span>, <span style="color:#5af78e">&#34;round-b&#34;</span>, events_a, events_b
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> diff<span style="color:#ff6ac1">.</span>round_a_id <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;round-a&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> diff<span style="color:#ff6ac1">.</span>round_b_id <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;round-b&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> delta <span style="color:#ff6ac1">in</span> diff<span style="color:#ff6ac1">.</span>frame_deltas:
+</span></span><span style="display:flex;"><span>    <span style="color:#78787e"># FrameDelta carries identity, status change, atom delta, event refs</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">assert</span> delta<span style="color:#ff6ac1">.</span>identity <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span></span></span></code></pre></div><p>Pass <code>include_unchanged=True</code> to emit deltas for frames that did not
+change between rounds.</p>
+<p><code>fg.audit.explain_fact(pred_id, e_ref, *value_atoms)</code> and
+<code>fg.audit.conflicts(pred_id, e_ref)</code> are the existing audit pair for
+persisted facts. They take an assertion-level coordinate and return a
+dictionary-form explanation; the earlier <code>Assertion records and views</code>
+page introduces them.</p>
+<h2 id="what-evidence-does-not-do">What evidence does not do<a class="anchor" href="#what-evidence-does-not-do">#</a></h2>
+<ul>
+<li><strong>No ledger write.</strong> None of these methods appends, retracts, or
+modifies assertions. Overlays describe imagined edits; the proofs they
+produce reference the unchanged ledger plus the frozen overlay.</li>
+<li><strong>No registry mutation.</strong> Rule overlays never change saved rules.</li>
+<li><strong>No schema mutation.</strong> Adding fields is <code>fg.schema.add(...)</code> from the
+schema page, not the evidence line.</li>
+<li><strong>No automatic chaining.</strong> A <code>SupportArtifact</code> is extracted from a
+check result by you and passed to recheck or rule overlay by you. The
+SDK does not run <code>check</code> internally on your behalf.</li>
+<li><strong>No support artifact under non-native engines.</strong> When <code>engine=</code> is
+<code>&quot;problog&quot;</code> or <code>&quot;pyreason&quot;</code>, <code>evidence_envelope.engine_payload</code> is a
+<code>ProvenanceEnvelope</code>, which the recheck and rule-overlay methods do not
+accept. Use <code>engine=&quot;native&quot;</code> to keep the evidence chain.</li>
+<li><strong>No recorder lifecycle on the SDK.</strong> <code>start_round</code>,
+<code>record_round_event</code>, and <code>finalize_round</code> live at
+<code>kernel.audit.round_events</code> as advanced importables; the SDK ships only
+the query-side <code>diff_proof_frames</code>.</li>
+<li><strong>No walker views.</strong> <code>ProofFrameView</code>, <code>SupportArtifactView</code>, and
+<code>ProofFrameDiffView</code> are advanced ergonomic wrappers in
+<code>kernel.application.walker</code>. The SDK methods return raw frozen DTOs.</li>
+<li><strong>No frontier introspection.</strong> Why-not requires an explicit candidate
+universe; whole-store frontier discovery sits at
+<code>kernel.core.rules.frontier</code> and is not part of this surface.</li>
+</ul>
+<h2 id="syntax-checklist">Syntax checklist<a class="anchor" href="#syntax-checklist">#</a></h2>
+<ul>
+<li><code>fg.what_if.check(inference, binding, *, engine=&quot;native&quot;, registry=None)</code>
+returns <code>CheckResult</code> (<code>status</code>, <code>matched_count</code>, <code>matched_binding</code>,
+<code>evidence_envelope</code>, <code>errors</code>, <code>warnings</code>).</li>
+<li><code>fg.what_if.diagnose(inference, binding, *, engine=&quot;native&quot;, registry=None)</code>
+returns <code>DiagnoseResult</code> (<code>status</code>, <code>failure_kind</code>,
+<code>diagnostic_payload</code>, <code>matched_count</code>, <code>matched_binding</code>, <code>errors</code>,
+<code>warnings</code>).</li>
+<li><code>fg.what_if.why_not(inference, candidates, *, engine=&quot;native&quot;, registry=None)</code>
+returns <code>WhyNotUniverseResult</code> (<code>status</code> is <code>&quot;completed&quot;</code>,
+<code>&quot;unsupported&quot;</code>, or <code>&quot;invalid_request&quot;</code>; <code>green</code>, <code>red</code>, <code>errors</code>,
+<code>warnings</code>).</li>
+<li><code>fg.what_if.fact_overlay.check(inference, binding, overlay, *, engine=&quot;native&quot;, registry=None)</code>
+returns <code>FactOverlayCheckResult</code> (<code>before</code>, <code>after</code>, <code>diff</code>).</li>
+<li><code>fg.what_if.fact_overlay.recheck_proof_frame(support_artifact, overlay)</code>
+returns <code>ProofFrameRecheckResult</code> (<code>status</code>, <code>binding_items</code>,
+<code>atom_verdicts</code>).</li>
+<li><code>fg.what_if.rule.disable(rule, support, *, branch_index, atom_index, overlay=None, note=None)</code>.</li>
+<li><code>fg.what_if.rule.literal_replace(rule, support, *, branch_index, atom_index, literal_path, old_literal, new_literal, overlay=None, note=None)</code>.</li>
+<li><code>fg.what_if.rule.add_condition(rule, support, *, branch_index, added_atom, overlay=None, note=None)</code>.</li>
+<li><code>fg.audit.diff_proof_frames(round_a_id, round_b_id, round_a_events, round_b_events, *, warnings=(), include_unchanged=False)</code>
+returns <code>ProofFrameDiff</code> (<code>round_a_id</code>, <code>round_b_id</code>, <code>frame_deltas</code>,
+<code>warnings</code>).</li>
+<li>Binding keys are <code>$</code>-prefixed strings; positional candidate rows match
+the plan&rsquo;s head variable order.</li>
+<li>Engine names are <code>&quot;native&quot;</code>, <code>&quot;souffle&quot;</code>, <code>&quot;problog&quot;</code>, <code>&quot;pyreason&quot;</code>;
+<code>semantics=</code> and <code>semantics_profile=</code> keywords are rejected on these
+methods. Use the named-engine form here, even when the same graph
+evaluates inferences with <code>ProbLogSemantics</code> / <code>PyReasonSemantics</code>
+elsewhere.</li>
+<li>DTO and overlay types live at <code>kernel.application.protocol</code>:
+<code>EvaluationOverlay</code>, <code>FactValueOverride</code>, <code>FactRemoveAction</code>,
+<code>RuleLiteralPath</code>, <code>RuleAddedAtom</code>, plus the result DTOs.
+<code>SupportArtifact</code> lives at <code>kernel.core.store._support</code>. None of these
+are in <code>kernel.sdk.__all__</code>; import them directly when you need typed
+references.</li>
+<li>Round capture (<code>start_round</code> / <code>record_round_event</code> / <code>finalize_round</code>)
+and audit package loading (<code>load_audit_package</code>) live at
+<code>kernel.audit.round_events</code> and <code>kernel.audit</code>.</li>
+<li>The flat <code>SDKStore.check(...)</code>, <code>SDKStore.check_fact_overlay(...)</code>,
+<code>SDKStore.check_rule_disable(...)</code>, etc. are permanent aliases; the
+taxonomy form (<code>fg.what_if.*</code>, <code>fg.audit.*</code>) is the canonical reading
+path.</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/concepts/semantics/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Semantics</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/concepts/rules-and-inferences/" class="flex align-center">
+        <span>Rules &amp; Inference</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#evidence-what-if-and-audit">Evidence: what-if and audit</a>
+      <ul>
+        <li><a href="#inspect-a-candidate-evidence-tree-from-an-audit-package">Inspect a candidate evidence tree from an audit package</a></li>
+        <li><a href="#a-slightly-richer-schema">A slightly richer schema</a></li>
+        <li><a href="#check-a-binding-fgwhat_ifcheck">Check a binding: <code>fg.what_if.check</code></a></li>
+        <li><a href="#diagnose-a-failure-fgwhat_ifdiagnose">Diagnose a failure: <code>fg.what_if.diagnose</code></a></li>
+        <li><a href="#why-not-over-a-candidate-universe-fgwhat_ifwhy_not">Why-not over a candidate universe: <code>fg.what_if.why_not</code></a></li>
+        <li><a href="#the-evidence-chain-extracting-supportartifact">The evidence chain: extracting <code>SupportArtifact</code></a></li>
+        <li><a href="#fact-overlay-what-if-facts-changed">Fact overlay: what if facts changed?</a></li>
+        <li><a href="#rule-overlay-what-if-the-rule-changed">Rule overlay: what if the rule changed?</a>
+          <ul>
+            <li><a href="#disable-an-atom">Disable an atom</a></li>
+            <li><a href="#replace-a-literal">Replace a literal</a></li>
+            <li><a href="#add-a-condition">Add a condition</a></li>
+          </ul>
+        </li>
+        <li><a href="#compare-two-recorded-rounds-fgauditdiff_proof_frames">Compare two recorded rounds: <code>fg.audit.diff_proof_frames</code></a></li>
+        <li><a href="#what-evidence-does-not-do">What evidence does not do</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

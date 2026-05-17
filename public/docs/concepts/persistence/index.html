@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Save rules, inferences, and workspaces# The earlier pages kept everything in memory. This page adds persistence.
+There are two layers:
+Need Use Save one reusable rule or inference fg.rules.save(...) / fg.inferences.save(...) Load a saved authoring asset fg.rules.load(...) / fg.inferences.load(...) Save the whole graph state fg.save() Restore the whole graph state FactGraph.load(...) Think of the registry as the place for authoring assets, and the workspace as the place for a complete graph state. A workspace contains the ledger, schema metadata, registry, and a workspace manifest.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/concepts/persistence/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Persistence">
+  <meta property="og:description" content="Save rules, inferences, and workspaces# The earlier pages kept everything in memory. This page adds persistence.
+There are two layers:
+Need Use Save one reusable rule or inference fg.rules.save(...) / fg.inferences.save(...) Load a saved authoring asset fg.rules.load(...) / fg.inferences.load(...) Save the whole graph state fg.save() Restore the whole graph state FactGraph.load(...) Think of the registry as the place for authoring assets, and the workspace as the place for a complete graph state. A workspace contains the ledger, schema metadata, registry, and a workspace manifest.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Persistence">
+  <meta itemprop="description" content="Save rules, inferences, and workspaces# The earlier pages kept everything in memory. This page adds persistence.
+There are two layers:
+Need Use Save one reusable rule or inference fg.rules.save(...) / fg.inferences.save(...) Load a saved authoring asset fg.rules.load(...) / fg.inferences.load(...) Save the whole graph state fg.save() Restore the whole graph state FactGraph.load(...) Think of the registry as the place for authoring assets, and the workspace as the place for a complete graph state. A workspace contains the ledger, schema metadata, registry, and a workspace manifest.">
+  <meta itemprop="wordCount" content="1006">
+
+<title>Persistence | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/concepts/persistence/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.f2649702e93cd1a98c670a367e867d65e997b099e0d56919036121e2b932509f.js" integrity="sha256-8mSXAuk80amMZwo2foZ9ZemXsJng1WkZA2Eh4rkyUJ8=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/" class="">
+      Concepts</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="active">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Persistence</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#save-rules-inferences-and-workspaces">Save rules, inferences, and workspaces</a>
+      <ul>
+        <li><a href="#create-a-path-backed-graph">Create a path-backed graph</a></li>
+        <li><a href="#save-a-rule">Save a Rule</a></li>
+        <li><a href="#list-and-get-saved-rules">List and get saved rules</a></li>
+        <li><a href="#save-and-load-an-inference">Save and load an Inference</a></li>
+        <li><a href="#save-the-workspace">Save the workspace</a></li>
+        <li><a href="#load-the-workspace">Load the workspace</a></li>
+        <li><a href="#which-save-should-i-use">Which save should I use?</a></li>
+        <li><a href="#what-not-to-do">What not to do</a></li>
+        <li><a href="#complete-example">Complete example</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="save-rules-inferences-and-workspaces">Save rules, inferences, and workspaces<a class="anchor" href="#save-rules-inferences-and-workspaces">#</a></h1>
+<p>The earlier pages kept everything in memory. This page adds persistence.</p>
+<p>There are two layers:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Need</th>
+          <th>Use</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Save one reusable rule or inference</td>
+          <td><code>fg.rules.save(...)</code> / <code>fg.inferences.save(...)</code></td>
+      </tr>
+      <tr>
+          <td>Load a saved authoring asset</td>
+          <td><code>fg.rules.load(...)</code> / <code>fg.inferences.load(...)</code></td>
+      </tr>
+      <tr>
+          <td>Save the whole graph state</td>
+          <td><code>fg.save()</code></td>
+      </tr>
+      <tr>
+          <td>Restore the whole graph state</td>
+          <td><code>FactGraph.load(...)</code></td>
+      </tr>
+  </tbody>
+</table>
+<p>Think of the registry as the place for authoring assets, and the workspace as
+the place for a complete graph state. A workspace contains the ledger, schema
+metadata, registry, and a workspace manifest.</p>
+<h2 id="create-a-path-backed-graph">Create a path-backed graph<a class="anchor" href="#create-a-path-backed-graph">#</a></h2>
+<p>Pass <code>path=</code> to <code>FactGraph.create(...)</code> when you want the graph to know where
+its workspace should live.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> pathlib <span style="color:#ff6ac1">import</span> Path
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> tempfile <span style="color:#ff6ac1">import</span> TemporaryDirectory
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> (
+</span></span><span style="display:flex;"><span>    Branch,
+</span></span><span style="display:flex;"><span>    Entity,
+</span></span><span style="display:flex;"><span>    FactGraph,
+</span></span><span style="display:flex;"><span>    Field,
+</span></span><span style="display:flex;"><span>    Identity,
+</span></span><span style="display:flex;"><span>    Inference,
+</span></span><span style="display:flex;"><span>    Pred,
+</span></span><span style="display:flex;"><span>    Rule,
+</span></span><span style="display:flex;"><span>    SavedInferenceRef,
+</span></span><span style="display:flex;"><span>    SavedRuleRef,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">vars</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tmp <span style="color:#ff6ac1">=</span> TemporaryDirectory()
+</span></span><span style="display:flex;"><span>workspace <span style="color:#ff6ac1">=</span> Path(tmp<span style="color:#ff6ac1">.</span>name) <span style="color:#ff6ac1">/</span> <span style="color:#5af78e">&#34;tutorial-workspace&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    tag_seed: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tag: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[User], path<span style="color:#ff6ac1">=</span>workspace)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>tag_seed, alice, <span style="color:#5af78e">&#34;engineer&#34;</span>)</span></span></code></pre></div><p>Because <code>path=</code> is set, the graph also gets default workspace registry and
+ledger locations. You can still work in memory until you call <code>fg.save()</code>.</p>
+<h2 id="save-a-rule">Save a Rule<a class="anchor" href="#save-a-rule">#</a></h2>
+<p>Rules and inferences are ordinary Python value objects first. Saving them
+stores their authoring form in the registry and returns a saved-ref handle.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    seeded_tags <span style="color:#ff6ac1">=</span> Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;rule.seeded_tags&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[u, tag],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Branch([Pred(<span style="color:#5af78e">&#34;user:tag_seed&#34;</span>, u, tag)], <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed_path&#34;</span>)],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rule_ref <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>save(seeded_tags)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">isinstance</span>(rule_ref, SavedRuleRef)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> rule_ref<span style="color:#ff6ac1">.</span>rule_id <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;rule.seeded_tags&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> rule_ref<span style="color:#ff6ac1">.</span>version <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;v1&#34;</span></span></span></code></pre></div><p><code>SavedRuleRef</code> is a registry handle. It is not the rule itself, and it is not
+something you pass to <code>fg.eval.run(...)</code>.</p>
+<p>Load the ref to get the runtime value object:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>loaded_rule <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>load(rule_ref)
+</span></span><span style="display:flex;"><span>rows <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>run(loaded_rule)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">isinstance</span>(loaded_rule, Rule)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> rows <span style="color:#ff6ac1">==</span> [{<span style="color:#5af78e">&#34;u&#34;</span>: alice, <span style="color:#5af78e">&#34;tag&#34;</span>: <span style="color:#5af78e">&#34;engineer&#34;</span>}]</span></span></code></pre></div><h2 id="list-and-get-saved-rules">List and get saved rules<a class="anchor" href="#list-and-get-saved-rules">#</a></h2>
+<p><code>list()</code> returns saved refs for all saved versions. <code>get(id)</code> returns the
+latest saved ref for one id.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>rule_refs <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>list()
+</span></span><span style="display:flex;"><span>latest_rule_ref <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>get(<span style="color:#5af78e">&#34;rule.seeded_tags&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> rule_refs <span style="color:#ff6ac1">==</span> [rule_ref]
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> latest_rule_ref <span style="color:#ff6ac1">==</span> rule_ref
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">isinstance</span>(latest_rule_ref, SavedRuleRef)</span></span></code></pre></div><p>The last assertion is the important one. <code>get(...)</code> returns a handle, not a
+<code>Rule</code>. Load it before running:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>latest_rule <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>load(latest_rule_ref)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>run(latest_rule) <span style="color:#ff6ac1">==</span> rows</span></span></code></pre></div><h2 id="save-and-load-an-inference">Save and load an Inference<a class="anchor" href="#save-and-load-an-inference">#</a></h2>
+<p>Inferences use the same pattern.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    tags_from_seed <span style="color:#ff6ac1">=</span> Inference(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;inf.tags_from_seed&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Branch([Pred(<span style="color:#5af78e">&#34;user:tag_seed&#34;</span>, u, tag)], <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed_path&#34;</span>)],
+</span></span><span style="display:flex;"><span>        target<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;user:tag&#34;</span>,
+</span></span><span style="display:flex;"><span>        head_vars<span style="color:#ff6ac1">=</span>[u, tag],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>inference_ref <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>inferences<span style="color:#ff6ac1">.</span>save(tags_from_seed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">isinstance</span>(inference_ref, SavedInferenceRef)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> inference_ref<span style="color:#ff6ac1">.</span>inference_id <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;inf.tags_from_seed&#34;</span></span></span></code></pre></div><p>Load before evaluating:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>loaded_inference <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>inferences<span style="color:#ff6ac1">.</span>load(inference_ref)
+</span></span><span style="display:flex;"><span>candidates <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>evaluate(loaded_inference)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">isinstance</span>(loaded_inference, Inference)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">len</span>(candidates) <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> candidates[<span style="color:#ff9f43">0</span>]<span style="color:#ff6ac1">.</span>target <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;user:tag&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> ()</span></span></code></pre></div><p>Accepting the candidate writes it to the ledger:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>accept(candidates[<span style="color:#ff9f43">0</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> (<span style="color:#5af78e">&#34;engineer&#34;</span>,)</span></span></code></pre></div><p>The saved inference asset and the accepted assertion are different things. The
+asset describes how to derive candidates. The ledger stores accepted facts.</p>
+<h2 id="save-the-workspace">Save the workspace<a class="anchor" href="#save-the-workspace">#</a></h2>
+<p>Saving a rule or inference writes to the registry. It does not, by itself, mean
+you have saved the whole graph state. Call <code>fg.save()</code> to persist the workspace.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>save_result <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>save()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> Path(save_result[<span style="color:#5af78e">&#34;path&#34;</span>]) <span style="color:#ff6ac1">==</span> workspace
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> (workspace <span style="color:#ff6ac1">/</span> <span style="color:#5af78e">&#34;factgraph_workspace.json&#34;</span>)<span style="color:#ff6ac1">.</span>exists()
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> (workspace <span style="color:#ff6ac1">/</span> <span style="color:#5af78e">&#34;ledger.db&#34;</span>)<span style="color:#ff6ac1">.</span>exists()
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> (workspace <span style="color:#ff6ac1">/</span> <span style="color:#5af78e">&#34;registry&#34;</span>)<span style="color:#ff6ac1">.</span>is_dir()</span></span></code></pre></div><p>The workspace is a level-4 graph snapshot:</p>
+<ul>
+<li>schema metadata</li>
+<li>ledger database</li>
+<li>authoring registry</li>
+<li>workspace manifest</li>
+</ul>
+<p>Artifact sidecars, views, audit reports, and service state are not part of this
+workspace format.</p>
+<p>The workspace manifest records the save scope and schema digest. Loading checks
+the manifest, ledger, registry schema metadata, and the <code>schema_classes=[...]</code>
+you provide. That is why the loader asks for Python schema classes instead of
+guessing a dynamic class model.</p>
+<h2 id="load-the-workspace">Load the workspace<a class="anchor" href="#load-the-workspace">#</a></h2>
+<p>Load requires the schema classes. Class-less dynamic load is not part of the
+current public surface.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>loaded <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>load(workspace, schema_classes<span style="color:#ff6ac1">=</span>[User])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>loaded_snap <span style="color:#ff6ac1">=</span> loaded<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>loaded_rule_ref <span style="color:#ff6ac1">=</span> loaded<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>get(<span style="color:#5af78e">&#34;rule.seeded_tags&#34;</span>)
+</span></span><span style="display:flex;"><span>loaded_inference_ref <span style="color:#ff6ac1">=</span> loaded<span style="color:#ff6ac1">.</span>inferences<span style="color:#ff6ac1">.</span>get(<span style="color:#5af78e">&#34;inf.tags_from_seed&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> loaded_snap <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(loaded_snap<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> (<span style="color:#5af78e">&#34;engineer&#34;</span>,)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> loaded_rule_ref <span style="color:#ff6ac1">==</span> rule_ref
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> loaded_inference_ref <span style="color:#ff6ac1">==</span> inference_ref</span></span></code></pre></div><p>The loaded graph has the ledger and the registry. You can load the saved rule
+and run it again.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>rule_after_load <span style="color:#ff6ac1">=</span> loaded<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>load(loaded_rule_ref)
+</span></span><span style="display:flex;"><span>rows_after_load <span style="color:#ff6ac1">=</span> loaded<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>run(rule_after_load)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> rows_after_load <span style="color:#ff6ac1">==</span> [{<span style="color:#5af78e">&#34;u&#34;</span>: alice, <span style="color:#5af78e">&#34;tag&#34;</span>: <span style="color:#5af78e">&#34;engineer&#34;</span>}]</span></span></code></pre></div><h2 id="which-save-should-i-use">Which save should I use?<a class="anchor" href="#which-save-should-i-use">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>Task</th>
+          <th>Use</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Save a reusable rule definition</td>
+          <td><code>fg.rules.save(rule)</code></td>
+      </tr>
+      <tr>
+          <td>Save a reusable inference definition</td>
+          <td><code>fg.inferences.save(inference)</code></td>
+      </tr>
+      <tr>
+          <td>Get the latest saved handle</td>
+          <td><code>fg.rules.get(id)</code> / <code>fg.inferences.get(id)</code></td>
+      </tr>
+      <tr>
+          <td>Load a runtime value object</td>
+          <td><code>fg.rules.load(ref)</code> / <code>fg.inferences.load(ref)</code></td>
+      </tr>
+      <tr>
+          <td>Save graph state to disk</td>
+          <td><code>fg.save()</code></td>
+      </tr>
+      <tr>
+          <td>Restore graph state from disk</td>
+          <td><code>FactGraph.load(path, schema_classes=[...])</code></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="what-not-to-do">What not to do<a class="anchor" href="#what-not-to-do">#</a></h2>
+<p>Do not pass saved refs to runtime methods:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>fg.eval.run(saved_rule_ref)        # wrong
+</span></span><span style="display:flex;"><span>fg.eval.evaluate(saved_inf_ref)    # wrong</span></span></code></pre></div><p>Saved refs are load handles. Runtime methods consume <code>Rule</code> and <code>Inference</code>
+value objects.</p>
+<p>Do not use <code>from_schema_classes(path=...)</code>. The workspace lifecycle lives on
+the public <code>FactGraph.create(path=...)</code>, <code>fg.save(...)</code>, and
+<code>FactGraph.load(...)</code> path.</p>
+<p>Do not call <code>FactGraph.load(path)</code> without <code>schema_classes=[...]</code>. The loader
+validates the workspace schema digest against your Python schema declarations.</p>
+<h2 id="complete-example">Complete example<a class="anchor" href="#complete-example">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> pathlib <span style="color:#ff6ac1">import</span> Path
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> tempfile <span style="color:#ff6ac1">import</span> TemporaryDirectory
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> (
+</span></span><span style="display:flex;"><span>    Branch,
+</span></span><span style="display:flex;"><span>    Entity,
+</span></span><span style="display:flex;"><span>    FactGraph,
+</span></span><span style="display:flex;"><span>    Field,
+</span></span><span style="display:flex;"><span>    Identity,
+</span></span><span style="display:flex;"><span>    Inference,
+</span></span><span style="display:flex;"><span>    Pred,
+</span></span><span style="display:flex;"><span>    Rule,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">vars</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    tag_seed: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tag: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">def</span> <span style="color:#57c7ff">make_rule</span>() <span style="color:#ff6ac1">-&gt;</span> Rule:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>        <span style="color:#ff6ac1">return</span> Rule(
+</span></span><span style="display:flex;"><span>            <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;rule.seeded_tags&#34;</span>,
+</span></span><span style="display:flex;"><span>            version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>            select<span style="color:#ff6ac1">=</span>[u, tag],
+</span></span><span style="display:flex;"><span>            where<span style="color:#ff6ac1">=</span>[Branch([Pred(<span style="color:#5af78e">&#34;user:tag_seed&#34;</span>, u, tag)], <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed_path&#34;</span>)],
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">def</span> <span style="color:#57c7ff">make_inference</span>() <span style="color:#ff6ac1">-&gt;</span> Inference:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>        <span style="color:#ff6ac1">return</span> Inference(
+</span></span><span style="display:flex;"><span>            <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;inf.tags_from_seed&#34;</span>,
+</span></span><span style="display:flex;"><span>            version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>            where<span style="color:#ff6ac1">=</span>[Branch([Pred(<span style="color:#5af78e">&#34;user:tag_seed&#34;</span>, u, tag)], <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed_path&#34;</span>)],
+</span></span><span style="display:flex;"><span>            target<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;user:tag&#34;</span>,
+</span></span><span style="display:flex;"><span>            head_vars<span style="color:#ff6ac1">=</span>[u, tag],
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> TemporaryDirectory() <span style="color:#ff6ac1">as</span> tmp_dir:
+</span></span><span style="display:flex;"><span>    workspace <span style="color:#ff6ac1">=</span> Path(tmp_dir) <span style="color:#ff6ac1">/</span> <span style="color:#5af78e">&#34;workspace&#34;</span>
+</span></span><span style="display:flex;"><span>    fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[User], path<span style="color:#ff6ac1">=</span>workspace)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    alice <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>    fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>tag_seed, alice, <span style="color:#5af78e">&#34;engineer&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    rule_ref <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>save(make_rule())
+</span></span><span style="display:flex;"><span>    inference_ref <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>inferences<span style="color:#ff6ac1">.</span>save(make_inference())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    rule <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>load(rule_ref)
+</span></span><span style="display:flex;"><span>    inference <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>inferences<span style="color:#ff6ac1">.</span>load(inference_ref)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">assert</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>run(rule) <span style="color:#ff6ac1">==</span> [{<span style="color:#5af78e">&#34;u&#34;</span>: alice, <span style="color:#5af78e">&#34;tag&#34;</span>: <span style="color:#5af78e">&#34;engineer&#34;</span>}]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    candidate <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>evaluate(inference)[<span style="color:#ff9f43">0</span>]
+</span></span><span style="display:flex;"><span>    fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>accept(candidate)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> (<span style="color:#5af78e">&#34;engineer&#34;</span>,)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    fg<span style="color:#ff6ac1">.</span>save()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    restored <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>load(workspace, schema_classes<span style="color:#ff6ac1">=</span>[User])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    restored_rule <span style="color:#ff6ac1">=</span> restored<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>load(restored<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>get(<span style="color:#5af78e">&#34;rule.seeded_tags&#34;</span>))
+</span></span><span style="display:flex;"><span>    restored_rows <span style="color:#ff6ac1">=</span> restored<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>run(restored_rule)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(restored<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> (<span style="color:#5af78e">&#34;engineer&#34;</span>,)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">assert</span> restored_rows <span style="color:#ff6ac1">==</span> [{<span style="color:#5af78e">&#34;u&#34;</span>: alice, <span style="color:#5af78e">&#34;tag&#34;</span>: <span style="color:#5af78e">&#34;engineer&#34;</span>}]</span></span></code></pre></div><h2 id="syntax-checklist">Syntax checklist<a class="anchor" href="#syntax-checklist">#</a></h2>
+<ul>
+<li>Use <code>FactGraph.create(schema_classes=[...], path=workspace)</code> for a
+path-backed graph.</li>
+<li>Use <code>fg.rules.save(rule)</code> and <code>fg.inferences.save(inference)</code> for per-asset
+registry persistence.</li>
+<li><code>fg.rules.get(id)</code> and <code>fg.inferences.get(id)</code> return the latest saved ref.</li>
+<li>Use <code>fg.rules.load(ref)</code> and <code>fg.inferences.load(ref)</code> to get runtime value
+objects.</li>
+<li>Runtime methods consume loaded <code>Rule</code> and <code>Inference</code> objects, not saved refs.</li>
+<li>Use <code>fg.save()</code> for the Level-4 workspace: manifest, ledger, schema IR, and
+registry rules/inferences.</li>
+<li>Use <code>FactGraph.load(path, schema_classes=[...])</code> to restore a workspace.</li>
+<li>Class-less load is not part of the current public surface.</li>
+<li>Views, artifacts, audit packages, service state, and package exports are not
+part of the workspace format.</li>
+<li>Workspace persistence and package export are different surfaces.</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/concepts/rules-and-inferences/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Rules &amp; Inference</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/concepts/namespace-map/" class="flex align-center">
+        <span>Namespace Map</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#save-rules-inferences-and-workspaces">Save rules, inferences, and workspaces</a>
+      <ul>
+        <li><a href="#create-a-path-backed-graph">Create a path-backed graph</a></li>
+        <li><a href="#save-a-rule">Save a Rule</a></li>
+        <li><a href="#list-and-get-saved-rules">List and get saved rules</a></li>
+        <li><a href="#save-and-load-an-inference">Save and load an Inference</a></li>
+        <li><a href="#save-the-workspace">Save the workspace</a></li>
+        <li><a href="#load-the-workspace">Load the workspace</a></li>
+        <li><a href="#which-save-should-i-use">Which save should I use?</a></li>
+        <li><a href="#what-not-to-do">What not to do</a></li>
+        <li><a href="#complete-example">Complete example</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

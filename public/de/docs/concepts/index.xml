@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Konzepte on factgraph</title>
+    <link>http://localhost:1313/de/docs/concepts/</link>
+    <description>Recent content in Konzepte on factgraph</description>
+    <generator>Hugo</generator>
+    <language>de</language>
+    <copyright>[© CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)</copyright>
+    <atom:link href="http://localhost:1313/de/docs/concepts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Überblick</title>
+      <link>http://localhost:1313/de/docs/concepts/overview/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/concepts/overview/</guid>
+      <description>&lt;h1 id=&#34;überblick&#34;&gt;Überblick&lt;a class=&#34;anchor&#34; href=&#34;#%c3%bcberblick&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Die Architektur von factpy beruht auf einer zentralen Entscheidung: Zustand wird nicht direkt gespeichert, sondern aus Fakten berechnet. Jede Aussage über eine Entität wird als eigener Fakt festgehalten. Der aktuelle Zustand einer Entität entsteht erst dann, wenn er gebraucht wird, indem diese Fakten nach den Regeln des Schemas zu einem Snapshot verdichtet werden. Es gibt keine Zeile, die aktualisiert wird, und kein Dokument, das ersetzt wird. Eine Entität ist die Projektion all dessen, was jemals über sie ausgesagt wurde. Die übrigen Komponenten des Kernels — Schema, Regeln, Ableitungen und Audit-Pakete — dienen dazu, diese Arbeitsweise praktikabel zu machen und die dabei entstehende Evidenzspur zu erhalten. Diese Seite beschreibt die Architektur auf einer gemeinsamen Abstraktionsebene; die vier folgenden Konzeptseiten behandeln die einzelnen Bestandteile im Detail.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Das Ledger</title>
+      <link>http://localhost:1313/de/docs/concepts/the-ledger/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/concepts/the-ledger/</guid>
+      <description>&lt;h1 id=&#34;das-ledger&#34;&gt;Das Ledger&lt;a class=&#34;anchor&#34; href=&#34;#das-ledger&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Jede Aussage und jede Retraktion, die über das SDK geschrieben wird, landet als neuer Eintrag im Ledger. Einmal geschrieben, wird ein Eintrag nicht mehr verändert oder entfernt. Snapshots, Query-Ergebnisse und die Eingaben für Regelauswertungen sind Projektionen des Ledgers. Sie werden bei Bedarf berechnet und nirgendwo anders als kanonischer Zustand gehalten. Wenn das Schema das Vokabular ist, in dem Aussagen formuliert werden, dann ist das Ledger der Ort, an dem diese Aussagen sich ansammeln. Diese Seite beschreibt, was ein Ledger-Eintrag enthält, wie Leseoperationen die Einträge in die Formen projizieren, die der Rest des Systems verwendet, und warum das Design auf append-only-Schreiben statt auf dem vertrauteren Überschreiben beruht.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Entitäten und Felder</title>
+      <link>http://localhost:1313/de/docs/concepts/entities-and-fields/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/concepts/entities-and-fields/</guid>
+      <description>&lt;h1 id=&#34;entitäten-und-felder&#34;&gt;Entitäten und Felder&lt;a class=&#34;anchor&#34; href=&#34;#entit%c3%a4ten-und-felder&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Wenn Fakten die atomaren Aussagen sind, die factpy speichert, dann ist das Schema das Vokabular, in dem diese Aussagen formuliert werden. Es legt fest, über welche Arten von Dingen das System Fakten halten kann, welche Aussagen über sie zulässig sind und wie eine Aussage ihrem Subjekt zugeordnet wird. Ein Schema ist keine Tabellendefinition: Es erzwingt kein Speicherlayout, verlangt nicht, dass ein Feld zu einem bestimmten Zeitpunkt einen Wert hat, und macht keine Aussage darüber, wie die Welt aussehen muss. Es beschränkt die Grammatik des Schreibens und Lesens: die Menge der existierenden Prädikate, ihre Typbereiche und die Regeln, nach denen mehrere Aussagen zum selben Prädikat reduziert werden. Der Rest dieser Seite beschreibt die Bestandteile dieser Grammatik, außerdem wie Schemas über Module hinweg zusammengesetzt werden und wie sie sich von Version zu Version weiterentwickeln.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Regeln und Ableitungen</title>
+      <link>http://localhost:1313/de/docs/concepts/rules-and-derivations/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/concepts/rules-and-derivations/</guid>
+      <description>&lt;h1 id=&#34;regeln-und-ableitungen&#34;&gt;Regeln und Ableitungen&lt;a class=&#34;anchor&#34; href=&#34;#regeln-und-ableitungen&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Die Reasoning-Schicht von factpy ist eine kleine logische Sprache direkt über dem Ledger. Eine Regel beschreibt, unter welchen Bedingungen ein Body aus Clauses für eine bestimmte Variablenbindung gleichzeitig erfüllt ist, und gibt diese Bindungen als Zeilen zurück. Eine Ableitung ist eine Regel, deren Head keine Zeilen projiziert, sondern neue Fakten benennt, die vorgeschlagen werden, wenn der Body passt. Beide werden vom Kernel gegen das Ledger ausgewertet, beide tragen stabile Identifier und explizite Versionen, und beide hinterlassen eine Auswertungsspur, die Teil der Audit-Story ist. Diese Seite beschreibt den Aufbau einer Regel, die Sprache ihres Bodys, das Verhältnis zwischen einer Regel als Query und einer Regel als Ableitung sowie den Lebenszyklus aus Kandidat und Annahme, der ein auditierbares Inferenzsystem von einem nicht auditierbaren unterscheidet.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Audit und Provenienz</title>
+      <link>http://localhost:1313/de/docs/concepts/audit-and-provenance/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/concepts/audit-and-provenance/</guid>
+      <description>&lt;h1 id=&#34;audit-und-provenienz&#34;&gt;Audit und Provenienz&lt;a class=&#34;anchor&#34; href=&#34;#audit-und-provenienz&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Provenienz und Audit beantworten zwei verwandte, aber unterschiedliche Fragen. Provenienz fragt, woher ein bestimmter Fakt stammt, und ist eine Eigenschaft jedes einzelnen Ledger-Eintrags. Audit fragt, was in einem bestimmten Lauf des Systems passiert ist und ob ein Dritter diesen Lauf nachvollziehen oder prüfen kann. Beides hängt eng zusammen: Eine Audit-Story aus Fakten ohne erhaltene Provenienz ist kaum eine Audit-Story. Der Kernel behandelt beide Aspekte aber über unterschiedliche Mechanismen. Diese Seite beschreibt die Metadaten, die mit jedem Fakt mitlaufen, die Records zu jedem Lauf, die Evidenzformen von Ableitungen und das Format des Audit-Pakets, das all diese Daten zu einem eigenständigen Artefakt für Archivierung und Offline-Prüfung bündelt.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docs on factgraph</title>
+    <link>http://localhost:1313/de/docs/</link>
+    <description>Recent content in Docs on factgraph</description>
+    <generator>Hugo</generator>
+    <language>de</language>
+    <copyright>[© CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)</copyright>
+    <atom:link href="http://localhost:1313/de/docs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Schnellstart</title>
+      <link>http://localhost:1313/de/docs/quickstart/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/quickstart/</guid>
+      <description>&lt;h1 id=&#34;quickstart&#34;&gt;Quickstart&lt;a class=&#34;anchor&#34; href=&#34;#quickstart&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;This page works through the smallest factpy program that exercises each of the kernel&amp;rsquo;s central abstractions: a typed schema, an append-only ledger of writes, a logical rule evaluated against those writes, and the recovery of a fact&amp;rsquo;s provenance from the resulting state. Everything below uses only the SDK&amp;rsquo;s public surface, and nothing has been simplified away for presentation.&lt;/p&gt;&#xA;&lt;h2 id=&#34;install&#34;&gt;Install&lt;a class=&#34;anchor&#34; href=&#34;#install&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;factpy requires Python 3.10 or newer.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install factpy-kernel&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The kernel itself has a minimal dependency set, and the adapter engines for PyReason, ProbLog, and Souffle are optional extras that are not needed for what follows.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

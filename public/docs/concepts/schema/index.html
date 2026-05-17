@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Define a schema# The schema is the vocabulary and coordinate system of a FactGraph. It tells the graph which kinds of entities exist, how each entity is located, and which facts can be asserted at that location.
+The most important distinction is between Identity and Field:
+Identity fields define the entity coordinate. Field descriptors define fact content attached to that coordinate. This is not a database table model where a primary key is the only identifier and every other column is mutable content. In FactGraph, all Identity fields participate in the generated entity reference. primary_key=True marks the logical anchor used by authoring and cross-coordinate joins; it does not exclude non-primary identities from the coordinate.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/concepts/schema/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Schema">
+  <meta property="og:description" content="Define a schema# The schema is the vocabulary and coordinate system of a FactGraph. It tells the graph which kinds of entities exist, how each entity is located, and which facts can be asserted at that location.
+The most important distinction is between Identity and Field:
+Identity fields define the entity coordinate. Field descriptors define fact content attached to that coordinate. This is not a database table model where a primary key is the only identifier and every other column is mutable content. In FactGraph, all Identity fields participate in the generated entity reference. primary_key=True marks the logical anchor used by authoring and cross-coordinate joins; it does not exclude non-primary identities from the coordinate.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Schema">
+  <meta itemprop="description" content="Define a schema# The schema is the vocabulary and coordinate system of a FactGraph. It tells the graph which kinds of entities exist, how each entity is located, and which facts can be asserted at that location.
+The most important distinction is between Identity and Field:
+Identity fields define the entity coordinate. Field descriptors define fact content attached to that coordinate. This is not a database table model where a primary key is the only identifier and every other column is mutable content. In FactGraph, all Identity fields participate in the generated entity reference. primary_key=True marks the logical anchor used by authoring and cross-coordinate joins; it does not exclude non-primary identities from the coordinate.">
+  <meta itemprop="wordCount" content="1345">
+
+<title>Schema | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/concepts/schema/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.f2649702e93cd1a98c670a367e867d65e997b099e0d56919036121e2b932509f.js" integrity="sha256-8mSXAuk80amMZwo2foZ9ZemXsJng1WkZA2Eh4rkyUJ8=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/" class="">
+      Concepts</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="active">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Schema</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#define-a-schema">Define a schema</a>
+      <ul>
+        <li><a href="#entity-classes">Entity classes</a></li>
+        <li><a href="#identity-vs-field">Identity vs Field</a></li>
+        <li><a href="#how-schema-becomes-graph-facts">How schema becomes graph facts</a></li>
+        <li><a href="#single-multi-and-entity-references">Single, multi, and entity references</a></li>
+        <li><a href="#why-the-primary-anchor-matters">Why the primary anchor matters</a></li>
+        <li><a href="#adding-fields-later">Adding fields later</a></li>
+        <li><a href="#what-schema-add-will-not-do">What schema add will not do</a></li>
+        <li><a href="#complete-example">Complete example</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="define-a-schema">Define a schema<a class="anchor" href="#define-a-schema">#</a></h1>
+<p>The schema is the vocabulary and coordinate system of a <code>FactGraph</code>. It tells
+the graph which kinds of entities exist, how each entity is located, and which
+facts can be asserted at that location.</p>
+<p>The most important distinction is between <code>Identity</code> and <code>Field</code>:</p>
+<ul>
+<li><code>Identity</code> fields define the entity coordinate.</li>
+<li><code>Field</code> descriptors define fact content attached to that coordinate.</li>
+</ul>
+<p>This is not a database table model where a primary key is the only identifier
+and every other column is mutable content. In FactGraph, all <code>Identity</code> fields
+participate in the generated entity reference. <code>primary_key=True</code> marks the
+logical anchor used by authoring and cross-coordinate joins; it does not exclude
+non-primary identities from the coordinate.</p>
+<p>This page stays with ordinary entity classes. Relationship classes are covered
+later because they are a more advanced schema declaration.</p>
+<h2 id="entity-classes">Entity classes<a class="anchor" href="#entity-classes">#</a></h2>
+<p>Every entity class subclasses <code>Entity</code>. Each entity must declare at least one
+<code>Identity(primary_key=True)</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Entity, FactGraph, Field, Identity
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Team</span>(Entity):
+</span></span><span style="display:flex;"><span>    team_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    locale: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(default<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>    display_name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tags: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>    team: Team <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p><code>FactGraph.create(...)</code> compiles these classes into the active graph schema:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[Team, User])</span></span></code></pre></div><p><code>User.user_id</code> is the logical anchor. <code>User.locale</code> is a coordinate dimension.
+Both are identity fields, so both participate in the entity reference.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>user_en <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>user_zh <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;zh&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> user_en <span style="color:#ff6ac1">!=</span> user_zh</span></span></code></pre></div><p>Those two references point to different complete coordinates. They share the
+same primary anchor (<code>user_id=&quot;u-1&quot;</code>), but they are not the same entity
+coordinate.</p>
+<h2 id="identity-vs-field">Identity vs Field<a class="anchor" href="#identity-vs-field">#</a></h2>
+<p>Use <code>Identity</code> when a value decides where facts live. Use <code>Field</code> when a value
+is itself a fact stored at that coordinate.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Need</th>
+          <th>Use</th>
+          <th>Example</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Locate the logical thing</td>
+          <td><code>Identity(primary_key=True)</code></td>
+          <td><code>user_id</code></td>
+      </tr>
+      <tr>
+          <td>Separate domains under the same anchor</td>
+          <td><code>Identity()</code></td>
+          <td><code>locale</code>, <code>work_id</code>, <code>tenant_id</code></td>
+      </tr>
+      <tr>
+          <td>Store current mutable content</td>
+          <td><code>Field(cardinality=&quot;single&quot;)</code></td>
+          <td><code>display_name</code>, <code>status</code></td>
+      </tr>
+      <tr>
+          <td>Store multiple active facts</td>
+          <td><code>Field(cardinality=&quot;multi&quot;)</code></td>
+          <td><code>tags</code>, <code>roles</code></td>
+      </tr>
+  </tbody>
+</table>
+<p>So this model:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>class User(Entity):
+</span></span><span style="display:flex;"><span>    user_id: str = Identity(primary_key=True)
+</span></span><span style="display:flex;"><span>    locale: str = Identity(default=&#34;en&#34;)
+</span></span><span style="display:flex;"><span>    display_name: str = Field(cardinality=&#34;single&#34;)</span></span></code></pre></div><p>means:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>(User, user_id, locale) -&gt; idref_v1
+</span></span><span style="display:flex;"><span>idref_v1 -&gt; display_name</span></span></code></pre></div><p>If <code>locale</code> decides which facts are being described, make it an <code>Identity()</code>.
+If <code>locale</code> is only a changeable preference about one user coordinate, make it
+a <code>Field(...)</code>.</p>
+<p>Historically, this is the reason dimensions such as <code>dims</code> or <code>fact_key</code> do not
+belong on <code>Field(...)</code>. Coordinate dimensions should be modeled as n-ary
+identity fields. Field values are the facts attached to the resulting
+coordinate.</p>
+<h2 id="how-schema-becomes-graph-facts">How schema becomes graph facts<a class="anchor" href="#how-schema-becomes-graph-facts">#</a></h2>
+<p>The SDK stores facts in a normalized graph form. You declare Python classes, but
+the graph works with predicate ids, entity references, assertion rows, and
+values.</p>
+<p>You normally do not write that lower-level form yourself. The schema compiler
+does the splitting:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>User.display_name -&gt; predicate id &#34;user:display_name&#34;
+</span></span><span style="display:flex;"><span>User.tags         -&gt; predicate id &#34;user:tags&#34;
+</span></span><span style="display:flex;"><span>(User, user_id, locale) -&gt; idref_v1 entity coordinate
+</span></span><span style="display:flex;"><span>fg.write.set(User.display_name, user_ref, &#34;Alice&#34;)
+</span></span><span style="display:flex;"><span>  -&gt; one assertion row for predicate &#34;user:display_name&#34;</span></span></code></pre></div><p>This normalized fact shape is useful because schema, reads, writes, rules,
+inferences, and audit all agree on the same predicate and assertion model. The
+quickstart calls it the graph fact model; internal design notes may call this
+GNF. The user-facing rule is simpler: declare <code>Entity</code>, <code>Identity</code>, and
+<code>Field</code>, then let the SDK split them into graph predicates and assertion rows.</p>
+<h2 id="single-multi-and-entity-references">Single, multi, and entity references<a class="anchor" href="#single-multi-and-entity-references">#</a></h2>
+<p>Use <code>cardinality=&quot;single&quot;</code> when the field should read as one current value.
+Use <code>cardinality=&quot;multi&quot;</code> when the field should read as a collection.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>team_ref <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(Team, team_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;t-1&#34;</span>)
+</span></span><span style="display:flex;"><span>user_ref <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(Team<span style="color:#ff6ac1">.</span>name, team_ref, <span style="color:#5af78e">&#34;Research&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>display_name, user_ref, <span style="color:#5af78e">&#34;Alice&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>add(User<span style="color:#ff6ac1">.</span>tags, user_ref, <span style="color:#5af78e">&#34;engineer&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>team, user_ref, team_ref)</span></span></code></pre></div><p><code>User.team</code> is a normal field whose value is another entity reference. Use the
+reference returned by <code>fg.read.ref(...)</code> from the same graph; do not parse,
+construct, or copy an <code>idref_v1</code> string by hand.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>user <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> user <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> user<span style="color:#ff6ac1">.</span>display_name <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Alice&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(user<span style="color:#ff6ac1">.</span>tags) <span style="color:#ff6ac1">==</span> (<span style="color:#5af78e">&#34;engineer&#34;</span>,)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> user<span style="color:#ff6ac1">.</span>team <span style="color:#ff6ac1">==</span> team_ref</span></span></code></pre></div><p><code>fg.read.get(...)</code> reads one complete coordinate. When you want all coordinates
+under a primary anchor, use <code>fg.read.find(...)</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>zh_ref <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;zh&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>display_name, zh_ref, <span style="color:#5af78e">&#34;Alice ZH&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rows <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>find(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {row<span style="color:#ff6ac1">.</span>identity[<span style="color:#5af78e">&#34;locale&#34;</span>] <span style="color:#ff6ac1">for</span> row <span style="color:#ff6ac1">in</span> rows} <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;en&#34;</span>, <span style="color:#5af78e">&#34;zh&#34;</span>}
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {row<span style="color:#ff6ac1">.</span>display_name <span style="color:#ff6ac1">for</span> row <span style="color:#ff6ac1">in</span> rows} <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;Alice&#34;</span>, <span style="color:#5af78e">&#34;Alice ZH&#34;</span>}</span></span></code></pre></div><p>Each row returned by <code>find</code> is still a full-coordinate snapshot. There is no
+separate primary-only entity reference.</p>
+<h2 id="why-the-primary-anchor-matters">Why the primary anchor matters<a class="anchor" href="#why-the-primary-anchor-matters">#</a></h2>
+<p>For ordinary <code>fg.write.*</code> calls, you pass the full identity directly to
+<code>fg.read.ref(...)</code>. The special role of <code>primary_key=True</code> becomes visible in
+batch writes, where an entity handle can be built in two steps.</p>
+<p>The first step must provide the primary identity anchor. The later <code>bind(...)</code>
+step may complete non-primary coordinate dimensions.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> fg<span style="color:#ff6ac1">.</span>batch() <span style="color:#ff6ac1">as</span> tx:
+</span></span><span style="display:flex;"><span>    batch_user <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-2&#34;</span>)
+</span></span><span style="display:flex;"><span>    batch_user<span style="color:#ff6ac1">.</span>bind(locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>    batch_user<span style="color:#ff6ac1">.</span>display_name<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;Bob&#34;</span>)
+</span></span><span style="display:flex;"><span>    tx<span style="color:#ff6ac1">.</span>commit(objects<span style="color:#ff6ac1">=</span>[batch_user])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>batch_snap <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-2&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> batch_snap <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> batch_snap<span style="color:#ff6ac1">.</span>display_name <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Bob&#34;</span></span></span></code></pre></div><p>This does not create a primary-only <code>idref_v1</code>. It creates an SDK handle that
+is anchored by <code>user_id</code>, then completes the coordinate with <code>locale</code> before
+writing. You cannot start from <code>locale</code> alone, and <code>bind(...)</code> is not the place
+to add or change primary identity fields.</p>
+<h2 id="adding-fields-later">Adding fields later<a class="anchor" href="#adding-fields-later">#</a></h2>
+<p><code>fg.schema.add(...)</code> is additive. It can add a new entity type or add
+non-identity fields to an existing entity type. To add a field to an existing
+entity, declare a replacement class with the same Python class name and the new
+field included.</p>
+<p>This is a graph schema transition, not ordinary Python monkey-patching. The new
+class object is the post-add declaration. After the graph accepts it, use that
+replacement class for reads and writes. The old class and its descriptors
+represent an earlier schema declaration.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    locale: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(default<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>    display_name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tags: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>    team: Team <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    nickname: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    skills: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>result <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>schema<span style="color:#ff6ac1">.</span>add(User)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> result<span style="color:#ff6ac1">.</span>added_entities <span style="color:#ff6ac1">==</span> []
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> result<span style="color:#ff6ac1">.</span>added_fields <span style="color:#ff6ac1">==</span> [<span style="color:#5af78e">&#34;User.nickname&#34;</span>, <span style="color:#5af78e">&#34;User.skills&#34;</span>]</span></span></code></pre></div><p>Existing facts remain readable. New single fields read as <code>None</code> until written.
+New multi fields read as <code>()</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>updated <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> updated <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> updated<span style="color:#ff6ac1">.</span>nickname <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(updated<span style="color:#ff6ac1">.</span>skills) <span style="color:#ff6ac1">==</span> ()</span></span></code></pre></div><h2 id="what-schema-add-will-not-do">What schema add will not do<a class="anchor" href="#what-schema-add-will-not-do">#</a></h2>
+<p>The current schema mutation surface is intentionally narrow. It does not delete
+fields, rename fields, change field types, change cardinality, or change
+identity fields. Those operations need an explicit migration design because
+they affect existing facts, saved rules, saved inferences, and workspace schema
+digests.</p>
+<h2 id="complete-example">Complete example<a class="anchor" href="#complete-example">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Entity, FactGraph, Field, Identity
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Team</span>(Entity):
+</span></span><span style="display:flex;"><span>    team_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    locale: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(default<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>    display_name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tags: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>    team: Team <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[Team, User])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>team_ref <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(Team, team_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;t-1&#34;</span>)
+</span></span><span style="display:flex;"><span>user_en <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>user_zh <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;zh&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> user_en <span style="color:#ff6ac1">!=</span> user_zh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(Team<span style="color:#ff6ac1">.</span>name, team_ref, <span style="color:#5af78e">&#34;Research&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>display_name, user_en, <span style="color:#5af78e">&#34;Alice&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>add(User<span style="color:#ff6ac1">.</span>tags, user_en, <span style="color:#5af78e">&#34;engineer&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>team, user_en, team_ref)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>display_name, user_zh, <span style="color:#5af78e">&#34;Alice ZH&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>user <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>rows <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>find(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> user <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> user<span style="color:#ff6ac1">.</span>display_name <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Alice&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(user<span style="color:#ff6ac1">.</span>tags) <span style="color:#ff6ac1">==</span> (<span style="color:#5af78e">&#34;engineer&#34;</span>,)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> user<span style="color:#ff6ac1">.</span>team <span style="color:#ff6ac1">==</span> team_ref
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {row<span style="color:#ff6ac1">.</span>identity[<span style="color:#5af78e">&#34;locale&#34;</span>] <span style="color:#ff6ac1">for</span> row <span style="color:#ff6ac1">in</span> rows} <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;en&#34;</span>, <span style="color:#5af78e">&#34;zh&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    locale: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(default<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>    display_name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tags: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>    team: Team <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    nickname: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    skills: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>result <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>schema<span style="color:#ff6ac1">.</span>add(User)
+</span></span><span style="display:flex;"><span>updated <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>, locale<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;en&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> result<span style="color:#ff6ac1">.</span>added_fields <span style="color:#ff6ac1">==</span> [<span style="color:#5af78e">&#34;User.nickname&#34;</span>, <span style="color:#5af78e">&#34;User.skills&#34;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> updated <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> updated<span style="color:#ff6ac1">.</span>nickname <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(updated<span style="color:#ff6ac1">.</span>skills) <span style="color:#ff6ac1">==</span> ()</span></span></code></pre></div><h2 id="syntax-checklist">Syntax checklist<a class="anchor" href="#syntax-checklist">#</a></h2>
+<ul>
+<li>Define graph vocabulary with <code>class User(Entity): ...</code>.</li>
+<li>Use <code>Identity(primary_key=True)</code> for the logical primary anchor.</li>
+<li>Use non-primary <code>Identity(...)</code> for domain dimensions under that anchor.</li>
+<li>Every <code>Identity</code> field participates in the complete <code>idref_v1</code> coordinate.</li>
+<li>Use <code>Field(cardinality=&quot;single&quot;)</code> for one active value at a coordinate.</li>
+<li>Use <code>Field(cardinality=&quot;multi&quot;)</code> for multiple active values at a coordinate.</li>
+<li>Use managed refs from <code>fg.read.ref(...)</code>; do not hand-build <code>idref_v1</code>.</li>
+<li>Use <code>fg.read.get(Entity, **full_identity)</code> for one full coordinate.</li>
+<li>Use <code>fg.read.find(Entity, **partial_filters)</code> for matching snapshots.</li>
+<li>In batches, start from primary identity with <code>tx.entity(...)</code> and complete
+non-primary dimensions with <code>bind(...)</code> before writing.</li>
+<li>Add schema with <code>fg.schema.add(NewEntity)</code> or same-name replacement classes.</li>
+<li>Field-add can only add non-identity fields; old class descriptors are
+superseded by the replacement class.</li>
+<li>New <code>single</code> fields read as <code>None</code>; new <code>multi</code> fields read as <code>()</code>.</li>
+<li>Deletes, renames, type changes, cardinality changes, identity changes,
+defaults, and backfill are not part of the current additive schema surface.</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/concepts/first-factgraph/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Your first factgraph</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/concepts/read-write/" class="flex align-center">
+        <span>Read and Write</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#define-a-schema">Define a schema</a>
+      <ul>
+        <li><a href="#entity-classes">Entity classes</a></li>
+        <li><a href="#identity-vs-field">Identity vs Field</a></li>
+        <li><a href="#how-schema-becomes-graph-facts">How schema becomes graph facts</a></li>
+        <li><a href="#single-multi-and-entity-references">Single, multi, and entity references</a></li>
+        <li><a href="#why-the-primary-anchor-matters">Why the primary anchor matters</a></li>
+        <li><a href="#adding-fields-later">Adding fields later</a></li>
+        <li><a href="#what-schema-add-will-not-do">What schema add will not do</a></li>
+        <li><a href="#complete-example">Complete example</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

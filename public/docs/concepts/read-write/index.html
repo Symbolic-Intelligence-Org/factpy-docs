@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Read and write facts# The first two pages showed the shape of a graph. This page focuses on what happens when you write and read data.
+A FactGraph is not a mutable table. A write appends an assertion to the ledger. A read asks the graph to resolve the active assertions for an entity and return a read-only snapshot. That distinction is why the API talks about references, assertion ids, and snapshots instead of object mutation.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/concepts/read-write/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Read and Write">
+  <meta property="og:description" content="Read and write facts# The first two pages showed the shape of a graph. This page focuses on what happens when you write and read data.
+A FactGraph is not a mutable table. A write appends an assertion to the ledger. A read asks the graph to resolve the active assertions for an entity and return a read-only snapshot. That distinction is why the API talks about references, assertion ids, and snapshots instead of object mutation.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Read and Write">
+  <meta itemprop="description" content="Read and write facts# The first two pages showed the shape of a graph. This page focuses on what happens when you write and read data.
+A FactGraph is not a mutable table. A write appends an assertion to the ledger. A read asks the graph to resolve the active assertions for an entity and return a read-only snapshot. That distinction is why the API talks about references, assertion ids, and snapshots instead of object mutation.">
+  <meta itemprop="wordCount" content="859">
+
+<title>Read and Write | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/concepts/read-write/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.f2649702e93cd1a98c670a367e867d65e997b099e0d56919036121e2b932509f.js" integrity="sha256-8mSXAuk80amMZwo2foZ9ZemXsJng1WkZA2Eh4rkyUJ8=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/" class="">
+      Concepts</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="active">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Read and Write</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#read-and-write-facts">Read and write facts</a>
+      <ul>
+        <li><a href="#the-write-coordinate">The write coordinate</a></li>
+        <li><a href="#single-and-multi-writes">Single and multi writes</a></li>
+        <li><a href="#current-snapshots">Current snapshots</a></li>
+        <li><a href="#finding-entities">Finding entities</a></li>
+        <li><a href="#retracting-an-assertion">Retracting an assertion</a></li>
+        <li><a href="#complete-example">Complete example</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="read-and-write-facts">Read and write facts<a class="anchor" href="#read-and-write-facts">#</a></h1>
+<p>The first two pages showed the shape of a graph. This page focuses on what
+happens when you write and read data.</p>
+<p>A <code>FactGraph</code> is not a mutable table. A write appends an assertion to the
+ledger. A read asks the graph to resolve the active assertions for an entity
+and return a read-only snapshot. That distinction is why the API talks about
+references, assertion ids, and snapshots instead of object mutation.</p>
+<p>This page covers the everyday read and write path. The next page,
+<a href="assertions.md">Assertion records and views</a>, goes deeper into assertion
+selection, frozen views, and the professional retract pattern. If you only
+need to write a few facts and read them back, this page is enough.</p>
+<h2 id="the-write-coordinate">The write coordinate<a class="anchor" href="#the-write-coordinate">#</a></h2>
+<p>Writes need an entity reference. Build it from the entity identity with
+<code>fg.read.ref(...)</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Entity, FactGraph, Field, Identity
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tags: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[User])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)</span></span></code></pre></div><p>The reference is the graph coordinate for &ldquo;the <code>User</code> whose <code>user_id</code> is
+<code>u-1</code>&rdquo;. It is an opaque <code>idref_v1</code> token. Treat it as a handle returned by
+the SDK, not as a string you parse or construct yourself.</p>
+<p>Calling <code>fg.read.ref(...)</code> does not write a fact by itself. It only gives
+later write calls a managed coordinate.</p>
+<h2 id="single-and-multi-writes">Single and multi writes<a class="anchor" href="#single-and-multi-writes">#</a></h2>
+<p>Use <code>fg.write.set(...)</code> for <code>single</code> fields and <code>fg.write.add(...)</code> for
+<code>multi</code> fields.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>name_id <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>name,
+</span></span><span style="display:flex;"><span>    alice,
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;Alice&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;seed-001&#34;</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>tag_engineer <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>add(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>tags,
+</span></span><span style="display:flex;"><span>    alice,
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;engineer&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;profile&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;profile-001&#34;</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>tag_reviewer <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>add(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>tags,
+</span></span><span style="display:flex;"><span>    alice,
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;reviewer&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;seed-002&#34;</span>},
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div><p>Each call returns an <code>asrt_id</code>. The id identifies the exact ledger record
+that was written. Keep it whenever you may want to retract or audit that
+write later. The next page goes into the full assertion record model; this
+page treats <code>asrt_id</code> as an opaque handle.</p>
+<p><code>set</code> does not delete the earlier <code>name</code> assertion if you call it again
+later. It appends a newer assertion, and the snapshot&rsquo;s scalar view chooses
+the latest active value for the single field.</p>
+<h2 id="current-snapshots">Current snapshots<a class="anchor" href="#current-snapshots">#</a></h2>
+<p>Use <code>fg.read.get(...)</code> when you know the full identity.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>snap <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> snap <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> snap<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Alice&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">set</span>(snap<span style="color:#ff6ac1">.</span>tags) <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;engineer&#34;</span>, <span style="color:#5af78e">&#34;reviewer&#34;</span>}</span></span></code></pre></div><p>The snapshot is read-only. It is the graph&rsquo;s current answer for that entity,
+not the ledger itself.</p>
+<p>For ordinary application code, <code>snap.name</code> and <code>snap.tags</code> are usually
+enough. When you need to know why the snapshot has that value &ndash; which
+assertion supports it, who added it, when &ndash; open the field assertion view
+described on <a href="assertions.md">Assertion records and views</a>.</p>
+<h2 id="finding-entities">Finding entities<a class="anchor" href="#finding-entities">#</a></h2>
+<p>Use <code>fg.read.find(...)</code> when you want all matching snapshots. Filters are
+exact matches. For a <code>multi</code> field, the filter is a containment check.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>bob <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-2&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>name, bob, <span style="color:#5af78e">&#34;Bob&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>add(User<span style="color:#ff6ac1">.</span>tags, bob, <span style="color:#5af78e">&#34;reviewer&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>reviewers <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>find(User, tags<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;reviewer&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {row<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">for</span> row <span style="color:#ff6ac1">in</span> reviewers} <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;Alice&#34;</span>, <span style="color:#5af78e">&#34;Bob&#34;</span>}</span></span></code></pre></div><p><code>find(...)</code> is a read surface, not a rule engine or query language. It is
+for snapshot filtering over entity identities and field values. Rules,
+inferences, and saved query surfaces are separate topics.</p>
+<h2 id="retracting-an-assertion">Retracting an assertion<a class="anchor" href="#retracting-an-assertion">#</a></h2>
+<p>Retraction is also append-only. It records that a specific assertion should
+no longer be authoritative in the current view.</p>
+<p><code>fg.write.retract(...)</code> takes an <code>asrt_id</code>, not an entity ref:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>revoker_id <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>retract(
+</span></span><span style="display:flex;"><span>    tag_reviewer,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;manual-fix&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;fix-001&#34;</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">isinstance</span>(revoker_id, <span style="color:#ff5c57">str</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>after <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> after <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(after<span style="color:#ff6ac1">.</span>tags) <span style="color:#ff6ac1">==</span> (<span style="color:#5af78e">&#34;engineer&#34;</span>,)</span></span></code></pre></div><p>Here <code>tag_reviewer</code> is the <code>asrt_id</code> we kept from the original
+<code>fg.write.add(...)</code> call. That is the simplest retract pattern: save the id
+at write time, retract by id later.</p>
+<p>When you do not have the id handy and have to find the assertion through a
+snapshot, use the selection-based retract pattern on
+<a href="assertions.md">Assertion records and views</a>. It walks through
+<code>snap.field(...).where(...).one().asrt_id</code> and explains why that step exists.</p>
+<p>The original assertion is not deleted. It moves out of the active set into
+history. The retract itself is a separate ledger record whose id is the
+return value.</p>
+<h2 id="complete-example">Complete example<a class="anchor" href="#complete-example">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Entity, FactGraph, Field, Identity
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tags: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[User])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>name_id <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>name,
+</span></span><span style="display:flex;"><span>    alice,
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;Alice&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;seed-001&#34;</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>tag_engineer <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>add(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>tags,
+</span></span><span style="display:flex;"><span>    alice,
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;engineer&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;profile&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;profile-001&#34;</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>tag_reviewer <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>add(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>tags,
+</span></span><span style="display:flex;"><span>    alice,
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;reviewer&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;seed-002&#34;</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>snap <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> snap <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> snap<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Alice&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">set</span>(snap<span style="color:#ff6ac1">.</span>tags) <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;engineer&#34;</span>, <span style="color:#5af78e">&#34;reviewer&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>bob <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-2&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>name, bob, <span style="color:#5af78e">&#34;Bob&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>add(User<span style="color:#ff6ac1">.</span>tags, bob, <span style="color:#5af78e">&#34;reviewer&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>reviewers <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>find(User, tags<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;reviewer&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {row<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">for</span> row <span style="color:#ff6ac1">in</span> reviewers} <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;Alice&#34;</span>, <span style="color:#5af78e">&#34;Bob&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>retract(tag_reviewer, meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;manual-fix&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>after <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> after <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(after<span style="color:#ff6ac1">.</span>tags) <span style="color:#ff6ac1">==</span> (<span style="color:#5af78e">&#34;engineer&#34;</span>,)</span></span></code></pre></div><h2 id="syntax-checklist">Syntax checklist<a class="anchor" href="#syntax-checklist">#</a></h2>
+<ul>
+<li><code>fg.read.ref(...)</code> gives writes a managed entity coordinate.</li>
+<li><code>fg.write.set(...)</code> appends a single-field assertion.</li>
+<li><code>fg.write.add(...)</code> appends a multi-field assertion.</li>
+<li><code>meta={&quot;source&quot;: ..., &quot;trace_id&quot;: ...}</code> attaches audit-friendly metadata.</li>
+<li>Writes return <code>asrt_id</code> strings for exact ledger records; keep them for
+later inspection or retract.</li>
+<li><code>fg.read.get(...)</code> returns the current snapshot for a full identity.</li>
+<li><code>fg.read.find(...)</code> returns matching snapshots.</li>
+<li><code>fg.write.retract(asrt_id)</code> records a retraction by id and returns the
+revoker&rsquo;s <code>asrt_id</code>.</li>
+<li>The ledger is append-only; snapshots are read-time views over assertions.</li>
+<li>For deeper assertion mechanics, see
+<a href="assertions.md">Assertion records and views</a>.</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/concepts/schema/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Schema</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/concepts/assertions/" class="flex align-center">
+        <span>Assertions</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#read-and-write-facts">Read and write facts</a>
+      <ul>
+        <li><a href="#the-write-coordinate">The write coordinate</a></li>
+        <li><a href="#single-and-multi-writes">Single and multi writes</a></li>
+        <li><a href="#current-snapshots">Current snapshots</a></li>
+        <li><a href="#finding-entities">Finding entities</a></li>
+        <li><a href="#retracting-an-assertion">Retracting an assertion</a></li>
+        <li><a href="#complete-example">Complete example</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

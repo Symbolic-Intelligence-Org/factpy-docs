@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tutorials on factgraph</title>
+    <link>http://localhost:1313/de/docs/tutorials/</link>
+    <description>Recent content in Tutorials on factgraph</description>
+    <generator>Hugo</generator>
+    <language>de</language>
+    <copyright>[© CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)</copyright>
+    <atom:link href="http://localhost:1313/de/docs/tutorials/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>01 — SDK Basics</title>
+      <link>http://localhost:1313/de/docs/tutorials/01-sdk-basics/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/tutorials/01-sdk-basics/</guid>
+      <description>&lt;h1 id=&#34;tutorial-01--sdk-basics&#34;&gt;Tutorial 01 — SDK basics&lt;a class=&#34;anchor&#34; href=&#34;#tutorial-01--sdk-basics&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;This tutorial walks from an empty project to a working factpy ledger you can read, write, correct, and persist. By the end you&amp;rsquo;ll have written a small schema, populated it, queried it, fixed a bad assertion, and saved the result to disk. We don&amp;rsquo;t assume any prior factpy code — only that you&amp;rsquo;ve skimmed &lt;a href=&#34;../concepts/overview.md&#34;&gt;the overview&lt;/a&gt; and roughly know what a fact-based store is.&lt;/p&gt;&#xA;&lt;p&gt;The example domain is small on purpose: a registry of people and the countries they live in. The same patterns scale up; starting small makes the moves easier to see.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>02 — Rules and Derivations</title>
+      <link>http://localhost:1313/de/docs/tutorials/02-rules-and-derivations/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/tutorials/02-rules-and-derivations/</guid>
+      <description>&lt;h1 id=&#34;tutorial-02--rules-and-derivations&#34;&gt;Tutorial 02 — Rules and derivations&lt;a class=&#34;anchor&#34; href=&#34;#tutorial-02--rules-and-derivations&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;In &lt;a href=&#34;01-sdk-basics.md&#34;&gt;tutorial 01&lt;/a&gt; we wrote facts directly into the ledger. This tutorial covers the part of factpy that &lt;em&gt;asks questions of the ledger and proposes new facts based on the answers&lt;/em&gt;: the rule DSL and the derivation lifecycle. By the end you&amp;rsquo;ll have written queries, composed rules, and walked a candidate fact from proposal to acceptance with its evidence preserved.&lt;/p&gt;&#xA;&lt;p&gt;Pick up where the last tutorial ended — same schema, same in-memory store. We&amp;rsquo;ll reuse the &lt;code&gt;Person&lt;/code&gt;, &lt;code&gt;Country&lt;/code&gt;, and &lt;code&gt;LivesIn&lt;/code&gt; declarations and add a few more facts to make the rules interesting.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>03 — PyReason Propagation</title>
+      <link>http://localhost:1313/de/docs/tutorials/03-pyreason-propagation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/tutorials/03-pyreason-propagation/</guid>
+      <description>&lt;h1 id=&#34;tutorial-03--pyreason-propagation&#34;&gt;Tutorial 03 — PyReason propagation&lt;a class=&#34;anchor&#34; href=&#34;#tutorial-03--pyreason-propagation&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The native evaluator from &lt;a href=&#34;02-rules-and-derivations.md&#34;&gt;tutorial 02&lt;/a&gt; is great when reasoning is a one-shot pull from the ledger. It&amp;rsquo;s not the right tool when &lt;em&gt;beliefs propagate through a graph&lt;/em&gt; — when the truth of a fact about one entity &lt;em&gt;depends on what&amp;rsquo;s now true about its neighbours&lt;/em&gt;, and that in turn depends on theirs, and so on, possibly over time. That&amp;rsquo;s what PyReason is for.&lt;/p&gt;&#xA;&lt;p&gt;This tutorial walks through a concrete propagation scenario: an outage in a service dependency graph. We have services that depend on each other; when one is down, services that depend on it become at-risk; when one of those is down, anything depending on &lt;em&gt;it&lt;/em&gt; becomes at-risk; and so on. We&amp;rsquo;ll build the graph, declare propagation rules, run PyReason, and accept the resulting facts back into our ledger.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>04 — ProbLog Probabilistic</title>
+      <link>http://localhost:1313/de/docs/tutorials/04-problog-probabilistic/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/tutorials/04-problog-probabilistic/</guid>
+      <description>&lt;h1 id=&#34;tutorial-04--problog-probabilistic-reasoning&#34;&gt;Tutorial 04 — ProbLog probabilistic reasoning&lt;a class=&#34;anchor&#34; href=&#34;#tutorial-04--problog-probabilistic-reasoning&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The native engine reasons about facts as either-true-or-not-asserted. The &lt;code&gt;Body(..., confidence=...)&lt;/code&gt; shape from &lt;a href=&#34;02-rules-and-derivations.md&#34;&gt;tutorial 02&lt;/a&gt; lets you tag whole bodies with a confidence — useful for review-time filtering, but not the same as actually &lt;em&gt;reasoning probabilistically&lt;/em&gt;. When you need real probabilistic semantics — facts that are true with some probability, rules that combine probabilities properly, queries that return marginal probabilities — you reach for ProbLog.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>05 — Onboarding Journey</title>
+      <link>http://localhost:1313/de/docs/tutorials/05-onboarding-journey/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/de/docs/tutorials/05-onboarding-journey/</guid>
+      <description>&lt;h1 id=&#34;tutorial-05--onboarding-journey&#34;&gt;Tutorial 05 — Onboarding journey&lt;a class=&#34;anchor&#34; href=&#34;#tutorial-05--onboarding-journey&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;This tutorial is the capstone. We weave every move from tutorials 01–04 into a single end-to-end scenario: define a schema, write facts, query the ledger, derive new facts, accept them, export the run as an audit package, and read the package back. By the end you&amp;rsquo;ll have a complete factpy workflow you can adapt to a real project.&lt;/p&gt;&#xA;&lt;p&gt;The scenario: a small system that onboards new users into an organisation. We want to track users, their initial roles, and which of them get promoted to &lt;em&gt;audited&lt;/em&gt; status by an automated rule. The rule&amp;rsquo;s output should be reviewable — &lt;em&gt;why&lt;/em&gt; did this user get audited? — through the audit package.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Entities and fields# If facts are the atomic claims factpy stores, the schema is the vocabulary in which those claims are made. It declares what kinds of thing the system can hold facts about, what kinds of claim are admissible against them, and how a particular claim is addressed to its subject. A schema is not a table definition: it imposes no layout on storage, requires no field to carry a value at any given moment, and says nothing about what the world has to look like. What it constrains is the grammar of writing and reading — the set of predicates that exist, the type domains they range over, and the rules under which multiple assertions to the same predicate reduce. The remainder of this page describes the components of that grammar in turn, together with how schemas are composed across modules and how they evolve from one version to the next.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/concepts/entities-and-fields/">
+  <meta property="og:site_name" content="FactPy">
+  <meta property="og:title" content="Entities and Fields">
+  <meta property="og:description" content="Entities and fields# If facts are the atomic claims factpy stores, the schema is the vocabulary in which those claims are made. It declares what kinds of thing the system can hold facts about, what kinds of claim are admissible against them, and how a particular claim is addressed to its subject. A schema is not a table definition: it imposes no layout on storage, requires no field to carry a value at any given moment, and says nothing about what the world has to look like. What it constrains is the grammar of writing and reading — the set of predicates that exist, the type domains they range over, and the rules under which multiple assertions to the same predicate reduce. The remainder of this page describes the components of that grammar in turn, together with how schemas are composed across modules and how they evolve from one version to the next.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Entities and Fields">
+  <meta itemprop="description" content="Entities and fields# If facts are the atomic claims factpy stores, the schema is the vocabulary in which those claims are made. It declares what kinds of thing the system can hold facts about, what kinds of claim are admissible against them, and how a particular claim is addressed to its subject. A schema is not a table definition: it imposes no layout on storage, requires no field to carry a value at any given moment, and says nothing about what the world has to look like. What it constrains is the grammar of writing and reading — the set of predicates that exist, the type domains they range over, and the rules under which multiple assertions to the same predicate reduce. The remainder of this page describes the components of that grammar in turn, together with how schemas are composed across modules and how they evolve from one version to the next.">
+  <meta itemprop="wordCount" content="1812">
+
+<title>Entities and Fields | FactPy</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/concepts/entities-and-fields/">
+  <link rel="alternate" hreflang="de" href="http://localhost:1313/de/docs/concepts/entities-and-fields/" title="Entitäten und Felder">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.1ca26259c496b7b66f39629503a8d9e08519e8f7c30bb604708e38d619a642a2.js" integrity="sha256-HKJiWcSWt7ZvOWKVA6jZ4IUZ6PfDC7YEcI441hmmQqI=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>FactPy</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        English
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/de/docs/concepts/entities-and-fields/" class="flex flex-auto">
+          Deutsch
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-903cb365ca4589d060a9e0c4e9cacd7a" class="toggle" checked />
+    <label for="section-903cb365ca4589d060a9e0c4e9cacd7a" class="flex">
+      <a role="button" class="">
+        Concepts</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/overview/" class="">
+      Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/the-ledger/" class="">
+      The Ledger</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/entities-and-fields/" class="active">
+      Entities and Fields</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-derivations/" class="">
+      Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/audit-and-provenance/" class="">
+      Audit and Provenance</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d26c9af1cc2443c595895ff545ee9a45" class="toggle"  />
+    <label for="section-d26c9af1cc2443c595895ff545ee9a45" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/defining-a-schema/" class="">
+      Defining a Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/reading-and-writing/" class="">
+      Reading and Writing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/writing-rules/" class="">
+      Writing Rules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/running-derivations/" class="">
+      Running Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/using-adapters/" class="">
+      Using Adapters</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ca174a65b61b36959d2dfae132eedf04" class="toggle"  />
+    <label for="section-ca174a65b61b36959d2dfae132eedf04" class="flex">
+      <a href="/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Entities and Fields</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#entities-and-fields">Entities and fields</a>
+      <ul>
+        <li><a href="#entities">Entities</a></li>
+        <li><a href="#identity">Identity</a></li>
+        <li><a href="#fields">Fields</a></li>
+        <li><a href="#type-domains">Type domains</a></li>
+        <li><a href="#relationships-as-entities">Relationships as entities</a></li>
+        <li><a href="#entity-metadata">Entity metadata</a></li>
+        <li><a href="#schemas-ledgers-and-the-digest">Schemas, ledgers, and the digest</a></li>
+        <li><a href="#composing-schemas">Composing schemas</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="entities-and-fields">Entities and fields<a class="anchor" href="#entities-and-fields">#</a></h1>
+<p>If facts are the atomic claims factpy stores, the schema is the vocabulary in which those claims are made. It declares what kinds of thing the system can hold facts about, what kinds of claim are admissible against them, and how a particular claim is addressed to its subject. A schema is not a table definition: it imposes no layout on storage, requires no field to carry a value at any given moment, and says nothing about what the world has to look like. What it constrains is the grammar of writing and reading — the set of predicates that exist, the type domains they range over, and the rules under which multiple assertions to the same predicate reduce. The remainder of this page describes the components of that grammar in turn, together with how schemas are composed across modules and how they evolve from one version to the next.</p>
+<h2 id="entities">Entities<a class="anchor" href="#entities">#</a></h2>
+<p>An entity declares a kind of thing about which the system can hold facts. The declaration takes the form of a python class:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Entity, Identity, Field
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Person</span>(Entity):
+</span></span><span style="display:flex;"><span>    person_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tag: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)</span></span></code></pre></div><p>The class is never instantiated to bring a person into being; nothing in factpy is brought into being by class instantiation, since the kernel records facts in a ledger and the class is only the schema&rsquo;s description of which facts about a <code>Person</code> are admissible and how a particular person is to be addressed when a fact is to be written about her. Two kinds of declaration carry the substance of an entity: identity declarations, by which the kernel locates a particular instance, and field declarations, which fix the predicates available for assertion against it.</p>
+<h2 id="identity">Identity<a class="anchor" href="#identity">#</a></h2>
+<p>An identity is a coordinate by which the ledger and the SDK locate the entity that a fact is about.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Person</span>(Entity):
+</span></span><span style="display:flex;"><span>    person_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)</span></span></code></pre></div><p>The flag <code>primary_key=True</code> marks the field as part of the entity&rsquo;s address. An entity may have more than one such field, in which case the combination of values must be unique:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    locale: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity()</span></span></code></pre></div><p>A <code>User</code> is then addressed by the pair <code>(user_id, locale)</code>, and two users sharing a <code>user_id</code> but differing in <code>locale</code> are distinct entities with separate histories of facts. The composite-identity pattern is appropriate wherever an entity is naturally scoped — by tenant, by region, by language — and the scoping properly belongs to the entity&rsquo;s name rather than to a field on it. Where two such instances should be able to coexist with independent histories, the distinguishing value belongs in the identity rather than in a field.</p>
+<p>An identity may declare a default value or a factory for cases in which a value is not supplied at write time:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">LivesIn</span>(Entity):
+</span></span><span style="display:flex;"><span>    uid: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>, default_factory<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;uuid4&#34;</span>)
+</span></span><span style="display:flex;"><span>    person: Person <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    country: Country <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p><code>default_factory=&quot;uuid4&quot;</code> instructs the SDK to assign a fresh identifier when the caller supplies none, while <code>default=...</code> provides a fixed value used in its place. Most domain entities have a meaningful natural key — an order id, an iso code, a person id — and require neither; surrogate-keyed entities, typically those that record edges between other entities, are the usual occasion for <code>default_factory</code>.</p>
+<p>Identity values are not themselves facts. They are not stored as ledger entries, they are not subject to projection or reduction, and they cannot be retracted, because they live on the entity&rsquo;s address rather than within its history. Everything else, including the country a person lives in or the address of a corporate residence, is held as a fact in the ledger.</p>
+<h2 id="fields">Fields<a class="anchor" href="#fields">#</a></h2>
+<p>A field is a predicate, that is, a kind of claim that the schema admits. Each declaration fixes the field&rsquo;s cardinality and its underlying type domain.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Person</span>(Entity):
+</span></span><span style="display:flex;"><span>    person_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tag: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>    age: <span style="color:#ff5c57">int</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p>A cardinality of <code>&quot;single&quot;</code> specifies that the snapshot of an entity carries at most one current value for the field at any moment. The ledger continues to accept and to retain any number of assertions to that field over time, but the projection that produces the snapshot includes only the latest non-retracted entry. A cardinality of <code>&quot;multi&quot;</code> specifies that the snapshot accumulates every active assertion into a set, with multiple assertions of the same value collapsing to a single entry in the projection while remaining distinct in the ledger.</p>
+<p>Cardinality is a property of the projection, not of the ledger itself. The ledger stores every assertion regardless of cardinality, and the reduction rule is what determines, at the moment a snapshot is computed, whether one value or many is exposed. A field may also carry an optional <code>description</code> string, which propagates into authoring artifacts and audit packages as inline documentation of the predicate.</p>
+<h2 id="type-domains">Type domains<a class="anchor" href="#type-domains">#</a></h2>
+<p>The python annotation on a field is mapped onto one of the kernel&rsquo;s type domains. The available domains are <code>string</code>, <code>int</code>, <code>bool</code>, <code>bytes</code>, <code>float64</code>, <code>uuid</code>, <code>time</code> (corresponding to a <code>datetime</code>), and <code>entity_ref</code> (a reference to another entity). The annotation <code>str</code> becomes <code>string</code>, <code>int</code> remains <code>int</code>, <code>UUID</code> becomes <code>uuid</code>, <code>datetime</code> becomes <code>time</code>, and any annotation that is itself a subclass of <code>Entity</code> becomes <code>entity_ref</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Person</span>(Entity):
+</span></span><span style="display:flex;"><span>    person_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    home_country: <span style="color:#5af78e">&#34;Country&#34;</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p>A field declared as <code>entity_ref</code> does not carry a value copied from another entity; it carries the address at which that other entity sits in the ledger. This indirection is what enables a rule to walk from one entity to another in the course of evaluation. A query of the form find every person whose home country is Germany works because home_country on a Person holds the reference to a Country, and the rule can follow that reference, read the country&rsquo;s iso_code, and retain only those persons for which it is &ldquo;DE&rdquo;. The type domain attached to a field is recorded alongside the field&rsquo;s assertions in the ledger, consulted during the compilation of rules that mention the field, and folded into the schema digest that the kernel verifies at open time.</p>
+<h2 id="relationships-as-entities">Relationships as entities<a class="anchor" href="#relationships-as-entities">#</a></h2>
+<p>In most modelling situations factpy does not require a dedicated relationship construct: a relationship between two entities is itself an entity, with each end held as an <code>entity_ref</code> field.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">LivesIn</span>(Entity):
+</span></span><span style="display:flex;"><span>    uid: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>, default_factory<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;uuid4&#34;</span>)
+</span></span><span style="display:flex;"><span>    person: Person <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    country: Country <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    since: <span style="color:#ff5c57">int</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p><code>LivesIn</code> is an ordinary entity whose facts refer to two others. It carries its own attributes — here, the year <code>since</code> — accumulates its own history of assertions, and is the subject of rules under the same DSL as any other entity. The query <em>which persons have lived in Germany since 2020</em> becomes a join over <code>LivesIn</code> instances under the same rule language used for any other join.</p>
+<p>For systems that require typed edges as a first-class kernel construct — that is, an explicit <code>Relationship</code> declaration carrying <code>from_entity</code> and <code>to_entity</code> types — the kernel provides a <code>Relationship</code> base class. Most application code has no occasion to use it, since the entity-as-relationship pattern above suffices for ordinary modelling; the place where the typed-edge form earns its weight is in adapters such as PyReason, where the engine itself works on a typed graph rather than on entities and predicates.</p>
+<h2 id="entity-metadata">Entity metadata<a class="anchor" href="#entity-metadata">#</a></h2>
+<p>An entity may carry a small amount of metadata through an inner <code>Meta</code> class:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Person</span>(Entity):
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;&#34;&#34;A natural person known to the system.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Meta</span>:
+</span></span><span style="display:flex;"><span>        version <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;1.0.0&#34;</span>
+</span></span><span style="display:flex;"><span>        description <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;Natural person&#34;</span>
+</span></span><span style="display:flex;"><span>        tags <span style="color:#ff6ac1">=</span> [<span style="color:#5af78e">&#34;domain:identity&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    person_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)</span></span></code></pre></div><p>The <code>version</code> field is part of the schema digest and travels into rule and derivation runs, where it lets an audit reader distinguish results obtained under one version of an entity&rsquo;s schema from those obtained under another. The <code>description</code> field, when omitted, defaults to the class docstring; the <code>tags</code> are free-form labels useful for organising large schemas across teams or domains. <code>Meta</code> accepts only these three keys, and any further key raises at class-definition time. The narrowness is deliberate: schema declarations are themselves part of the audit story, and the kernel keeps the surface that participates in that story small enough to remain predictable.</p>
+<h2 id="schemas-ledgers-and-the-digest">Schemas, ledgers, and the digest<a class="anchor" href="#schemas-ledgers-and-the-digest">#</a></h2>
+<p>When a persistent ledger is opened, the kernel compares the schema supplied at open time against a digest stored in the ledger file. A change in any field&rsquo;s cardinality, type domain, or identity composition that would render existing assertions unreadable causes the open to fail with an explicit error rather than to proceed with a silent reinterpretation. This is what makes the schema part of the ledger&rsquo;s contract rather than an external commentary on it: the facts in the ledger are meaningful only under the schema that wrote them, and a silent change to that schema would invalidate replay, would render audit packages misleading, and would allow derived state to diverge from the assertions on which it was nominally based.</p>
+<p>Additions are unproblematic. A new field, a new entity, or the addition of optional metadata where none existed previously preserves legibility and does not affect the digest. Renaming a field, changing a cardinality, or changing a type domain does not preserve legibility, constitutes a new schema version, and requires that any ledger written under the previous schema be migrated explicitly rather than reinterpreted in place. The mechanics of the digest, the distinction between legible and illegible changes, and migration as a replay between two ledgers are taken up in <a href="the-ledger.md">the ledger</a> and in the <a href="../guides/persistence.md">persistence guide</a>.</p>
+<h2 id="composing-schemas">Composing schemas<a class="anchor" href="#composing-schemas">#</a></h2>
+<p>Entity classes are ordinary python classes declared in ordinary modules and imported as any other class would be. A schema, from the kernel&rsquo;s perspective, is simply the list of entity classes supplied to the SDK at the moment a store is opened.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> SDKStore
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> myapp.schema.identity <span style="color:#ff6ac1">import</span> Person, Country
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> myapp.schema.commerce <span style="color:#ff6ac1">import</span> Order, LineItem
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes([Person, Country, Order, LineItem])</span></span></code></pre></div><p>There is no central schema registry, no separate schema file, and no decorator whose execution is required for an entity to be recognised. Splitting a schema across modules — by domain, by ownership, by team — is the same act as splitting any other python codebase, and combining two schemas is the same act as importing from two packages. The architectural consequence is that a schema can be refactored, composed, vendored, or extracted without further ceremony, because the kernel sees only the list of classes it has been given and treats them as the schema for the duration of the session.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<p><a href="../the-ledger">The ledger</a> develops the storage and projection layer that the schema&rsquo;s predicates write into. <a href="../rules-and-derivations">Rules and derivations</a> develops the reasoning layer in which those predicates appear. <a href="../audit-and-provenance">Audit and provenance</a> describes how the schema, including its version, is captured in audit packages. The <a href="../../guides/defining-a-schema">defining a schema guide</a> walks through real-world schema patterns — composite identities, surrogate keys, and evolving a schema across versions — for readers who want the same material in task-oriented form.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/concepts/the-ledger/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>The Ledger</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/concepts/rules-and-derivations/" class="flex align-center">
+        <span>Rules and Derivations</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>FactPy - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#entities-and-fields">Entities and fields</a>
+      <ul>
+        <li><a href="#entities">Entities</a></li>
+        <li><a href="#identity">Identity</a></li>
+        <li><a href="#fields">Fields</a></li>
+        <li><a href="#type-domains">Type domains</a></li>
+        <li><a href="#relationships-as-entities">Relationships as entities</a></li>
+        <li><a href="#entity-metadata">Entity metadata</a></li>
+        <li><a href="#schemas-ledgers-and-the-digest">Schemas, ledgers, and the digest</a></li>
+        <li><a href="#composing-schemas">Composing schemas</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

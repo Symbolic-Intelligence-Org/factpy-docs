@@ -2,6 +2,220 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/de/docs/quickstart/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/quickstart/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/quickstart/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/concepts/overview/</loc>
+  </url><url>
+    <loc>http://localhost:1313/de/docs/tutorials/01-sdk-basics/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/tutorials/01-sdk-basics/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/tutorials/01-sdk-basics/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/concepts/the-ledger/</loc>
+  </url><url>
+    <loc>http://localhost:1313/de/docs/guides/defining-a-schema/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/guides/defining-a-schema/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/guides/defining-a-schema/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/concepts/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/concepts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/concepts/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/tutorials/02-rules-and-derivations/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/tutorials/02-rules-and-derivations/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/tutorials/02-rules-and-derivations/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/concepts/entities-and-fields/</loc>
+  </url><url>
+    <loc>http://localhost:1313/de/docs/guides/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/guides/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/guides/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/guides/reading-and-writing/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/guides/reading-and-writing/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/guides/reading-and-writing/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/tutorials/03-pyreason-propagation/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/tutorials/03-pyreason-propagation/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/tutorials/03-pyreason-propagation/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/guides/writing-rules/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/guides/writing-rules/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/guides/writing-rules/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/tutorials/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/tutorials/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/tutorials/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/tutorials/04-problog-probabilistic/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/tutorials/04-problog-probabilistic/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/tutorials/04-problog-probabilistic/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/guides/running-derivations/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/guides/running-derivations/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/guides/running-derivations/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/concepts/rules-and-derivations/</loc>
+  </url><url>
+    <loc>http://localhost:1313/de/docs/tutorials/05-onboarding-journey/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/tutorials/05-onboarding-journey/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/tutorials/05-onboarding-journey/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/concepts/audit-and-provenance/</loc>
+  </url><url>
+    <loc>http://localhost:1313/de/docs/guides/auditing-a-run/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/guides/auditing-a-run/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/guides/auditing-a-run/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/guides/persistence/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/guides/persistence/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/guides/persistence/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/guides/using-adapters/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/guides/using-adapters/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/guides/using-adapters/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/reference/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/reference/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="de"
+                href="http://localhost:1313/de/docs/reference/"
+                />
+  </url><url>
     <loc>http://localhost:1313/de/categories/</loc>
     <xhtml:link
                 rel="alternate"
@@ -10,13 +224,20 @@
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="zh"
-                href="http://localhost:1313/zh/categories/"
+                hreflang="de"
+                href="http://localhost:1313/de/categories/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/de/docs/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/docs/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="de"
-                href="http://localhost:1313/de/categories/"
+                href="http://localhost:1313/de/docs/"
                 />
   </url><url>
     <loc>http://localhost:1313/de/</loc>
@@ -24,11 +245,6 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="http://localhost:1313/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="http://localhost:1313/zh/"
                 />
     <xhtml:link
                 rel="alternate"
@@ -41,11 +257,6 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="http://localhost:1313/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="http://localhost:1313/zh/tags/"
                 />
     <xhtml:link
                 rel="alternate"

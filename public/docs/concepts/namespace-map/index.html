@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Namespace map# This page is a map. It is not a separate subsystem. After the earlier quickstart pages, this is where you scan the full kernel SDK surface, see the design philosophy behind each namespace, and find the right call when you know what you want to do.
+Two reading paths:
+If you want to know what to import, see the public imports table at the bottom. If you want to know which method to call, scan the namespace tables. Flat methods on FactGraph are still supported for backwards compatibility, but the namespaced form is the teaching path and the form used by every other quickstart page.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/concepts/namespace-map/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Namespace Map">
+  <meta property="og:description" content="Namespace map# This page is a map. It is not a separate subsystem. After the earlier quickstart pages, this is where you scan the full kernel SDK surface, see the design philosophy behind each namespace, and find the right call when you know what you want to do.
+Two reading paths:
+If you want to know what to import, see the public imports table at the bottom. If you want to know which method to call, scan the namespace tables. Flat methods on FactGraph are still supported for backwards compatibility, but the namespaced form is the teaching path and the form used by every other quickstart page.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Namespace Map">
+  <meta itemprop="description" content="Namespace map# This page is a map. It is not a separate subsystem. After the earlier quickstart pages, this is where you scan the full kernel SDK surface, see the design philosophy behind each namespace, and find the right call when you know what you want to do.
+Two reading paths:
+If you want to know what to import, see the public imports table at the bottom. If you want to know which method to call, scan the namespace tables. Flat methods on FactGraph are still supported for backwards compatibility, but the namespaced form is the teaching path and the form used by every other quickstart page.">
+  <meta itemprop="wordCount" content="1481">
+
+<title>Namespace Map | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/concepts/namespace-map/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.f2649702e93cd1a98c670a367e867d65e997b099e0d56919036121e2b932509f.js" integrity="sha256-8mSXAuk80amMZwo2foZ9ZemXsJng1WkZA2Eh4rkyUJ8=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/" class="">
+      Concepts</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="active">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Namespace Map</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#namespace-map">Namespace map</a>
+      <ul>
+        <li><a href="#why-these-namespaces">Why these namespaces</a></li>
+        <li><a href="#factgraph-entry-points">FactGraph entry points</a></li>
+        <li><a href="#schema-read-write-and-assertions">Schema, read, write, and assertions</a></li>
+        <li><a href="#frozen-views">Frozen views</a></li>
+        <li><a href="#rules-inferences-and-evaluation">Rules, inferences, and evaluation</a></li>
+        <li><a href="#what-if-and-audit">What-if and audit</a></li>
+        <li><a href="#package-surface">Package surface</a></li>
+        <li><a href="#public-imports-panorama">Public imports panorama</a></li>
+        <li><a href="#what-is-not-on-this-surface">What is not on this surface</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="namespace-map">Namespace map<a class="anchor" href="#namespace-map">#</a></h1>
+<p>This page is a map. It is not a separate subsystem. After the earlier quickstart
+pages, this is where you scan the full kernel SDK surface, see the design
+philosophy behind each namespace, and find the right call when you know what
+you want to do.</p>
+<p>Two reading paths:</p>
+<ul>
+<li>If you want to know <strong>what to import</strong>, see the public imports table at the
+bottom.</li>
+<li>If you want to know <strong>which method to call</strong>, scan the namespace tables.</li>
+</ul>
+<p>Flat methods on <code>FactGraph</code> are still supported for backwards compatibility,
+but the namespaced form is the teaching path and the form used by every other
+quickstart page.</p>
+<h2 id="why-these-namespaces">Why these namespaces<a class="anchor" href="#why-these-namespaces">#</a></h2>
+<p>The public surface is organized concept-first, not storage-first. A few
+principles run through the whole map:</p>
+<ol>
+<li>
+<p><strong><code>FactGraph</code> owns lifecycle.</strong>
+Creating, loading, and saving a graph workspace are top-level entry points,
+not methods on a sub-namespace. Lifecycle answers &ldquo;where does this graph
+live?&rdquo;, which is a property of the graph itself.</p>
+</li>
+<li>
+<p><strong>Assertion surfaces are invariant.</strong>
+<code>fg.read</code>, <code>fg.write</code>, <code>fg.assertions</code>, and <code>fg.views</code> describe how facts
+enter and leave the ledger. Those surfaces are stable across releases; new
+capabilities should not reshape them.</p>
+</li>
+<li>
+<p><strong>Authoring assets live in domain namespaces.</strong>
+<code>fg.rules.*</code> and <code>fg.inferences.*</code> own save/load/list/get for reusable
+authoring assets. Registry mechanics back them, but the user-facing verb is
+the asset domain, not the storage layer.</p>
+</li>
+<li>
+<p><strong>Counterfactual vs. persisted review are different namespaces.</strong>
+<code>fg.what_if</code> is live counterfactual exploration that does not write to the
+ledger. <code>fg.audit</code> is persisted-record explanation and cross-round review.
+Mixing them would obscure the difference between &ldquo;what could happen&rdquo; and
+&ldquo;what already happened.&rdquo;</p>
+</li>
+<li>
+<p><strong>Semantics are evaluate-time configuration.</strong>
+<code>ProbLogSemantics</code> and <code>PyReasonSemantics</code> are call-time arguments to
+<code>fg.eval.evaluate(...)</code>. They do not live inside the <code>Inference</code> template
+and they do not change the candidate -&gt; accept -&gt; ledger lifecycle.</p>
+</li>
+<li>
+<p><strong>Public SDK uses <code>Inference</code>; substrate may still use <code>Derivation</code>.</strong>
+The public candidate-producing value object is <code>Inference</code>. Some internal
+protocol, service payload, and proof/audit names still use <code>derivation_*</code>
+during the rename window. Tutorials prefer <code>Inference</code>.</p>
+</li>
+<li>
+<p><strong>Registry and workspace are mechanisms, not the teaching surface.</strong>
+<code>kernel.sdk.registry.SDKRegistry</code> and the workspace file layout remain
+available for advanced use, but the normal product path is <code>fg.rules.*</code>,
+<code>fg.inferences.*</code>, <code>FactGraph.create(path=...)</code>, <code>fg.save(...)</code>, and
+<code>FactGraph.load(...)</code>.</p>
+</li>
+</ol>
+<h2 id="factgraph-entry-points">FactGraph entry points<a class="anchor" href="#factgraph-entry-points">#</a></h2>
+<p>The top of the map. These are class methods, instance methods, and properties
+that live directly on <code>FactGraph</code>, not on a namespace.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Surface</th>
+          <th>Use it for</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>FactGraph.create(schema_classes=[...])</code></td>
+          <td>Build a new graph. Pass <code>path=</code> for a path-backed workspace; pass <code>ledger_path=</code>, <code>registry_root=</code>, <code>registry=</code>, or <code>artifact_store_root=</code> for explicit components.</td>
+      </tr>
+      <tr>
+          <td><code>FactGraph.load(path, schema_classes=[...])</code></td>
+          <td>Restore a saved workspace. The loader validates the workspace schema digest against the supplied classes.</td>
+      </tr>
+      <tr>
+          <td><code>FactGraph.from_schema_classes([...])</code></td>
+          <td>Lower-level class-first constructor. <code>create(...)</code> is the normal teaching path.</td>
+      </tr>
+      <tr>
+          <td><code>fg.save(path=None)</code></td>
+          <td>Persist the graph to its workspace. No-arg save requires a bound path; passing <code>path</code> rebinds the graph.</td>
+      </tr>
+      <tr>
+          <td><code>fg.batch(meta=None)</code></td>
+          <td>Open a batch transaction context for grouped writes.</td>
+      </tr>
+      <tr>
+          <td><code>fg.store</code></td>
+          <td>Underlying core store (advanced).</td>
+      </tr>
+      <tr>
+          <td><code>fg.ledger</code></td>
+          <td>Underlying append-only ledger (advanced).</td>
+      </tr>
+      <tr>
+          <td><code>fg.schema_ir</code></td>
+          <td>Compiled schema IR snapshot (advanced).</td>
+      </tr>
+  </tbody>
+</table>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Entity, FactGraph, Field, Identity
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[User])</span></span></code></pre></div><h2 id="schema-read-write-and-assertions">Schema, read, write, and assertions<a class="anchor" href="#schema-read-write-and-assertions">#</a></h2>
+<p>The append-only side of the graph. These four namespaces are the invariant
+core: they decide how vocabulary, coordinates, assertions, and frozen
+selections appear to the user.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Surface</th>
+          <th>Methods</th>
+          <th>Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>fg.schema</code></td>
+          <td><code>add(*entity_classes)</code>, <code>ingest(...)</code>, <code>validate_provenance(obj, *, standard=&quot;derivation_v1&quot;)</code></td>
+          <td><code>add(...)</code> returns <code>SchemaAddResult</code>. It is additive only: new entities and new non-identity fields. Delete, rename, identity changes, and migrations are not part of the current surface.</td>
+      </tr>
+      <tr>
+          <td><code>fg.read</code></td>
+          <td><code>ref(EntityCls, **identity)</code>, <code>get(EntityCls, **identity)</code>, <code>find(EntityCls, **partial_filters)</code></td>
+          <td>Returns managed refs, full-coordinate snapshots, and matching-snapshot collections.</td>
+      </tr>
+      <tr>
+          <td><code>fg.write</code></td>
+          <td><code>set(field, ref, value, meta=None)</code>, <code>add(field, ref, value, meta=None)</code>, <code>retract(asrt_id, meta=None)</code>, <code>edit(...)</code></td>
+          <td>Appends ledger assertions or retractions. Returns assertion ids. <code>set</code> is for single-cardinality fields; <code>add</code> is for multi-cardinality fields.</td>
+      </tr>
+      <tr>
+          <td><code>fg.assertions</code></td>
+          <td><code>by_id(asrt_id)</code>, <code>by_ids(asrt_ids)</code>, <code>field(Field)</code>, <code>active()</code>, <code>all()</code></td>
+          <td>Graph-scoped assertion-record readback and selection. See <a href="assertions.md">Assertion records and views</a> for the full assertion model.</td>
+      </tr>
+  </tbody>
+</table>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>schema declaration -&gt; managed ref -&gt; assertion write -&gt; snapshot read</span></span></code></pre></div><p>Assertion ids are ledger records. Entity refs are coordinates. Keep those two
+ideas separate when reading the rest of the API.</p>
+<h2 id="frozen-views">Frozen views<a class="anchor" href="#frozen-views">#</a></h2>
+<p><code>fg.views</code> stores named frozen selections of assertion ids. A view is not a
+read policy and not a dynamic query.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Surface</th>
+          <th>Methods</th>
+          <th>Returns</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>fg.views</code></td>
+          <td><code>create(name, asrt_ids=[...])</code>, <code>update(name, asrt_ids=[...])</code>, <code>delete(name)</code>, <code>get(name)</code>, <code>list()</code></td>
+          <td><code>FrozenAssertionView</code> per item; <code>dict[str, FrozenAssertionView]</code> for <code>list()</code>.</td>
+      </tr>
+  </tbody>
+</table>
+<p>Views are currently in-memory and are not part of the workspace save format.</p>
+<h2 id="rules-inferences-and-evaluation">Rules, inferences, and evaluation<a class="anchor" href="#rules-inferences-and-evaluation">#</a></h2>
+<p>The reasoning side. These three namespaces own how authoring assets are
+described, persisted, and executed.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Surface</th>
+          <th>Methods</th>
+          <th>Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>fg.rules</code></td>
+          <td><code>inspect(rule_or_inference_or_query)</code>, <code>save(rule)</code>, <code>load(saved_rule_ref)</code>, <code>list()</code>, <code>get(rule_id)</code></td>
+          <td><code>inspect(...)</code> shows structure; <code>save(...)</code> returns <code>SavedRuleRef</code>; <code>get(...)</code> returns the latest <code>SavedRuleRef</code>; <code>load(...)</code> returns a <code>Rule</code>.</td>
+      </tr>
+      <tr>
+          <td><code>fg.inferences</code></td>
+          <td><code>save(inference)</code>, <code>load(saved_inference_ref)</code>, <code>list()</code>, <code>get(inference_id)</code></td>
+          <td><code>save(...)</code> returns <code>SavedInferenceRef</code>; <code>get(...)</code> returns the latest ref; <code>load(...)</code> returns an <code>Inference</code>. Structural inspection still goes through <code>fg.rules.inspect(...)</code>.</td>
+      </tr>
+      <tr>
+          <td><code>fg.eval</code></td>
+          <td><code>run(rule_or_query)</code>, <code>evaluate(inference, *, engine=None, semantics=None)</code>, <code>accept(candidate)</code>, <code>accept_many(candidates)</code>, <code>inspect_semantics(semantics_or_profile)</code></td>
+          <td><code>run(...)</code> is read-only and returns rows. <code>evaluate(...)</code> is read-only and returns <code>CandidateSet[]</code>. <code>accept(...)</code> writes ledger assertions and returns <code>AcceptResult</code>. <code>inspect_semantics(...)</code> previews wrapper or profile shape without running an engine.</td>
+      </tr>
+  </tbody>
+</table>
+<p>Public DSL value objects are <code>Rule</code>, <code>Inference</code>, <code>Query</code>, <code>Branch</code>, <code>Pred</code>,
+<code>Not</code>, <code>RuleRef</code>, and <code>vars</code>. <code>SavedRuleRef</code> and <code>SavedInferenceRef</code> are
+load-only handles produced by <code>save(...)</code> / <code>get(...)</code>; load them before
+passing to <code>fg.eval.*</code>.</p>
+<h2 id="what-if-and-audit">What-if and audit<a class="anchor" href="#what-if-and-audit">#</a></h2>
+<p>Different review surfaces with different boundaries.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Surface</th>
+          <th>Methods</th>
+          <th>Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>fg.what_if</code></td>
+          <td><code>check(...)</code>, <code>diagnose(...)</code>, <code>why_not(...)</code></td>
+          <td>Live counterfactual checks. No ledger writes.</td>
+      </tr>
+      <tr>
+          <td><code>fg.what_if.fact_overlay</code></td>
+          <td><code>check(...)</code>, <code>recheck_proof_frame(...)</code></td>
+          <td>Counterfactuals layered on top of imagined facts without a registry write.</td>
+      </tr>
+      <tr>
+          <td><code>fg.what_if.rule</code></td>
+          <td><code>disable(...)</code>, <code>literal_replace(...)</code>, <code>add_condition(...)</code></td>
+          <td>Counterfactuals over imagined rule edits.</td>
+      </tr>
+      <tr>
+          <td><code>fg.audit</code></td>
+          <td><code>explain_fact(pred_id, e_ref, *value_atoms)</code>, <code>conflicts(pred_id, e_ref)</code>, <code>diff_proof_frames(...)</code></td>
+          <td>Persisted-fact explanation and cross-round proof-frame diff.</td>
+      </tr>
+  </tbody>
+</table>
+<p><code>fg.audit.explain_fact(...)</code> is the user-facing bridge into evidence in the
+quickstart path: assertion ids first, then fact-level explanation. Durable
+cross-engine <code>EvidenceGraph</code> objects, rendered proof pages, and round-event
+archives are audit-layer advanced surfaces, not the beginner read/write path.</p>
+<h2 id="package-surface">Package surface<a class="anchor" href="#package-surface">#</a></h2>
+<p><code>fg.package</code> is for portable distribution and replay, not workspace
+persistence.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Surface</th>
+          <th>Methods</th>
+          <th>Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>fg.package</code></td>
+          <td><code>export_package(out_dir, options)</code>, <code>run_package(package_dir, entrypoints=[...], engine=&quot;souffle&quot;)</code></td>
+          <td>Packages and workspaces have different scopes. Workspace lifecycle is <code>FactGraph.create(path=...)</code>, <code>fg.save(...)</code>, and <code>FactGraph.load(...)</code>.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="public-imports-panorama">Public imports panorama<a class="anchor" href="#public-imports-panorama">#</a></h2>
+<p>Everything in <code>kernel.sdk.__all__</code>, grouped by purpose. The intent of this
+table is to answer &ldquo;what should I import for this task?&rdquo; without scanning the
+whole module.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Group</th>
+          <th>Names</th>
+          <th>Use it for</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Graph entry point</td>
+          <td><code>FactGraph</code>, <code>SDKStore</code></td>
+          <td>Create / load / save the graph. <code>FactGraph</code> is the alias used in docs; <code>SDKStore</code> is the same class for advanced use.</td>
+      </tr>
+      <tr>
+          <td>Schema declaration</td>
+          <td><code>Entity</code>, <code>Identity</code>, <code>Field</code>, <code>Relationship</code></td>
+          <td>Define entity vocabulary and field coordinates.</td>
+      </tr>
+      <tr>
+          <td>Rule DSL</td>
+          <td><code>Rule</code>, <code>Inference</code>, <code>Query</code>, <code>Branch</code>, <code>Pred</code>, <code>Not</code>, <code>RuleRef</code>, <code>vars</code></td>
+          <td>Author saved rules, inferences, ad-hoc queries, and rule-body atoms.</td>
+      </tr>
+      <tr>
+          <td>Persistence handles</td>
+          <td><code>SavedRuleRef</code>, <code>SavedInferenceRef</code>, <code>SchemaAddResult</code></td>
+          <td>Return types from <code>fg.rules.save</code>, <code>fg.inferences.save</code>, and <code>fg.schema.add</code>.</td>
+      </tr>
+      <tr>
+          <td>Ingest results</td>
+          <td><code>IngestResult</code>, <code>ValidationReport</code></td>
+          <td>Return types from <code>fg.schema.ingest(...)</code> and <code>fg.schema.validate_provenance(...)</code>.</td>
+      </tr>
+      <tr>
+          <td>Semantics</td>
+          <td><code>ProbLogSemantics</code>, <code>PyReasonSemantics</code>, <code>SemanticsProfile</code></td>
+          <td>Configure inference evaluation. Wrappers are the teaching path; <code>SemanticsProfile</code> is the canonical lower form.</td>
+      </tr>
+      <tr>
+          <td>Error types</td>
+          <td><code>SDKSchemaError</code>, <code>SDKStoreError</code>, <code>SDKRegistryError</code>, <code>EntityNotFoundError</code>, <code>FrozenSnapshotError</code>, <code>CardinalityError</code>, <code>EditorClosedError</code>, <code>SDKDSLError</code></td>
+          <td>Catch these for kernel-level failure modes.</td>
+      </tr>
+      <tr>
+          <td>Error codes (advanced)</td>
+          <td><code>INVALID_ROW_FORMAT</code>, <code>QUERY_ALIAS_CONFLICT</code>, <code>QUERY_INVALID_ROW_FORMAT</code>, <code>QUERY_MISSING_REF</code>, <code>QUERY_NOT_IMPLEMENTED</code>, <code>QUERY_TYPE_MISMATCH</code>, <code>QUERY_UNBOUND_VAR</code></td>
+          <td>Stable string constants used inside error messages.</td>
+      </tr>
+      <tr>
+          <td>Schema compile helpers (advanced)</td>
+          <td><code>build_authoring_schema_from_classes</code>, <code>compile_schema_from_classes</code>, <code>schema_preflight_from_classes</code></td>
+          <td>Lower-level schema compilation. Not part of the normal teaching path.</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="what-is-not-on-this-surface">What is not on this surface<a class="anchor" href="#what-is-not-on-this-surface">#</a></h2>
+<p>The kernel SDK does not own these surfaces. Some are different layers of the
+same project; some are out of scope for <code>factpy-kernel</code> entirely.</p>
+<ul>
+<li>Service routes, HTTP payloads, and service authentication.</li>
+<li>Agent workflows, dialog runtime, and conversation memory.</li>
+<li>Extraction pipelines and document ingestion stacks.</li>
+<li>Domain bundles and prepackaged applications.</li>
+<li>Internal registry wrapper (<code>kernel.sdk.registry.SDKRegistry</code>); it is
+importable for advanced use, but the standard path is the graph-bound
+<code>fg.rules.*</code> and <code>fg.inferences.*</code> namespaces.</li>
+<li>Substrate <code>derivation_*</code> names in protocol, registry, and proof internals;
+public SDK uses <code>Inference</code>.</li>
+<li>Round capture (<code>start_round</code>, <code>record_round_event</code>, <code>finalize_round</code> in
+<code>kernel.audit.round_events</code>) and audit package loading
+(<code>kernel.audit.load_audit_package</code>); the SDK ships the query-side
+<code>fg.audit.diff_proof_frames(...)</code> but not the recorder lifecycle.</li>
+<li>Walker views over evidence results (<code>ProofFrameView</code>,
+<code>SupportArtifactView</code>, <code>ProofFrameDiffView</code> in <code>kernel.application.walker</code>);
+the SDK methods return raw frozen DTOs.</li>
+<li>Frontier introspection (<code>kernel.core.rules.frontier</code>); Why-not requires an
+explicit candidate universe.</li>
+<li>Long-form proof / evidence rendering pipelines beyond the structured DTOs
+returned by <code>fg.what_if.*</code> and <code>fg.audit.*</code>.</li>
+</ul>
+<h2 id="syntax-checklist">Syntax checklist<a class="anchor" href="#syntax-checklist">#</a></h2>
+<ul>
+<li><code>FactGraph.create(schema_classes=[...], path=...)</code> is the normal constructor.</li>
+<li><code>FactGraph.load(path, schema_classes=[...])</code> restores a workspace.</li>
+<li><code>fg.save(path=None)</code> persists ledger, schema IR, registry, and manifest.</li>
+<li><code>fg.batch(meta=...)</code> opens a batch transaction; batch <code>save(...)</code> is unrelated
+to graph save.</li>
+<li><code>fg.schema.add(...)</code> extends the schema additively and returns
+<code>SchemaAddResult</code>.</li>
+<li><code>fg.read.ref(...)</code>, <code>fg.read.get(...)</code>, and <code>fg.read.find(...)</code> are the read
+entry points.</li>
+<li><code>fg.write.set(...)</code>, <code>fg.write.add(...)</code>, and <code>fg.write.retract(...)</code> append
+ledger assertions or retractions.</li>
+<li><code>fg.assertions.by_id(...)</code>, <code>fg.assertions.by_ids(...)</code>,
+<code>fg.assertions.field(Field)</code>, <code>fg.assertions.active()</code>, and
+<code>fg.assertions.all()</code> read assertion records. Chain <code>.where(...)</code>,
+<code>.at(...)</code>, <code>.version(...)</code>, and <code>.by_id(...)</code> after a returned
+<code>AssertionRecordSet</code>.</li>
+<li><code>fg.views.create/update/delete/get/list</code> manages frozen assertion-id
+selections.</li>
+<li><code>fg.rules.inspect(...)</code> previews structure for rules, inferences, and
+queries.</li>
+<li><code>fg.rules.save(...)</code> and <code>fg.inferences.save(...)</code> persist authoring assets
+and return saved refs.</li>
+<li><code>fg.rules.get(id)</code> and <code>fg.inferences.get(id)</code> return the latest saved ref;
+call <code>load(ref)</code> to get a runtime value object.</li>
+<li><code>fg.eval.run(rule_or_query)</code> reads; <code>fg.eval.evaluate(inference, engine=..., semantics=...)</code> proposes; <code>fg.eval.accept(candidate)</code> writes.</li>
+<li><code>fg.eval.inspect_semantics(...)</code> previews semantics shape; it does not run an
+engine.</li>
+<li><code>fg.what_if.*</code> is live counterfactual exploration without ledger writes.</li>
+<li><code>fg.audit.explain_fact(...)</code>, <code>fg.audit.conflicts(...)</code>, and
+<code>fg.audit.diff_proof_frames(...)</code> inspect persisted records.</li>
+<li><code>fg.package.export_package(...)</code> / <code>fg.package.run_package(...)</code> is for
+portable distribution, distinct from workspace save.</li>
+<li>Flat <code>FactGraph</code> methods remain supported, but new docs prefer namespaces.</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/concepts/persistence/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Persistence</span>
+      </a>
+    
+    </span>
+    <span>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#namespace-map">Namespace map</a>
+      <ul>
+        <li><a href="#why-these-namespaces">Why these namespaces</a></li>
+        <li><a href="#factgraph-entry-points">FactGraph entry points</a></li>
+        <li><a href="#schema-read-write-and-assertions">Schema, read, write, and assertions</a></li>
+        <li><a href="#frozen-views">Frozen views</a></li>
+        <li><a href="#rules-inferences-and-evaluation">Rules, inferences, and evaluation</a></li>
+        <li><a href="#what-if-and-audit">What-if and audit</a></li>
+        <li><a href="#package-surface">Package surface</a></li>
+        <li><a href="#public-imports-panorama">Public imports panorama</a></li>
+        <li><a href="#what-is-not-on-this-surface">What is not on this surface</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Guides on factgraph</title>
+    <link>http://localhost:1313/docs/guides/</link>
+    <description>Recent content in Guides on factgraph</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>[© CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)</copyright>
+    <atom:link href="http://localhost:1313/docs/guides/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Defining a Schema</title>
+      <link>http://localhost:1313/docs/guides/defining-a-schema/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/guides/defining-a-schema/</guid>
+      <description>&lt;h1 id=&#34;defining-a-schema&#34;&gt;Defining a schema&lt;a class=&#34;anchor&#34; href=&#34;#defining-a-schema&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;This guide develops the practical decisions that arise when writing a schema for a real domain: where the schema lives in a project, how identities are chosen, how cardinalities are picked, how relationships are modelled, how schemas are split across modules, how they are validated before a store is opened, and how they evolve from one version to the next. It assumes familiarity with the conceptual material developed in &lt;a href=&#34;../../concepts/entities-and-fields&#34;&gt;entities and fields&lt;/a&gt;, and concentrates here on the choices that have to be made when one sits down to declare a schema for the first time.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Reading and Writing</title>
+      <link>http://localhost:1313/docs/guides/reading-and-writing/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/guides/reading-and-writing/</guid>
+      <description>&lt;h1 id=&#34;reading-and-writing&#34;&gt;Reading and writing&lt;a class=&#34;anchor&#34; href=&#34;#reading-and-writing&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;This guide covers the day-to-day mechanics of putting facts into the ledger and reading them back out: the two write paths the SDK provides, the shape of single-entity and filter-based reads, the conventions around write-time metadata, the semantics of retraction and idempotent re-runs, and the typed errors raised when something is wrong with the call. It assumes a schema and an open store; for the schema side, see &lt;a href=&#34;http://localhost:1313/docs/guides/defining-a-schema&#34;&gt;defining a schema&lt;/a&gt;, and for the conceptual underpinning of writes, projections, and retractions, see &lt;a href=&#34;http://localhost:1313/docs/concepts/the-ledger&#34;&gt;the ledger&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Writing Rules</title>
+      <link>http://localhost:1313/docs/guides/writing-rules/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/guides/writing-rules/</guid>
+      <description>&lt;h1 id=&#34;writing-rules&#34;&gt;Writing rules&lt;a class=&#34;anchor&#34; href=&#34;#writing-rules&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;This guide develops the rule DSL the way it is used in practice: building bodies from atoms, joining across entities through shared variables, composing rules into larger rules, working with negation, and running rules with the row format appropriate to the calling code. For the conceptual material — projections, derivations, candidates — see &lt;a href=&#34;http://localhost:1313/docs/concepts/rules-and-derivations&#34;&gt;rules and derivations&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;h2 id=&#34;the-shape-of-a-rule&#34;&gt;The shape of a rule&lt;a class=&#34;anchor&#34; href=&#34;#the-shape-of-a-rule&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;A &lt;code&gt;Rule&lt;/code&gt; is constructed with four structurally distinguished parts: an id, a version, a &lt;code&gt;select&lt;/code&gt; head that names what the rule returns for each match, and a &lt;code&gt;where&lt;/code&gt; body that lists the conditions under which a match is produced. Variables that appear in the body are produced by the &lt;code&gt;vars(...)&lt;/code&gt; context manager and projected through the head.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Running Derivations</title>
+      <link>http://localhost:1313/docs/guides/running-derivations/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/guides/running-derivations/</guid>
+      <description>&lt;h1 id=&#34;running-derivations&#34;&gt;Running derivations&lt;a class=&#34;anchor&#34; href=&#34;#running-derivations&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;A derivation is a rule whose head proposes new facts when the body matches, rather than returning rows. The lifecycle of a derivation falls into three steps: evaluation produces candidates from the current ledger state, review decides which of those candidates ought to become facts, and acceptance writes the accepted candidates as new ledger entries with their evidence preserved as provenance. The present guide develops each step in practice. For the conceptual material on which the lifecycle rests, see &lt;a href=&#34;http://localhost:1313/docs/concepts/rules-and-derivations&#34;&gt;rules and derivations&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Auditing a Run</title>
+      <link>http://localhost:1313/docs/guides/auditing-a-run/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/guides/auditing-a-run/</guid>
+      <description>&lt;h1 id=&#34;auditing-a-run&#34;&gt;Auditing a run&lt;a class=&#34;anchor&#34; href=&#34;#auditing-a-run&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Every operation a factpy system performs — writes, queries, derivation evaluations, acceptances — leaves records in the store as it goes. Producing an audit package is the act of bundling those records into a self-contained directory that can be shipped, archived, or reviewed elsewhere, independently of the system that produced it. The present guide develops the mechanics of producing such a package, the structure that the package has on disk, the way &lt;code&gt;kernel.audit&lt;/code&gt; reads it back, the views that an audit reader most often constructs from it, and the rhythms in which export is sensibly performed. For the conceptual material on which the package format rests, see &lt;a href=&#34;http://localhost:1313/docs/concepts/audit-and-provenance&#34;&gt;audit and provenance&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Persistence</title>
+      <link>http://localhost:1313/docs/guides/persistence/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/guides/persistence/</guid>
+      <description>&lt;h1 id=&#34;persistence&#34;&gt;Persistence&lt;a class=&#34;anchor&#34; href=&#34;#persistence&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The default ledger lives in memory: it exists for the lifetime of the process that opened it and is discarded when the process exits. This is the appropriate behaviour for tests and for short-lived computation, and is what &lt;code&gt;SDKStore.from_schema_classes([...])&lt;/code&gt; produces when no further arguments are supplied. For everything else — long-running services, jobs whose state must survive a restart, schemas that evolve over time — the ledger is persisted to a file. The present guide develops how persistence is opened, what the schema digest is and what it protects against, which kinds of schema change are safe across restarts and which require migration, how processes share a persistent ledger without losing the audit story, and how sidecar artifacts and backups relate to the ledger file itself.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Using Adapters</title>
+      <link>http://localhost:1313/docs/guides/using-adapters/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/guides/using-adapters/</guid>
+      <description>&lt;h1 id=&#34;using-adapters&#34;&gt;Using adapters&lt;a class=&#34;anchor&#34; href=&#34;#using-adapters&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The native evaluator covers the rule shape that most application code requires: typed bodies with joins, sub-rules, and negation as failure. For three reasoning shapes that the native evaluator does not address — propagation through a graph of typed relationships, probabilistic inference over uncertain facts, and Datalog evaluation at scale — the kernel delegates to adapter engines. Three are shipped: PyReason, ProbLog, and Souffle. The present guide develops the criteria by which an adapter is chosen and the integration pattern of each, with the configuration details and full APIs left to the adapter reference pages.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

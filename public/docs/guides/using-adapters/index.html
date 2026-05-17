@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Using adapters# The native evaluator covers the rule shape that most application code requires: typed bodies with joins, sub-rules, and negation as failure. For three reasoning shapes that the native evaluator does not address — propagation through a graph of typed relationships, probabilistic inference over uncertain facts, and Datalog evaluation at scale — the kernel delegates to adapter engines. Three are shipped: PyReason, ProbLog, and Souffle. The present guide develops the criteria by which an adapter is chosen and the integration pattern of each, with the configuration details and full APIs left to the adapter reference pages.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/guides/using-adapters/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Using Adapters">
+  <meta property="og:description" content="Using adapters# The native evaluator covers the rule shape that most application code requires: typed bodies with joins, sub-rules, and negation as failure. For three reasoning shapes that the native evaluator does not address — propagation through a graph of typed relationships, probabilistic inference over uncertain facts, and Datalog evaluation at scale — the kernel delegates to adapter engines. Three are shipped: PyReason, ProbLog, and Souffle. The present guide develops the criteria by which an adapter is chosen and the integration pattern of each, with the configuration details and full APIs left to the adapter reference pages.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Using Adapters">
+  <meta itemprop="description" content="Using adapters# The native evaluator covers the rule shape that most application code requires: typed bodies with joins, sub-rules, and negation as failure. For three reasoning shapes that the native evaluator does not address — propagation through a graph of typed relationships, probabilistic inference over uncertain facts, and Datalog evaluation at scale — the kernel delegates to adapter engines. Three are shipped: PyReason, ProbLog, and Souffle. The present guide develops the criteria by which an adapter is chosen and the integration pattern of each, with the configuration details and full APIs left to the adapter reference pages.">
+  <meta itemprop="wordCount" content="1497">
+
+<title>Using Adapters | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/guides/using-adapters/">
+  <link rel="alternate" hreflang="de" href="http://localhost:1313/de/docs/guides/using-adapters/" title="Adapter verwenden">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.2d0bb1214ca4979905abe6ff414cee5d5260e17e8f410ecb0cc797cb83587775.js" integrity="sha256-LQuxIUykl5kFq&#43;b/QUzuXVJg4X6PQQ7LDMeXy4NYd3U=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        English
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/de/docs/guides/using-adapters/" class="flex flex-auto">
+          Deutsch
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-903cb365ca4589d060a9e0c4e9cacd7a" class="toggle"  />
+    <label for="section-903cb365ca4589d060a9e0c4e9cacd7a" class="flex">
+      <a role="button" class="">
+        Concepts</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d26c9af1cc2443c595895ff545ee9a45" class="toggle" checked />
+    <label for="section-d26c9af1cc2443c595895ff545ee9a45" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/defining-a-schema/" class="">
+      Defining a Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/reading-and-writing/" class="">
+      Reading and Writing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/writing-rules/" class="">
+      Writing Rules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/running-derivations/" class="">
+      Running Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/using-adapters/" class="active">
+      Using Adapters</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ca174a65b61b36959d2dfae132eedf04" class="toggle"  />
+    <label for="section-ca174a65b61b36959d2dfae132eedf04" class="flex">
+      <a href="/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Using Adapters</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#using-adapters">Using adapters</a>
+      <ul>
+        <li><a href="#choosing-an-adapter">Choosing an adapter</a></li>
+        <li><a href="#problog-probabilities-on-bodies">ProbLog: probabilities on bodies</a></li>
+        <li><a href="#pyreason-graph-propagation-as-a-session">PyReason: graph propagation as a session</a></li>
+        <li><a href="#souffle-package-based-execution">Souffle: package-based execution</a></li>
+        <li><a href="#what-stays-uniform-across-adapters">What stays uniform across adapters</a></li>
+        <li><a href="#operational-notes">Operational notes</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="using-adapters">Using adapters<a class="anchor" href="#using-adapters">#</a></h1>
+<p>The native evaluator covers the rule shape that most application code requires: typed bodies with joins, sub-rules, and negation as failure. For three reasoning shapes that the native evaluator does not address — propagation through a graph of typed relationships, probabilistic inference over uncertain facts, and Datalog evaluation at scale — the kernel delegates to adapter engines. Three are shipped: PyReason, ProbLog, and Souffle. The present guide develops the criteria by which an adapter is chosen and the integration pattern of each, with the configuration details and full APIs left to the adapter reference pages.</p>
+<h2 id="choosing-an-adapter">Choosing an adapter<a class="anchor" href="#choosing-an-adapter">#</a></h2>
+<p>The choice is determined by the shape of the reasoning, not by preference. The native evaluator is the appropriate default until a concrete reason to leave it appears, since it has no further operational dependencies, the fastest iteration cycle, and the smallest blast radius for modelling mistakes.</p>
+<p>PyReason is appropriate where the reasoning has the shape of <em>graph-based annotated logic</em>. Beliefs are intervals with a lower and an upper bound, they propagate along typed edges through discrete time steps, and the natural data shape is a graph of entities and relationships whose state evolves as inference re-runs. The adapter is the appropriate choice wherever entities are connected by typed relationships, where signals propagate through them carrying confidence bands, and where time is part of the model.</p>
+<p>ProbLog is appropriate where the reasoning is <em>probabilistic logic programming</em> in the strict sense. Facts have probabilities, rules combine them, and the answers are probabilities over outcomes. The adapter is the appropriate choice wherever rules need to reason about uncertain inputs in a principled probabilistic way, including marginalising over alternatives, computing joint probabilities, and learning probabilities from labelled data. It is <em>not</em> the appropriate choice for systems whose confidences are heuristic labels rather than calibrated probabilities; in that case the native evaluator with weighted bodies is sufficient and considerably cheaper.</p>
+<p>Souffle is appropriate where the reasoning is plain Datalog and the rule set has grown beyond what the native evaluator handles in acceptable time. The engine compiles rules into native code and evaluates them efficiently over very large fact bases. The adapter is the appropriate choice wherever throughput on a large fact base has become the bottleneck and the rules themselves are well-formed Datalog without probabilistic semantics or graph propagation.</p>
+<p>If none of these shapes describes the problem at hand, no adapter is needed. The native evaluator is uniform and sufficient for the substantial majority of factpy projects.</p>
+<h2 id="problog-probabilities-on-bodies">ProbLog: probabilities on bodies<a class="anchor" href="#problog-probabilities-on-bodies">#</a></h2>
+<p>ProbLog has the closest-to-uniform integration with the SDK. Importing the adapter package registers the engine with the dispatch in <code>sdk.evaluate</code>, after which a derivation can be run under ProbLog by passing <code>mode=&quot;problog&quot;</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">import</span> kernel.adapters.problog  <span style="color:#78787e"># registers the engine evaluator</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>candidates <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>evaluate(some_derivation, mode<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;problog&#34;</span>)</span></span></code></pre></div><p>For derivations that need engine-specific configuration — branch probabilities, inference parameters — a <code>ProbLogRuleExt</code> is attached to the derivation through its <code>engine_ext</code> parameter.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.adapters.problog.rule_ext <span style="color:#ff6ac1">import</span> ProbLogRuleExt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;r&#34;</span>, <span style="color:#5af78e">&#34;name&#34;</span>) <span style="color:#ff6ac1">as</span> (r, name):
+</span></span><span style="display:flex;"><span>    expertise_drv <span style="color:#ff6ac1">=</span> Derivation(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;drv.expertise&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Pred(<span style="color:#5af78e">&#34;researcher:name&#34;</span>, r, name)],
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>Researcher<span style="color:#ff6ac1">.</span>expertise(researcher_id<span style="color:#ff6ac1">=</span>r, expertise<span style="color:#ff6ac1">=</span>name),
+</span></span><span style="display:flex;"><span>        mode<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;problog&#34;</span>,
+</span></span><span style="display:flex;"><span>        engine_ext<span style="color:#ff6ac1">=</span>ProbLogRuleExt(branch_probabilities<span style="color:#ff6ac1">=</span>(<span style="color:#ff9f43">0.85</span>,)),
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p>Candidates produced by the ProbLog evaluator carry probability annotations forward into acceptance, which writes them as conventional <code>confidence</code> metadata on the resulting ledger assertions. The accepted facts appear in the audit story like any other derived fact, with the difference that the evidence record reflects the engine&rsquo;s reasoning trace rather than a flat tree.</p>
+<p>The <code>Body(..., confidence=...)</code> shape developed in <a href="/docs/guides/running-derivations">running derivations</a> is the lightweight handoff between the two evaluators: a derivation with weighted bodies under the native evaluator becomes a derivation with probabilistic bodies under ProbLog without any change to the DSL. When weighted-body confidences cease to be expressive enough — when joint distributions and marginalisation become necessary — the same <code>Derivation</code> object runs under ProbLog by switching the <code>mode</code> argument.</p>
+<h2 id="pyreason-graph-propagation-as-a-session">PyReason: graph propagation as a session<a class="anchor" href="#pyreason-graph-propagation-as-a-session">#</a></h2>
+<p>PyReason&rsquo;s integration is shaped differently because the engine itself is. Inference does not run as a one-shot evaluation against a static ledger; it propagates through a graph whose state changes over discrete time steps. The adapter exposes that shape as a <em>session</em> — a stateful object in which the typed graph is built up before propagation runs against it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.adapters.pyreason.session <span style="color:#ff6ac1">import</span> PyReasonSession
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.adapters.pyreason.runner <span style="color:#ff6ac1">import</span> PyReasonRunConfig, run_pyreason
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.adapters.pyreason.accept <span style="color:#ff6ac1">import</span> accept_pyreason_session
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>session <span style="color:#ff6ac1">=</span> PyReasonSession(schema_ir)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> session<span style="color:#ff6ac1">.</span>batch() <span style="color:#ff6ac1">as</span> tx:
+</span></span><span style="display:flex;"><span>    a <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Vendor, vendor_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;A&#34;</span>)
+</span></span><span style="display:flex;"><span>    b <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Vendor, vendor_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;B&#34;</span>)
+</span></span><span style="display:flex;"><span>    a<span style="color:#ff6ac1">.</span>at_risk_signal<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;true&#34;</span>, bound<span style="color:#ff6ac1">=</span>[<span style="color:#ff9f43">1.0</span>, <span style="color:#ff9f43">1.0</span>],
+</span></span><span style="display:flex;"><span>        meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;incident_triage&#34;</span>})
+</span></span><span style="display:flex;"><span>    tx<span style="color:#ff6ac1">.</span>relationship(VendorDependency, from_entity<span style="color:#ff6ac1">=</span>a, to_entity<span style="color:#ff6ac1">=</span>b,
+</span></span><span style="display:flex;"><span>        critical_path<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;true&#34;</span>, bound<span style="color:#ff6ac1">=</span>[<span style="color:#ff9f43">1.0</span>, <span style="color:#ff9f43">1.0</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>result <span style="color:#ff6ac1">=</span> run_pyreason(session, PyReasonRunConfig(<span style="color:#ff6ac1">...</span>))
+</span></span><span style="display:flex;"><span>accept_pyreason_session(sdk, result, <span style="color:#ff6ac1">...</span>)</span></span></code></pre></div><p>The integration pattern is to build the typed graph in a session, run the propagation, and commit the resulting facts back into the main store. The adapter handles translation between factpy&rsquo;s schema and PyReason&rsquo;s annotated-graph representation; entity declarations and relationships are written as they would be in the SDK, with the addition of <code>bound=[lo, hi]</code> for confidence intervals on each fact and explicit <code>Relationship</code> declarations for the typed edges along which beliefs propagate.</p>
+<p>PyReason is the appropriate choice wherever the reasoning <em>is</em> propagation through a graph state. The session-based API is what makes that shape ergonomic; expressing the same propagation as a flat derivation under the native evaluator is awkward at best and rapidly becomes unworkable as the depth of propagation grows.</p>
+<h2 id="souffle-package-based-execution">Souffle: package-based execution<a class="anchor" href="#souffle-package-based-execution">#</a></h2>
+<p>Souffle is a compiled Datalog engine, and the integration reflects that. The kernel exports a <em>package</em> describing the rules, the schema, and the input facts; the Souffle binary compiles and runs against the package; the results return as new facts.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.adapters.souffle.package <span style="color:#ff6ac1">import</span> ExportOptions
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># Export an inference package</span>
+</span></span><span style="display:flex;"><span>out <span style="color:#ff6ac1">=</span> Path(<span style="color:#5af78e">&#34;./packages/run-1&#34;</span>)
+</span></span><span style="display:flex;"><span>sdk<span style="color:#ff6ac1">.</span>export_package(out, ExportOptions(package_kind<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;inference&#34;</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># Run it under Souffle</span>
+</span></span><span style="display:flex;"><span>result <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>run_package(out, entrypoints<span style="color:#ff6ac1">=</span>[<span style="color:#5af78e">&#34;my_rule&#34;</span>], engine<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;souffle&#34;</span>)</span></span></code></pre></div><p>The <code>package_kind=&quot;inference&quot;</code> setting produces the leaner package suitable for re-execution rather than for review — schema, rules, and input facts, without the audit-side records that an audit package additionally carries. The <code>entrypoints</code> argument names the rules whose outputs are wanted from the run. <code>run_package</code> invokes the Souffle binary against the exported package and returns the derived facts as a result.</p>
+<p>Souffle is the appropriate choice when rule evaluation under the native engine has become the bottleneck. The cost of choosing it is a package round-trip per run, a binary dependency on <code>souffle</code> that must be installed on the host, and a less interactive feedback loop than running rules in-process. The benefit is throughput on rule sets and fact bases that the native evaluator would not process in acceptable time. The same <code>Rule</code> and <code>Derivation</code> declarations are used; the adapter compiles them into Souffle&rsquo;s surface language without further intervention from the rule author.</p>
+<h2 id="what-stays-uniform-across-adapters">What stays uniform across adapters<a class="anchor" href="#what-stays-uniform-across-adapters">#</a></h2>
+<p>Three properties hold uniformly across the native evaluator and all three adapters. The schema and the DSL are unchanged: the same <code>Entity</code> declarations, the same <code>Rule</code> and <code>Derivation</code> objects. An adapter changes the evaluator that consumes them, not the language in which they are written. The audit story is unchanged in its general shape: every evaluator produces evidence, in the form of a tree under the native engine and as a richer <code>EvidenceGraph</code> under engines whose reasoning does not reduce to a tree, and audit packages capture both shapes uniformly. And the candidate-and-acceptance lifecycle is unchanged where applicable: ProbLog and the candidate-producing portions of Souffle plug into <code>sdk.accept</code> and <code>sdk.accept_many</code> exactly as the native evaluator does, while PyReason&rsquo;s session-based output flows through <code>accept_pyreason_session</code>, which plays the same role for that engine&rsquo;s results.</p>
+<p>What is <em>not</em> uniform across adapters is the surface for engine-specific configuration — branch probabilities for ProbLog, propagation step counts and atom-trace flags for PyReason, dialect versions and policy modes for Souffle — and the shape of the evidence each engine produces, which is a tree, graph, or timeline depending on the engine&rsquo;s reasoning model. Operational dependencies likewise differ: PyReason and ProbLog ship as optional Python packages, while Souffle requires a separately installed compiled binary. The adapter reference pages cover each of these surfaces in detail.</p>
+<h2 id="operational-notes">Operational notes<a class="anchor" href="#operational-notes">#</a></h2>
+<p>PyReason and ProbLog are optional Python dependencies and are not installed with the kernel by default. They are installed through factpy-kernel&rsquo;s optional extras (<code>pip install factpy-kernel[pyreason]</code>, <code>pip install factpy-kernel[problog]</code>); the exact extras names should be confirmed against the project&rsquo;s install documentation, since these may evolve. Importing the adapter modules without the underlying engine present raises a clear error rather than failing later in the run.</p>
+<p>Souffle requires the <code>souffle</code> binary on the host&rsquo;s <code>PATH</code>. The adapter does not ship the compiler, and a missing binary surfaces as a preflight warning before it surfaces as a runtime error.</p>
+<p>Local rule development is best done against the native evaluator. The native evaluator has no further dependencies, the fastest iteration cycle, and the smallest blast radius for modelling mistakes. Adapters are the appropriate choice when the reasoning shape itself requires them, not as a default for ordinary work.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<p><a href="/docs/guides/running-derivations">Running derivations</a> covers the candidate-and-acceptance lifecycle that ProbLog and Souffle share with the native evaluator. <a href="/docs/guides/auditing-a-run">Auditing a run</a> covers how adapter-produced evidence — graphs and timelines — appears in audit packages. The adapter-specific reference pages cover full configuration, engine extensions, and the data conversions each adapter performs.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/guides/persistence/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Persistence</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/tutorials/" class="flex align-center">
+        <span>Tutorials</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#using-adapters">Using adapters</a>
+      <ul>
+        <li><a href="#choosing-an-adapter">Choosing an adapter</a></li>
+        <li><a href="#problog-probabilities-on-bodies">ProbLog: probabilities on bodies</a></li>
+        <li><a href="#pyreason-graph-propagation-as-a-session">PyReason: graph propagation as a session</a></li>
+        <li><a href="#souffle-package-based-execution">Souffle: package-based execution</a></li>
+        <li><a href="#what-stays-uniform-across-adapters">What stays uniform across adapters</a></li>
+        <li><a href="#operational-notes">Operational notes</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

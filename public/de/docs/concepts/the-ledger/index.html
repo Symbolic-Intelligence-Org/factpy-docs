@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Das Ledger# Jede Aussage und jede Retraktion, die über das SDK geschrieben wird, landet als neuer Eintrag im Ledger. Einmal geschrieben, wird ein Eintrag nicht mehr verändert oder entfernt. Snapshots, Query-Ergebnisse und die Eingaben für Regelauswertungen sind Projektionen des Ledgers. Sie werden bei Bedarf berechnet und nirgendwo anders als kanonischer Zustand gehalten. Wenn das Schema das Vokabular ist, in dem Aussagen formuliert werden, dann ist das Ledger der Ort, an dem diese Aussagen sich ansammeln. Diese Seite beschreibt, was ein Ledger-Eintrag enthält, wie Leseoperationen die Einträge in die Formen projizieren, die der Rest des Systems verwendet, und warum das Design auf append-only-Schreiben statt auf dem vertrauteren Überschreiben beruht.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/de/docs/concepts/the-ledger/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Das Ledger">
+  <meta property="og:description" content="Das Ledger# Jede Aussage und jede Retraktion, die über das SDK geschrieben wird, landet als neuer Eintrag im Ledger. Einmal geschrieben, wird ein Eintrag nicht mehr verändert oder entfernt. Snapshots, Query-Ergebnisse und die Eingaben für Regelauswertungen sind Projektionen des Ledgers. Sie werden bei Bedarf berechnet und nirgendwo anders als kanonischer Zustand gehalten. Wenn das Schema das Vokabular ist, in dem Aussagen formuliert werden, dann ist das Ledger der Ort, an dem diese Aussagen sich ansammeln. Diese Seite beschreibt, was ein Ledger-Eintrag enthält, wie Leseoperationen die Einträge in die Formen projizieren, die der Rest des Systems verwendet, und warum das Design auf append-only-Schreiben statt auf dem vertrauteren Überschreiben beruht.">
+  <meta property="og:locale" content="de">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Das Ledger">
+  <meta itemprop="description" content="Das Ledger# Jede Aussage und jede Retraktion, die über das SDK geschrieben wird, landet als neuer Eintrag im Ledger. Einmal geschrieben, wird ein Eintrag nicht mehr verändert oder entfernt. Snapshots, Query-Ergebnisse und die Eingaben für Regelauswertungen sind Projektionen des Ledgers. Sie werden bei Bedarf berechnet und nirgendwo anders als kanonischer Zustand gehalten. Wenn das Schema das Vokabular ist, in dem Aussagen formuliert werden, dann ist das Ledger der Ort, an dem diese Aussagen sich ansammeln. Diese Seite beschreibt, was ein Ledger-Eintrag enthält, wie Leseoperationen die Einträge in die Formen projizieren, die der Rest des Systems verwendet, und warum das Design auf append-only-Schreiben statt auf dem vertrauteren Überschreiben beruht.">
+  <meta itemprop="wordCount" content="1578">
+
+<title>Das Ledger | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/de/docs/concepts/the-ledger/">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/de.search.min.a92013675f37793ce9c8fb9acdda196dc19f26e429d7c863d62fdef621fe6daa.js" integrity="sha256-qSATZ183eTzpyPuazdoZbcGfJuQp18hj1i/e9iH&#43;bao=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/de/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Suche"
+    aria-label="Suche"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        Deutsch
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/" class="flex flex-auto">
+          English
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/quickstart/" class="">
+      Schnellstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="toggle" checked />
+    <label for="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="flex">
+      <a role="button" class="">
+        Konzepte</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/overview/" class="">
+      Überblick</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/the-ledger/" class="active">
+      Das Ledger</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/entities-and-fields/" class="">
+      Entitäten und Felder</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/rules-and-derivations/" class="">
+      Regeln und Ableitungen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/audit-and-provenance/" class="">
+      Audit und Provenienz</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-34058d101374bf945fbfadcda1396a3e" class="toggle"  />
+    <label for="section-34058d101374bf945fbfadcda1396a3e" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/defining-a-schema/" class="">
+      Ein Schema definieren</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/reading-and-writing/" class="">
+      Lesen und Schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/writing-rules/" class="">
+      Regeln schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/running-derivations/" class="">
+      Ableitungen ausführen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/persistence/" class="">
+      Persistenz</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/using-adapters/" class="">
+      Adapter verwenden</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-877dfaeda590afb0dbf2967bfa587bd2" class="toggle"  />
+    <label for="section-877dfaeda590afb0dbf2967bfa587bd2" class="flex">
+      <a href="/de/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Das Ledger</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#das-ledger">Das Ledger</a>
+      <ul>
+        <li><a href="#was-ein-eintrag-enthält">Was ein Eintrag enthält</a></li>
+        <li><a href="#was-set-add-und-retract-tatsächlich-tun">Was <code>set</code>, <code>add</code> und <code>retract</code> tatsächlich tun</a></li>
+        <li><a href="#snapshots-als-projektionen">Snapshots als Projektionen</a></li>
+        <li><a href="#projektionen-und-ableitungen">Projektionen und Ableitungen</a></li>
+        <li><a href="#persistenz">Persistenz</a></li>
+        <li><a href="#warum-append-only">Warum append-only</a></li>
+        <li><a href="#nächste-schritte">Nächste Schritte</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="das-ledger">Das Ledger<a class="anchor" href="#das-ledger">#</a></h1>
+<p>Jede Aussage und jede Retraktion, die über das SDK geschrieben wird, landet als neuer Eintrag im Ledger. Einmal geschrieben, wird ein Eintrag nicht mehr verändert oder entfernt. Snapshots, Query-Ergebnisse und die Eingaben für Regelauswertungen sind Projektionen des Ledgers. Sie werden bei Bedarf berechnet und nirgendwo anders als kanonischer Zustand gehalten. Wenn das Schema das Vokabular ist, in dem Aussagen formuliert werden, dann ist das Ledger der Ort, an dem diese Aussagen sich ansammeln. Diese Seite beschreibt, was ein Ledger-Eintrag enthält, wie Leseoperationen die Einträge in die Formen projizieren, die der Rest des Systems verwendet, und warum das Design auf append-only-Schreiben statt auf dem vertrauteren Überschreiben beruht.</p>
+<h2 id="was-ein-eintrag-enthält">Was ein Eintrag enthält<a class="anchor" href="#was-ein-eintrag-enth%c3%a4lt">#</a></h2>
+<p>Jeder Eintrag hält einen einzelnen Schreibakt fest. Der Kernel speichert genug Informationen über diesen Akt, damit er für sich allein verständlich bleibt. Ein Eintrag enthält das betroffene Prädikat, also das Schemafeld in der kleingeschriebenen Form <code>entity:field</code>, zusammen mit dem Subjekt, über das geschrieben wird, identifiziert durch Entitätstyp und Identity-Koordinaten. Er enthält den behaupteten Wert oder, im Fall einer Retraktion, den Identifier der früheren Aussage, die zurückgezogen wird. Er enthält die ausgeführte Aktion: <code>set</code> für eine einwertige Aussage, <code>add</code> für eine mehrwertige Aussage oder <code>retract</code> für die explizite Zurücknahme einer früheren Aussage. Außerdem enthält er einen Metadatenblock mit dem vom Kernel vergebenen Zeitstempel, der Assertion-ID, über die der Eintrag später referenziert werden kann, und weiteren vom Schreiber gelieferten Schlüsseln. Üblich sind <code>source</code>, <code>trace_id</code>, <code>version</code>, <code>valid_from</code> und <code>confidence</code>, doch der Kernel erzwingt diese Konvention nicht. Er verlangt nur, dass die Werte JSON-kompatibel sind. Nach dem Schreiben ist der Eintrag unveränderlich: Ein gestern geschriebenes und heute erneut geöffnetes Ledger ist Byte für Byte dasselbe.</p>
+<h2 id="was-set-add-und-retract-tatsächlich-tun">Was <code>set</code>, <code>add</code> und <code>retract</code> tatsächlich tun<a class="anchor" href="#was-set-add-und-retract-tats%c3%a4chlich-tun">#</a></h2>
+<p>Die drei direkten Schreiboperationen des SDK werden auf dieselbe primitive Ledger-Operation zurückgeführt: das Anhängen eines neuen Eintrags. Sie unterscheiden sich in der Kardinalität des Zielfelds und darin, wie die spätere Projektion sie interpretiert, wenn sie das Ledger zu einem Snapshot reduziert. Ein Aufruf von <code>sdk.set(Person.name, ref, &quot;Alice&quot;)</code> schreibt eine Aussage auf ein Feld mit einfacher Kardinalität. Ein späterer Aufruf mit <code>&quot;Alicia&quot;</code> schreibt einen zweiten, separaten Eintrag, statt den ersten zu überschreiben. Beide Einträge bleiben dauerhaft im Ledger. Ein Aufruf von <code>sdk.add(Person.tag, ref, &quot;vip&quot;)</code> schreibt eine Aussage auf ein Feld mit mehrfacher Kardinalität. Ein späterer Aufruf mit demselben Wert schreibt ebenfalls einen weiteren Eintrag, unterscheidbar durch Metadaten und Zeitstempel, auch wenn die Projektion beide im Snapshot zu einem einzigen Tag zusammenführt. Ein Aufruf von <code>sdk.retract</code> entfernt sein Ziel nicht. Er hängt einen Retraktions-Eintrag an, der über seine ID auf eine frühere Aussage verweist, und spätere Projektionen überspringen diese Aussage bei der Reduktion. Die allgemeine Eigenschaft gilt ohne Ausnahme: Schreibvorgänge ändern keine früheren Einträge. Jede sichtbare Zustandsänderung entsteht durch einen zusätzlichen Eintrag, den die nächste Leseoperation berücksichtigt.</p>
+<h2 id="snapshots-als-projektionen">Snapshots als Projektionen<a class="anchor" href="#snapshots-als-projektionen">#</a></h2>
+<p>Ein Snapshot ist die Antwort des Kernels auf die Frage nach dem aktuellen Zustand einer bestimmten Entität. Er ist die häufigste Form, in der das Ledger gelesen wird. Der Snapshot wird nicht als kanonischer Zustand gespeichert. Wenn <code>sdk.get(Person, person_id=&quot;...&quot;)</code> aufgerufen wird, läuft der Kernel über die relevanten Einträge dieser Entität und reduziert sie nach der Kardinalität, die das Schema für jedes Feld deklariert. Einwertige Felder nehmen die neueste nicht zurückgezogene Aussage. Mehrwertige Felder nehmen die Vereinigung aller nicht zurückgezogenen Aussagen; Duplikate fallen in der Projektion zusammen, bleiben im Ledger aber als separate Einträge erhalten. Identity-Felder werden direkt aus der Adresse der Entität gelesen und nicht aus Aussagen, da Identity-Werte gar nicht als Fakten gespeichert werden. Der zurückgegebene Snapshot ist read-only. Der Versuch, einem seiner Attribute einen neuen Wert zuzuweisen, wirft einen Fehler, statt stillschweigend einen Projektionszustand zu mutieren, der keine kanonische Existenz hat.</p>
+<p>Die folgende Pseudo-Timeline zeigt sechs Schreibvorgänge auf eine Entität und den Snapshot, den der Kernel daraus erzeugt.</p>
+<pre class="mermaid">flowchart LR
+    A1[&#34;t=1&lt;br/&gt;set name=&#39;Alice&#39;&#34;] --&gt; A2[&#34;t=2&lt;br/&gt;set name=&#39;Alicia&#39;&#34;]
+    A2 --&gt; A3[&#34;t=3&lt;br/&gt;retract name=&#39;Alicia&#39;&#34;]
+    A3 --&gt; A4[&#34;t=4&lt;br/&gt;add tag=&#39;vip&#39;&#34;]
+    A4 --&gt; A5[&#34;t=5&lt;br/&gt;add tag=&#39;blocked&#39;&#34;]
+    A5 --&gt; A6[&#34;t=6&lt;br/&gt;retract tag=&#39;blocked&#39;&#34;]
+    A6 --&gt; Snap[&#34;snapshot&lt;br/&gt;name = &#39;Alice&#39;&lt;br/&gt;tag = [&#39;vip&#39;]&#34;]
+
+    style Snap fill:none</pre><script src="/mermaid.min.js"></script><script>mermaid.initialize({"flowchart":{"useMaxWidth":true},"theme":"default"})</script><p>Die zurückgezogene Aussage <code>name='Alicia'</code> bleibt im Ledger. Die Projektion überspringt sie, sodass die ältere Aussage <code>'Alice'</code> wieder die neueste nicht zurückgezogene einwertige Aussage ist. Die Retraktion selbst ist ein Ledger-Eintrag mit eigenem Zeitstempel, eigenen Metadaten und einem expliziten Verweis auf die zurückgezogene Aussage. Ein Audit-Reader kann daher nicht nur erkennen, dass eine Aussage zurückgezogen wurde, sondern auch wer sie wann und aus welchem Grund zurückgezogen hat. Der Snapshot ist reproduzierbar: Dasselbe Ledger ergibt unter denselben Projektionsregeln jedes Mal denselben Snapshot. Für jeden historischen Schnitt des Ledgers liefert dasselbe Verfahren den Snapshot, der zu diesem Zeitpunkt gegolten hätte. Genau diese Determiniertheit unterscheidet den Snapshot von kanonischem Zustand: Er enthält keine Information, die nicht bereits durch das Ledger gestützt wird, und kann später jederzeit ohne weitere Quelle neu berechnet werden.</p>
+<p>Die Standardprojektion folgt den beschriebenen Kardinalitätsregeln. Zusätzlich unterstützt der Kernel benannte <em>Views</em>, die alternative Reduktionsstrategien auf dasselbe Ledger anwenden, etwa andere Aggregationsregeln für Confidence, Zeitgrenzen oder Einschränkungen auf bestimmte Quellen. Views werden in den Guides dort eingeführt, wo sie gebraucht werden. Für den konzeptionellen Teil reicht die Standardreduktion aus. Die Eigenschaft, dass Snapshots Projektionen des Ledgers sind, gilt für jede View gleichermaßen.</p>
+<p>Query-Ergebnisse, die durch das Ausführen einer <code>Rule</code> gegen das Ledger entstehen, sind Projektionen im selben Sinn. Der Kernel reduziert das Ledger nach dem Body der Regel und gibt die Variablenbindungen zurück, die ihn erfüllen. Die Kardinalität einzelner Felder ist ein Parameter dieser Reduktion, die logische Struktur der Regel ein anderer. Die darauf aufbauende Reasoning-Schicht wird unter <a href="rules-and-derivations.md">Regeln und Ableitungen</a> behandelt.</p>
+<h2 id="projektionen-und-ableitungen">Projektionen und Ableitungen<a class="anchor" href="#projektionen-und-ableitungen">#</a></h2>
+<p>Das Ledger ist an zwei strukturell verschiedenen Operationen beteiligt. Sie auseinanderzuhalten ist wichtig, weil sie oberflächlich ähnlich wirken, aber in einem sehr unterschiedlichen epistemischen Verhältnis zu den Daten stehen.</p>
+<p>Eine <em>Projektion</em> ist eine reine Reduktion des Ledgers. Der Kernel berechnet sie, ohne Informationen hinzuzufügen, die nicht schon in den Einträgen liegen. Bei gleichem Ledger und gleichen Reduktionsregeln ist das Ergebnis in jedem Lauf gleich. Snapshots und Query-Zeilen sind Projektionen in diesem Sinn. Wer sie liest, liest etwas, das bereits implizit im Ledger enthalten ist.</p>
+<p>Eine <em>Ableitung</em> dagegen ist eine Regel, deren Head neue Fakten vorschlägt, wenn ihr Body erfüllt ist. Wird eine Ableitung gegen das Ledger ausgeführt, entstehen <em>Kandidaten</em>: Fakten in der vom Head angegebenen Form, aus dem Ledger unter der Regel abgeleitet, aber noch nicht im Ledger enthalten. Erst ein separater Annahmeschritt macht sie zu Ledger-Einträgen. Die Annahme hängt den Kandidaten als neue Aussage an und übernimmt seine Evidenz als Provenienz des neuen Eintrags. Architektonisch ist die Unterscheidung entscheidend: Alles im Ledger wurde entweder direkt geschrieben oder durch eine identifizierbare Entscheidung aus einem Kandidaten akzeptiert. Projektionen dagegen sind read-only-Berechnungen aus diesen Einträgen und fügen nichts Neues hinzu. Der Candidate-and-Acceptance-Mechanismus wird vollständig auf der Seite <a href="rules-and-derivations.md">Regeln und Ableitungen</a> entwickelt.</p>
+<h2 id="persistenz">Persistenz<a class="anchor" href="#persistenz">#</a></h2>
+<p>Standardmäßig lebt das Ledger im Speicher. Ein Store, der mit <code>SDKStore.from_schema_classes([Person])</code> geöffnet wird, verwirft seinen Inhalt beim Beenden des Prozesses. Das ist das passende Verhalten für Tests und kurzlebige Berechnungen. Persistenz ist opt-in und wird über <code>ledger_path</code> aktiviert:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes([Person], ledger_path<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;./data/factpy.db&#34;</span>)</span></span></code></pre></div><p>Die Datei an diesem Pfad ist ein eigenständiger Store. Beim ersten Öffnen wird der Content-Digest des Schemas darin gespeichert. Bei jedem späteren Öffnen berechnet der Kernel den Digest aus dem übergebenen Schema erneut und vergleicht beide Werte. Wenn sich strukturell relevante Teile des Schemas so geändert haben, dass bestehende Aussagen nicht mehr lesbar wären — etwa durch ein umbenanntes Feld, eine geänderte Kardinalität oder eine veränderte Zusammensetzung der Identity —, schlägt das Öffnen mit einem expliziten Fehler fehl, statt die Daten stillschweigend neu zu interpretieren. Die Mechanik des Digests, der Unterschied zwischen lesbaren und nicht lesbaren Änderungen und die Migration alter Ledger unter neuen Schemas werden unter <a href="../../guides/persistence">Persistenz</a> im Detail behandelt.</p>
+<h2 id="warum-append-only">Warum append-only<a class="anchor" href="#warum-append-only">#</a></h2>
+<p>Der Preis von append-only-Schreiben ist, dass das Ledger monoton wächst. Ob dieses Wachstum akzeptabel ist, hängt davon ab, worauf man sonst verzichten müsste. Ein überschreibender Store hält nur den aktuellen Wert jedes Feldes und verwirft, was davor war. Eine Zeile in einer mutablen Tabelle enthält höchstens noch die Metadaten des letzten Schreibers. Frühere Zustände lassen sich in einem solchen Modell nur rekonstruieren, wenn ein zusätzliches System dafür eingerichtet wurde: ein Changelog, eine Audit-Tabelle, ein externes Log. In der Praxis sind solche Mechanismen selten vollständig zuverlässig, und meistens arbeiten sie gegen das Grunddesign der Datenbank, die darauf ausgelegt ist, genau einen aktuellen Wert möglichst effizient zu halten.</p>
+<p>Das append-only-Ledger kehrt dieses Modell um. Jede jemals gemachte Aussage bleibt mit ihren Herkunftsmetadaten erhalten. Jede Retraktion bleibt als eigenes Ereignis erhalten. Der aktuelle Zustand einer Entität ist eine Projektion, die jederzeit aus den darunterliegenden Einträgen neu berechnet werden kann. Ein Replay bis zu einem beliebigen früheren Zeitpunkt ist sinnvoll, weil die Einträge, aus denen der damalige Zustand entstanden ist, noch vorhanden sind. Provenienz liegt lokal am einzelnen Fakt, statt rückwärts aus einer Zeile aggregiert zu werden, die möglicherweise nacheinander von mehreren Akteuren verändert wurde. Die Audit-Geschichte, auf der factpy aufbaut — erklären, warum ein Fakt gilt, oder einen vollständigen Lauf zur Prüfung durch Dritte exportieren — beruht auf genau diesen Eigenschaften und braucht dafür keine zusätzliche Buchführung. Das monotone Wachstum ist der Preis dafür. Für Workloads, in denen diese Eigenschaften keine Rolle spielen, ist factpy das falsche Werkzeug. Für Workloads, in denen sie zählen, macht genau dieses Design sie handhabbar.</p>
+<h2 id="nächste-schritte">Nächste Schritte<a class="anchor" href="#n%c3%a4chste-schritte">#</a></h2>
+<p><a href="/docs/concepts/rules-and-derivations">Regeln und Ableitungen</a> entwickelt die Reasoning-Schicht, die das Ledger liest und Ergänzungen vorschlägt. <a href="/docs/concepts/audit-and-provenance">Audit und Provenienz</a> beschreibt, was zusammen mit dem Ledger exportiert wird, wenn ein Audit-Paket erzeugt wird. Der <a href="/docs/guides/reading-and-writing">Guide zum Lesen und Schreiben</a> behandelt die alltägliche Praxis: wann <code>set</code> die richtige Operation ist, wann <code>add</code>, wann <code>retract</code>, wie Batches verwendet werden und wie Schreibmetadaten konsistent durch eine Codebasis getragen werden.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/de/docs/concepts/overview/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Überblick</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/de/docs/concepts/entities-and-fields/" class="flex align-center">
+        <span>Entitäten und Felder</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#das-ledger">Das Ledger</a>
+      <ul>
+        <li><a href="#was-ein-eintrag-enthält">Was ein Eintrag enthält</a></li>
+        <li><a href="#was-set-add-und-retract-tatsächlich-tun">Was <code>set</code>, <code>add</code> und <code>retract</code> tatsächlich tun</a></li>
+        <li><a href="#snapshots-als-projektionen">Snapshots als Projektionen</a></li>
+        <li><a href="#projektionen-und-ableitungen">Projektionen und Ableitungen</a></li>
+        <li><a href="#persistenz">Persistenz</a></li>
+        <li><a href="#warum-append-only">Warum append-only</a></li>
+        <li><a href="#nächste-schritte">Nächste Schritte</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

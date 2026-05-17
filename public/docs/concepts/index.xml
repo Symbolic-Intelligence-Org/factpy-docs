@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Concepts on factgraph</title>
+    <link>http://localhost:1313/docs/concepts/</link>
+    <description>Recent content in Concepts on factgraph</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>[© CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)</copyright>
+    <atom:link href="http://localhost:1313/docs/concepts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Your first factgraph</title>
+      <link>http://localhost:1313/docs/concepts/first-factgraph/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/concepts/first-factgraph/</guid>
+      <description>&lt;h1 id=&#34;your-first-factgraph&#34;&gt;Your first FactGraph&lt;a class=&#34;anchor&#34; href=&#34;#your-first-factgraph&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;This page builds the smallest useful graph: a schema, two writes, and one read.&#xA;It uses only the in-memory SDK path so you can see the core model before adding&#xA;rules, inferences, workspaces, or persistence.&lt;/p&gt;&#xA;&lt;p&gt;A &lt;code&gt;FactGraph&lt;/code&gt; is a place where typed facts live. The schema says what kinds of&#xA;things the graph can talk about. Writes append assertions to the graph ledger.&#xA;Reads resolve those assertions into the current snapshot of an entity.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Schema</title>
+      <link>http://localhost:1313/docs/concepts/schema/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/concepts/schema/</guid>
+      <description>&lt;h1 id=&#34;define-a-schema&#34;&gt;Define a schema&lt;a class=&#34;anchor&#34; href=&#34;#define-a-schema&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The schema is the vocabulary and coordinate system of a &lt;code&gt;FactGraph&lt;/code&gt;. It tells&#xA;the graph which kinds of entities exist, how each entity is located, and which&#xA;facts can be asserted at that location.&lt;/p&gt;&#xA;&lt;p&gt;The most important distinction is between &lt;code&gt;Identity&lt;/code&gt; and &lt;code&gt;Field&lt;/code&gt;:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;Identity&lt;/code&gt; fields define the entity coordinate.&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;Field&lt;/code&gt; descriptors define fact content attached to that coordinate.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;This is not a database table model where a primary key is the only identifier&#xA;and every other column is mutable content. In FactGraph, all &lt;code&gt;Identity&lt;/code&gt; fields&#xA;participate in the generated entity reference. &lt;code&gt;primary_key=True&lt;/code&gt; marks the&#xA;logical anchor used by authoring and cross-coordinate joins; it does not exclude&#xA;non-primary identities from the coordinate.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Read and Write</title>
+      <link>http://localhost:1313/docs/concepts/read-write/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/concepts/read-write/</guid>
+      <description>&lt;h1 id=&#34;read-and-write-facts&#34;&gt;Read and write facts&lt;a class=&#34;anchor&#34; href=&#34;#read-and-write-facts&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The first two pages showed the shape of a graph. This page focuses on what&#xA;happens when you write and read data.&lt;/p&gt;&#xA;&lt;p&gt;A &lt;code&gt;FactGraph&lt;/code&gt; is not a mutable table. A write appends an assertion to the&#xA;ledger. A read asks the graph to resolve the active assertions for an entity&#xA;and return a read-only snapshot. That distinction is why the API talks about&#xA;references, assertion ids, and snapshots instead of object mutation.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Assertions</title>
+      <link>http://localhost:1313/docs/concepts/assertions/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/concepts/assertions/</guid>
+      <description>&lt;h1 id=&#34;assertion-records-and-views&#34;&gt;Assertion records and views&lt;a class=&#34;anchor&#34; href=&#34;#assertion-records-and-views&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Read and write worked at the snapshot level. This page goes one layer deeper.&#xA;Every fact you wrote is an &lt;code&gt;assertion&lt;/code&gt;, and every assertion has a durable&#xA;identity called &lt;code&gt;asrt_id&lt;/code&gt;. Working at this level is how you do precise edits,&#xA;named record selections, and audit-friendly retracts without ambiguity.&lt;/p&gt;&#xA;&lt;p&gt;The mental model is:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ledger&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -&amp;gt; assertion records (asrt_id + value + meta + active/revoked)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    -&amp;gt; grouped by entity coordinate     -&amp;gt; EntitySnapshot&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    -&amp;gt; selected by id membership        -&amp;gt; FrozenAssertionView&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    -&amp;gt; looked up by id                  -&amp;gt; fg.assertions.by_id&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The discipline is:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Semantics</title>
+      <link>http://localhost:1313/docs/concepts/semantics/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/concepts/semantics/</guid>
+      <description>&lt;h1 id=&#34;configure-inference-semantics&#34;&gt;Configure inference semantics&lt;a class=&#34;anchor&#34; href=&#34;#configure-inference-semantics&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The previous pages used the default native evaluator. This page shows how to&#xA;attach engine-specific semantics when evaluating an &lt;code&gt;Inference&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;p&gt;Semantics are call-time configuration. They do not live inside the inference&#xA;template, and they do not change the ledger lifecycle:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Inference -&amp;gt; evaluate -&amp;gt; CandidateSet -&amp;gt; accept -&amp;gt; ledger assertion&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Use this page to learn the shape of the public API. It does not teach the&#xA;mathematics of ProbLog or PyReason.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Evidence</title>
+      <link>http://localhost:1313/docs/concepts/evidence/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/concepts/evidence/</guid>
+      <description>&lt;h1 id=&#34;evidence-what-if-and-audit&#34;&gt;Evidence: what-if and audit&lt;a class=&#34;anchor&#34; href=&#34;#evidence-what-if-and-audit&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The earlier pages wrote facts and ran rules. This page covers the read-only&#xA;side: asking the graph whether a hypothetical fact would hold, why a check&#xA;failed, what would happen under an imagined fact or rule edit, and how to&#xA;compare two persisted rounds.&lt;/p&gt;&#xA;&lt;p&gt;Every method on this page is read-only. None of them writes to the ledger,&#xA;mutates the registry, or changes schema. The two top-level taxonomies are:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Rules &amp; Inference</title>
+      <link>http://localhost:1313/docs/concepts/rules-and-inferences/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/concepts/rules-and-inferences/</guid>
+      <description>&lt;h1 id=&#34;rules-and-inferences&#34;&gt;Rules and inferences&lt;a class=&#34;anchor&#34; href=&#34;#rules-and-inferences&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The previous pages wrote facts directly. Rules and inferences let you describe&#xA;patterns over those facts.&lt;/p&gt;&#xA;&lt;p&gt;A &lt;code&gt;Rule&lt;/code&gt; asks the graph what is already true. It is a reusable read query over&#xA;the current snapshot.&lt;/p&gt;&#xA;&lt;p&gt;An &lt;code&gt;Inference&lt;/code&gt; proposes new facts from existing facts. It does not write by&#xA;itself. Evaluation produces candidates, and accepting a candidate appends the&#xA;new assertion to the ledger.&lt;/p&gt;&#xA;&lt;p&gt;The short version is:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Persistence</title>
+      <link>http://localhost:1313/docs/concepts/persistence/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/concepts/persistence/</guid>
+      <description>&lt;h1 id=&#34;save-rules-inferences-and-workspaces&#34;&gt;Save rules, inferences, and workspaces&lt;a class=&#34;anchor&#34; href=&#34;#save-rules-inferences-and-workspaces&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;The earlier pages kept everything in memory. This page adds persistence.&lt;/p&gt;&#xA;&lt;p&gt;There are two layers:&lt;/p&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Need&lt;/th&gt;&#xA;          &lt;th&gt;Use&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Save one reusable rule or inference&lt;/td&gt;&#xA;          &lt;td&gt;&lt;code&gt;fg.rules.save(...)&lt;/code&gt; / &lt;code&gt;fg.inferences.save(...)&lt;/code&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Load a saved authoring asset&lt;/td&gt;&#xA;          &lt;td&gt;&lt;code&gt;fg.rules.load(...)&lt;/code&gt; / &lt;code&gt;fg.inferences.load(...)&lt;/code&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Save the whole graph state&lt;/td&gt;&#xA;          &lt;td&gt;&lt;code&gt;fg.save()&lt;/code&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;Restore the whole graph state&lt;/td&gt;&#xA;          &lt;td&gt;&lt;code&gt;FactGraph.load(...)&lt;/code&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;Think of the registry as the place for authoring assets, and the workspace as&#xA;the place for a complete graph state. A workspace contains the ledger, schema&#xA;metadata, registry, and a workspace manifest.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Namespace Map</title>
+      <link>http://localhost:1313/docs/concepts/namespace-map/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/docs/concepts/namespace-map/</guid>
+      <description>&lt;h1 id=&#34;namespace-map&#34;&gt;Namespace map&lt;a class=&#34;anchor&#34; href=&#34;#namespace-map&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;This page is a map. It is not a separate subsystem. After the earlier quickstart&#xA;pages, this is where you scan the full kernel SDK surface, see the design&#xA;philosophy behind each namespace, and find the right call when you know what&#xA;you want to do.&lt;/p&gt;&#xA;&lt;p&gt;Two reading paths:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;If you want to know &lt;strong&gt;what to import&lt;/strong&gt;, see the public imports table at the&#xA;bottom.&lt;/li&gt;&#xA;&lt;li&gt;If you want to know &lt;strong&gt;which method to call&lt;/strong&gt;, scan the namespace tables.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;Flat methods on &lt;code&gt;FactGraph&lt;/code&gt; are still supported for backwards compatibility,&#xA;but the namespaced form is the teaching path and the form used by every other&#xA;quickstart page.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

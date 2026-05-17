@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Configure inference semantics# The previous pages used the default native evaluator. This page shows how to attach engine-specific semantics when evaluating an Inference.
+Semantics are call-time configuration. They do not live inside the inference template, and they do not change the ledger lifecycle:
+Inference -&gt; evaluate -&gt; CandidateSet -&gt; accept -&gt; ledger assertionUse this page to learn the shape of the public API. It does not teach the mathematics of ProbLog or PyReason.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/concepts/semantics/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Semantics">
+  <meta property="og:description" content="Configure inference semantics# The previous pages used the default native evaluator. This page shows how to attach engine-specific semantics when evaluating an Inference.
+Semantics are call-time configuration. They do not live inside the inference template, and they do not change the ledger lifecycle:
+Inference -&gt; evaluate -&gt; CandidateSet -&gt; accept -&gt; ledger assertionUse this page to learn the shape of the public API. It does not teach the mathematics of ProbLog or PyReason.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Semantics">
+  <meta itemprop="description" content="Configure inference semantics# The previous pages used the default native evaluator. This page shows how to attach engine-specific semantics when evaluating an Inference.
+Semantics are call-time configuration. They do not live inside the inference template, and they do not change the ledger lifecycle:
+Inference -&gt; evaluate -&gt; CandidateSet -&gt; accept -&gt; ledger assertionUse this page to learn the shape of the public API. It does not teach the mathematics of ProbLog or PyReason.">
+  <meta itemprop="wordCount" content="1047">
+
+<title>Semantics | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/concepts/semantics/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.f2649702e93cd1a98c670a367e867d65e997b099e0d56919036121e2b932509f.js" integrity="sha256-8mSXAuk80amMZwo2foZ9ZemXsJng1WkZA2Eh4rkyUJ8=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/" class="">
+      Concepts</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="active">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Semantics</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#configure-inference-semantics">Configure inference semantics</a>
+      <ul>
+        <li><a href="#which-semantics-object-should-i-use">Which semantics object should I use?</a></li>
+        <li><a href="#build-an-inference-with-a-stable-branch-id">Build an inference with a stable branch id</a></li>
+        <li><a href="#inspect-problog-semantics">Inspect ProbLog semantics</a></li>
+        <li><a href="#inspect-pyreason-semantics">Inspect PyReason semantics</a></li>
+        <li><a href="#use-semanticsprofile-when-you-need-the-canonical-form">Use SemanticsProfile when you need the canonical form</a></li>
+        <li><a href="#semantics-do-not-change-acceptance">Semantics do not change acceptance</a></li>
+        <li><a href="#what-not-to-do">What not to do</a></li>
+        <li><a href="#complete-example">Complete example</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="configure-inference-semantics">Configure inference semantics<a class="anchor" href="#configure-inference-semantics">#</a></h1>
+<p>The previous pages used the default native evaluator. This page shows how to
+attach engine-specific semantics when evaluating an <code>Inference</code>.</p>
+<p>Semantics are call-time configuration. They do not live inside the inference
+template, and they do not change the ledger lifecycle:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Inference -&gt; evaluate -&gt; CandidateSet -&gt; accept -&gt; ledger assertion</span></span></code></pre></div><p>Use this page to learn the shape of the public API. It does not teach the
+mathematics of ProbLog or PyReason.</p>
+<h2 id="which-semantics-object-should-i-use">Which semantics object should I use?<a class="anchor" href="#which-semantics-object-should-i-use">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>Need</th>
+          <th>Use</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>ProbLog branch probabilities</td>
+          <td><code>ProbLogSemantics(...)</code></td>
+      </tr>
+      <tr>
+          <td>PyReason time delay or interval bounds</td>
+          <td><code>PyReasonSemantics(...)</code></td>
+      </tr>
+      <tr>
+          <td>Lower-level canonical control</td>
+          <td><code>SemanticsProfile(...)</code></td>
+      </tr>
+      <tr>
+          <td>See what a semantics object means</td>
+          <td><code>fg.eval.inspect_semantics(...)</code></td>
+      </tr>
+  </tbody>
+</table>
+<p>Most application code should start with <code>ProbLogSemantics</code> or
+<code>PyReasonSemantics</code>. <code>SemanticsProfile</code> is public, but it is the advanced
+canonical form that adapters consume internally.</p>
+<h2 id="build-an-inference-with-a-stable-branch-id">Build an inference with a stable branch id<a class="anchor" href="#build-an-inference-with-a-stable-branch-id">#</a></h2>
+<p>Branch ids matter because public semantics wrappers refer to branches by id.
+Use explicit <code>Branch(id=...)</code> values when you plan to configure branch-level
+semantics.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> (
+</span></span><span style="display:flex;"><span>    Branch,
+</span></span><span style="display:flex;"><span>    Entity,
+</span></span><span style="display:flex;"><span>    FactGraph,
+</span></span><span style="display:flex;"><span>    Field,
+</span></span><span style="display:flex;"><span>    Identity,
+</span></span><span style="display:flex;"><span>    Inference,
+</span></span><span style="display:flex;"><span>    Pred,
+</span></span><span style="display:flex;"><span>    ProbLogSemantics,
+</span></span><span style="display:flex;"><span>    PyReasonSemantics,
+</span></span><span style="display:flex;"><span>    SemanticsProfile,
+</span></span><span style="display:flex;"><span>    SDKStoreError,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">vars</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    tag_seed: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tag: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[User])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>tag_seed, alice, <span style="color:#5af78e">&#34;engineer&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    tags_from_seed <span style="color:#ff6ac1">=</span> Inference(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;inf.tags_from_seed&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Branch([Pred(<span style="color:#5af78e">&#34;user:tag_seed&#34;</span>, u, tag)], <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed_path&#34;</span>)],
+</span></span><span style="display:flex;"><span>        target<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;user:tag&#34;</span>,
+</span></span><span style="display:flex;"><span>        head_vars<span style="color:#ff6ac1">=</span>[u, tag],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>inspection <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>inspect(tags_from_seed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> inspection[<span style="color:#5af78e">&#34;kind&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Inference&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> inspection[<span style="color:#5af78e">&#34;branches&#34;</span>][<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;seed_path&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> inspection[<span style="color:#5af78e">&#34;branches&#34;</span>][<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;fallback_id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;b0&#34;</span></span></span></code></pre></div><p>The explicit id <code>seed_path</code> is the stable user-facing key. The fallback id
+<code>b0</code> is also accepted, but explicit ids make later examples easier to read.</p>
+<h2 id="inspect-problog-semantics">Inspect ProbLog semantics<a class="anchor" href="#inspect-problog-semantics">#</a></h2>
+<p><code>ProbLogSemantics</code> lets you attach probabilities to branch ids. The SDK can
+derive <code>engine=&quot;problog&quot;</code> from the wrapper, so you usually do not need to pass
+<code>engine=</code> yourself.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>problog <span style="color:#ff6ac1">=</span> ProbLogSemantics(branch_probabilities<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;seed_path&#34;</span>: <span style="color:#ff9f43">0.7</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> problog<span style="color:#ff6ac1">.</span>engine <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;problog&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> problog<span style="color:#ff6ac1">.</span>branch_probabilities[<span style="color:#5af78e">&#34;seed_path&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">0.7</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>preview <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>inspect_semantics(problog)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> preview[<span style="color:#5af78e">&#34;semantics_type&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;ProbLogSemantics&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> preview[<span style="color:#5af78e">&#34;engine&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;problog&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> preview[<span style="color:#5af78e">&#34;lowered_profile&#34;</span>][<span style="color:#5af78e">&#34;engine&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;problog&#34;</span></span></span></code></pre></div><p>The preview is structural. It tells you which engine the wrapper selects and
+what canonical profile shape it lowers toward. Branch probabilities are
+resolved against a concrete <code>Inference</code> when you evaluate that inference,
+because only the inference knows which branch id maps to which branch index.</p>
+<p>The evaluation call keeps the same lifecycle:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>candidates <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>evaluate(tags_from_seed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">len</span>(candidates) <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> ()</span></span></code></pre></div><p>Engine-specific evaluation uses the same public call site:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#78787e"># Shape only. This page does not require a ProbLog runtime to be installed.</span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># candidates = fg.eval.evaluate(tags_from_seed, semantics=problog)</span></span></span></code></pre></div><p>Whether the evaluator is native, ProbLog, or PyReason, <code>evaluate(...)</code> produces
+candidates. It does not write accepted facts.</p>
+<p>If you pass <code>engine=...</code> explicitly, it must match the wrapper:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">try</span>:
+</span></span><span style="display:flex;"><span>    fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>evaluate(tags_from_seed, engine<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;pyreason&#34;</span>, semantics<span style="color:#ff6ac1">=</span>problog)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">except</span> SDKStoreError <span style="color:#ff6ac1">as</span> exc:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">assert</span> <span style="color:#5af78e">&#34;does not match&#34;</span> <span style="color:#ff6ac1">in</span> <span style="color:#ff5c57">str</span>(exc)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">else</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">raise</span> AssertionError(<span style="color:#5af78e">&#34;mismatched engine should be rejected&#34;</span>)</span></span></code></pre></div><p>Most code should omit <code>engine=</code> when using a public wrapper. The SDK derives
+the engine from <code>ProbLogSemantics</code> or <code>PyReasonSemantics</code>.</p>
+<h2 id="inspect-pyreason-semantics">Inspect PyReason semantics<a class="anchor" href="#inspect-pyreason-semantics">#</a></h2>
+<p><code>PyReasonSemantics</code> configures PyReason-specific time and interval behavior.
+The common quickstart knobs are:</p>
+<ul>
+<li><code>timestep_delay</code>: delay attached to compiled rules</li>
+<li><code>head_bound</code>: global interval for rule heads</li>
+<li><code>branch_bounds</code>: per-branch interval overrides keyed by branch id</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pyreason <span style="color:#ff6ac1">=</span> PyReasonSemantics(
+</span></span><span style="display:flex;"><span>    timestep_delay<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">2</span>,
+</span></span><span style="display:flex;"><span>    head_bound<span style="color:#ff6ac1">=</span>[<span style="color:#ff9f43">0.7</span>, <span style="color:#ff9f43">0.9</span>],
+</span></span><span style="display:flex;"><span>    branch_bounds<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;seed_path&#34;</span>: [<span style="color:#ff9f43">0.8</span>, <span style="color:#ff9f43">1.0</span>]},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> pyreason<span style="color:#ff6ac1">.</span>engine <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;pyreason&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> pyreason<span style="color:#ff6ac1">.</span>head_bound <span style="color:#ff6ac1">==</span> (<span style="color:#ff9f43">0.7</span>, <span style="color:#ff9f43">0.9</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> pyreason<span style="color:#ff6ac1">.</span>branch_bounds[<span style="color:#5af78e">&#34;seed_path&#34;</span>] <span style="color:#ff6ac1">==</span> (<span style="color:#ff9f43">0.8</span>, <span style="color:#ff9f43">1.0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>preview <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>inspect_semantics(pyreason)
+</span></span><span style="display:flex;"><span>entries <span style="color:#ff6ac1">=</span> preview[<span style="color:#5af78e">&#34;lowered_profile&#34;</span>][<span style="color:#5af78e">&#34;rule_projection&#34;</span>][<span style="color:#5af78e">&#34;pyreason&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> preview[<span style="color:#5af78e">&#34;semantics_type&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;PyReasonSemantics&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> preview[<span style="color:#5af78e">&#34;engine&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;pyreason&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {<span style="color:#5af78e">&#34;target&#34;</span>: <span style="color:#5af78e">&#34;head:0&#34;</span>, <span style="color:#5af78e">&#34;kind&#34;</span>: <span style="color:#5af78e">&#34;interval&#34;</span>, <span style="color:#5af78e">&#34;value&#34;</span>: [<span style="color:#ff9f43">0.7</span>, <span style="color:#ff9f43">0.9</span>]} <span style="color:#ff6ac1">in</span> entries
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {<span style="color:#5af78e">&#34;target&#34;</span>: <span style="color:#5af78e">&#34;branch:0&#34;</span>, <span style="color:#5af78e">&#34;kind&#34;</span>: <span style="color:#5af78e">&#34;interval&#34;</span>, <span style="color:#5af78e">&#34;value&#34;</span>: [<span style="color:#ff9f43">0.8</span>, <span style="color:#ff9f43">1.0</span>]} <span style="color:#ff6ac1">in</span> entries
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {<span style="color:#5af78e">&#34;target&#34;</span>: <span style="color:#5af78e">&#34;rule&#34;</span>, <span style="color:#5af78e">&#34;kind&#34;</span>: <span style="color:#5af78e">&#34;timestep_delay&#34;</span>, <span style="color:#5af78e">&#34;value&#34;</span>: <span style="color:#ff9f43">2</span>} <span style="color:#ff6ac1">in</span> entries</span></span></code></pre></div><p>The branch-specific bound overrides the global <code>head_bound</code> for that branch.
+Branches without a branch-specific bound keep the global value.</p>
+<p><code>inspect_semantics(...)</code> can preview the wrapper shape without running an
+engine. During real evaluation, branch ids are resolved against the concrete
+<code>Inference</code>. That is why explicit branch ids are useful.</p>
+<p>The user-facing branch id is lowered to the adapter&rsquo;s branch index. In the
+preview above, <code>&quot;seed_path&quot;</code> becomes <code>&quot;branch:0&quot;</code> because it is the first branch
+in the inference.</p>
+<h2 id="use-semanticsprofile-when-you-need-the-canonical-form">Use SemanticsProfile when you need the canonical form<a class="anchor" href="#use-semanticsprofile-when-you-need-the-canonical-form">#</a></h2>
+<p><code>SemanticsProfile</code> is the lower-level profile shape consumed by runtime
+adapters. It remains public for advanced users, service JSON compatibility,
+and direct canonical configuration.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>profile <span style="color:#ff6ac1">=</span> SemanticsProfile(name<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;manual.native&#34;</span>, engine<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;native&#34;</span>)
+</span></span><span style="display:flex;"><span>profile_preview <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>inspect_semantics(profile)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> profile_preview[<span style="color:#5af78e">&#34;engine&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;native&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> profile_preview[<span style="color:#5af78e">&#34;profile&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;manual.native&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#5af78e">&#34;lowered_profile&#34;</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">in</span> profile_preview</span></span></code></pre></div><p>Public wrappers return wrapper metadata plus a lowered-profile preview.
+<code>SemanticsProfile</code> is already canonical, so inspection returns the canonical
+inspection directly.</p>
+<h2 id="semantics-do-not-change-acceptance">Semantics do not change acceptance<a class="anchor" href="#semantics-do-not-change-acceptance">#</a></h2>
+<p>Semantics choose how candidates are produced. Acceptance is still explicit.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>before <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(before<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> ()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>candidate <span style="color:#ff6ac1">=</span> candidates[<span style="color:#ff9f43">0</span>]
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>accept(candidate)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>after <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(after<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> (<span style="color:#5af78e">&#34;engineer&#34;</span>,)</span></span></code></pre></div><p>Keep this separation in mind:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Step</th>
+          <th>Question</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>Inference</code></td>
+          <td>What could be derived?</td>
+      </tr>
+      <tr>
+          <td><code>semantics=...</code></td>
+          <td>How should an engine evaluate it?</td>
+      </tr>
+      <tr>
+          <td><code>CandidateSet</code></td>
+          <td>What did evaluation propose?</td>
+      </tr>
+      <tr>
+          <td><code>accept(...)</code></td>
+          <td>Which candidate facts enter the ledger?</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="what-not-to-do">What not to do<a class="anchor" href="#what-not-to-do">#</a></h2>
+<p>Do not put engine semantics inside the <code>Inference</code> definition. The same
+inference can be evaluated with different semantics objects.</p>
+<p>Do not use <code>SemanticsProfile</code> for basic ProbLog or PyReason examples unless
+you need the advanced canonical form. The wrappers are easier to read.</p>
+<p>Do not assume <code>inspect_semantics(...)</code> runs an engine. It only shows structure.</p>
+<p>Do not expect <code>evaluate(...)</code> to write facts. It returns candidates; accepting
+them writes ledger assertions.</p>
+<h2 id="complete-example">Complete example<a class="anchor" href="#complete-example">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> (
+</span></span><span style="display:flex;"><span>    Branch,
+</span></span><span style="display:flex;"><span>    Entity,
+</span></span><span style="display:flex;"><span>    FactGraph,
+</span></span><span style="display:flex;"><span>    Field,
+</span></span><span style="display:flex;"><span>    Identity,
+</span></span><span style="display:flex;"><span>    Inference,
+</span></span><span style="display:flex;"><span>    Pred,
+</span></span><span style="display:flex;"><span>    ProbLogSemantics,
+</span></span><span style="display:flex;"><span>    PyReasonSemantics,
+</span></span><span style="display:flex;"><span>    SDKStoreError,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">vars</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    tag_seed: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tag: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[User])
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>tag_seed, alice, <span style="color:#5af78e">&#34;engineer&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    inference <span style="color:#ff6ac1">=</span> Inference(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;inf.tags_from_seed&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Branch([Pred(<span style="color:#5af78e">&#34;user:tag_seed&#34;</span>, u, tag)], <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed_path&#34;</span>)],
+</span></span><span style="display:flex;"><span>        target<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;user:tag&#34;</span>,
+</span></span><span style="display:flex;"><span>        head_vars<span style="color:#ff6ac1">=</span>[u, tag],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>problog <span style="color:#ff6ac1">=</span> ProbLogSemantics(branch_probabilities<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;seed_path&#34;</span>: <span style="color:#ff9f43">0.7</span>})
+</span></span><span style="display:flex;"><span>pyreason <span style="color:#ff6ac1">=</span> PyReasonSemantics(
+</span></span><span style="display:flex;"><span>    timestep_delay<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">2</span>,
+</span></span><span style="display:flex;"><span>    head_bound<span style="color:#ff6ac1">=</span>[<span style="color:#ff9f43">0.7</span>, <span style="color:#ff9f43">0.9</span>],
+</span></span><span style="display:flex;"><span>    branch_bounds<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;seed_path&#34;</span>: [<span style="color:#ff9f43">0.8</span>, <span style="color:#ff9f43">1.0</span>]},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>inspect_semantics(problog)[<span style="color:#5af78e">&#34;engine&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;problog&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>inspect_semantics(pyreason)[<span style="color:#5af78e">&#34;engine&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;pyreason&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">try</span>:
+</span></span><span style="display:flex;"><span>    fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>evaluate(inference, engine<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;pyreason&#34;</span>, semantics<span style="color:#ff6ac1">=</span>problog)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">except</span> SDKStoreError <span style="color:#ff6ac1">as</span> exc:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">assert</span> <span style="color:#5af78e">&#34;does not match&#34;</span> <span style="color:#ff6ac1">in</span> <span style="color:#ff5c57">str</span>(exc)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">else</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">raise</span> AssertionError(<span style="color:#5af78e">&#34;mismatched engine should be rejected&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>candidates <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>evaluate(inference)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> ()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>accept(candidates[<span style="color:#ff9f43">0</span>])
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> (<span style="color:#5af78e">&#34;engineer&#34;</span>,)</span></span></code></pre></div><h2 id="syntax-checklist">Syntax checklist<a class="anchor" href="#syntax-checklist">#</a></h2>
+<ul>
+<li>Semantics are evaluate-time configuration.</li>
+<li>Use <code>ProbLogSemantics(...)</code> for ProbLog branch probabilities.</li>
+<li>Use <code>PyReasonSemantics(...)</code> for PyReason delays, head bounds, and branch
+bounds.</li>
+<li>Use <code>SemanticsProfile(...)</code> only when you need the canonical lower-level
+profile.</li>
+<li><code>fg.eval.inspect_semantics(...)</code> inspects configuration; it does not run an
+engine.</li>
+<li>The SDK derives <code>engine=</code> from public wrappers; explicit mismatches are
+rejected.</li>
+<li>Branch-level semantics should use explicit <code>Branch(id=...)</code> names.</li>
+<li>Branch ids are lowered to adapter branch indexes such as <code>branch:0</code>.</li>
+<li><code>evaluate(...)</code> still returns candidates, and <code>accept(...)</code> still writes
+accepted facts.</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/concepts/assertions/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Assertions</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/concepts/evidence/" class="flex align-center">
+        <span>Evidence</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#configure-inference-semantics">Configure inference semantics</a>
+      <ul>
+        <li><a href="#which-semantics-object-should-i-use">Which semantics object should I use?</a></li>
+        <li><a href="#build-an-inference-with-a-stable-branch-id">Build an inference with a stable branch id</a></li>
+        <li><a href="#inspect-problog-semantics">Inspect ProbLog semantics</a></li>
+        <li><a href="#inspect-pyreason-semantics">Inspect PyReason semantics</a></li>
+        <li><a href="#use-semanticsprofile-when-you-need-the-canonical-form">Use SemanticsProfile when you need the canonical form</a></li>
+        <li><a href="#semantics-do-not-change-acceptance">Semantics do not change acceptance</a></li>
+        <li><a href="#what-not-to-do">What not to do</a></li>
+        <li><a href="#complete-example">Complete example</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

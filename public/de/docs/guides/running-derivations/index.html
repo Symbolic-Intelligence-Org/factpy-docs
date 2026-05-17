@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Ableitungen ausführen# Eine Ableitung ist eine Regel, deren Head neue Fakten vorschlägt, wenn der Body passt, statt Zeilen zurückzugeben. Der Lebenszyklus einer Ableitung besteht aus drei Schritten: Die Auswertung erzeugt Kandidaten aus dem aktuellen Ledger-Zustand, die Prüfung entscheidet, welche Kandidaten zu Fakten werden sollen, und die Annahme schreibt die akzeptierten Kandidaten als neue Ledger-Einträge, wobei ihre Evidenz als Provenienz erhalten bleibt. Dieser Guide zeigt die einzelnen Schritte in der Praxis. Die konzeptionelle Grundlage steht unter Regeln und Ableitungen.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/de/docs/guides/running-derivations/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Ableitungen ausführen">
+  <meta property="og:description" content="Ableitungen ausführen# Eine Ableitung ist eine Regel, deren Head neue Fakten vorschlägt, wenn der Body passt, statt Zeilen zurückzugeben. Der Lebenszyklus einer Ableitung besteht aus drei Schritten: Die Auswertung erzeugt Kandidaten aus dem aktuellen Ledger-Zustand, die Prüfung entscheidet, welche Kandidaten zu Fakten werden sollen, und die Annahme schreibt die akzeptierten Kandidaten als neue Ledger-Einträge, wobei ihre Evidenz als Provenienz erhalten bleibt. Dieser Guide zeigt die einzelnen Schritte in der Praxis. Die konzeptionelle Grundlage steht unter Regeln und Ableitungen.">
+  <meta property="og:locale" content="de">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Ableitungen ausführen">
+  <meta itemprop="description" content="Ableitungen ausführen# Eine Ableitung ist eine Regel, deren Head neue Fakten vorschlägt, wenn der Body passt, statt Zeilen zurückzugeben. Der Lebenszyklus einer Ableitung besteht aus drei Schritten: Die Auswertung erzeugt Kandidaten aus dem aktuellen Ledger-Zustand, die Prüfung entscheidet, welche Kandidaten zu Fakten werden sollen, und die Annahme schreibt die akzeptierten Kandidaten als neue Ledger-Einträge, wobei ihre Evidenz als Provenienz erhalten bleibt. Dieser Guide zeigt die einzelnen Schritte in der Praxis. Die konzeptionelle Grundlage steht unter Regeln und Ableitungen.">
+  <meta itemprop="wordCount" content="1572">
+
+<title>Ableitungen ausführen | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/de/docs/guides/running-derivations/">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/de.search.min.a92013675f37793ce9c8fb9acdda196dc19f26e429d7c863d62fdef621fe6daa.js" integrity="sha256-qSATZ183eTzpyPuazdoZbcGfJuQp18hj1i/e9iH&#43;bao=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/de/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Suche"
+    aria-label="Suche"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        Deutsch
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/" class="flex flex-auto">
+          English
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/quickstart/" class="">
+      Schnellstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="toggle"  />
+    <label for="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="flex">
+      <a role="button" class="">
+        Konzepte</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/overview/" class="">
+      Überblick</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/the-ledger/" class="">
+      Das Ledger</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/entities-and-fields/" class="">
+      Entitäten und Felder</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/rules-and-derivations/" class="">
+      Regeln und Ableitungen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/audit-and-provenance/" class="">
+      Audit und Provenienz</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-34058d101374bf945fbfadcda1396a3e" class="toggle" checked />
+    <label for="section-34058d101374bf945fbfadcda1396a3e" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/defining-a-schema/" class="">
+      Ein Schema definieren</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/reading-and-writing/" class="">
+      Lesen und Schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/writing-rules/" class="">
+      Regeln schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/running-derivations/" class="active">
+      Ableitungen ausführen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/persistence/" class="">
+      Persistenz</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/using-adapters/" class="">
+      Adapter verwenden</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-877dfaeda590afb0dbf2967bfa587bd2" class="toggle"  />
+    <label for="section-877dfaeda590afb0dbf2967bfa587bd2" class="flex">
+      <a href="/de/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Ableitungen ausführen</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#ableitungen-ausführen">Ableitungen ausführen</a>
+      <ul>
+        <li><a href="#eine-ableitung-deklarieren">Eine Ableitung deklarieren</a></li>
+        <li><a href="#auswerten">Auswerten</a></li>
+        <li><a href="#prüfen">Prüfen</a></li>
+        <li><a href="#akzeptieren">Akzeptieren</a></li>
+        <li><a href="#bodys-und-confidence">Bodys und Confidence</a></li>
+        <li><a href="#evidenz-nachträglich-lesen">Evidenz nachträglich lesen</a></li>
+        <li><a href="#muster-und-fallstricke">Muster und Fallstricke</a></li>
+        <li><a href="#nächste-schritte">Nächste Schritte</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="ableitungen-ausführen">Ableitungen ausführen<a class="anchor" href="#ableitungen-ausf%c3%bchren">#</a></h1>
+<p>Eine Ableitung ist eine Regel, deren Head neue Fakten vorschlägt, wenn der Body passt, statt Zeilen zurückzugeben. Der Lebenszyklus einer Ableitung besteht aus drei Schritten: Die Auswertung erzeugt Kandidaten aus dem aktuellen Ledger-Zustand, die Prüfung entscheidet, welche Kandidaten zu Fakten werden sollen, und die Annahme schreibt die akzeptierten Kandidaten als neue Ledger-Einträge, wobei ihre Evidenz als Provenienz erhalten bleibt. Dieser Guide zeigt die einzelnen Schritte in der Praxis. Die konzeptionelle Grundlage steht unter <a href="/docs/concepts/rules-and-derivations">Regeln und Ableitungen</a>.</p>
+<h2 id="eine-ableitung-deklarieren">Eine Ableitung deklarieren<a class="anchor" href="#eine-ableitung-deklarieren">#</a></h2>
+<p>Eine <code>Derivation</code> verwendet dieselbe Body-Sprache wie eine <code>Rule</code> und trägt ebenfalls ID und Version. Sie unterscheidet sich nur im Head: Eine <code>Rule</code> projiziert Variablenbindungen als Zeilen, eine <code>Derivation</code> deklariert einen faktförmigen Head, der beschreibt, was für jede passende Bindung vorgeschlagen werden soll.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Derivation, <span style="color:#ff5c57">vars</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;loc&#34;</span>, <span style="color:#5af78e">&#34;nm&#34;</span>) <span style="color:#ff6ac1">as</span> (u, loc, nm):
+</span></span><span style="display:flex;"><span>    auto_alias <span style="color:#ff6ac1">=</span> Derivation(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;drv.auto_alias&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[User(u), u<span style="color:#ff6ac1">.</span>locale <span style="color:#ff6ac1">==</span> loc, u<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> nm],
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>User<span style="color:#ff6ac1">.</span>tag(locale<span style="color:#ff6ac1">=</span>loc, tag<span style="color:#ff6ac1">=</span>nm),
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p>Das <code>where</code> ist ein gewöhnlicher Regel-Body. Der <code>head</code> ist ein <em>Feldaufruf</em> — <code>User.tag(...)</code> — und benennt den Fakt, den jeder Match vorschlagen soll. Identity-Koordinaten wie <code>locale=loc</code> werden aus den Variablenbindungen des Bodys gelesen; der Feldwert, hier <code>tag=nm</code>, ist der Wert, den der Body gebunden hat. Ein Match im Body erzeugt einen Kandidatenfakt im Head.</p>
+<p>Eine Ableitung kann pro Match mehrere zusammengehörige Fakten schreiben, indem eine Liste von Head-Feldaufrufen übergeben wird.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;loc&#34;</span>, <span style="color:#5af78e">&#34;nm&#34;</span>, <span style="color:#5af78e">&#34;tg&#34;</span>) <span style="color:#ff6ac1">as</span> (u, loc, nm, tg):
+</span></span><span style="display:flex;"><span>    multi <span style="color:#ff6ac1">=</span> Derivation(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;drv.multi&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[User(u), u<span style="color:#ff6ac1">.</span>locale <span style="color:#ff6ac1">==</span> loc, u<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> nm, u<span style="color:#ff6ac1">.</span>tag <span style="color:#ff6ac1">==</span> tg],
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            User<span style="color:#ff6ac1">.</span>name(locale<span style="color:#ff6ac1">=</span>loc, name<span style="color:#ff6ac1">=</span>nm),
+</span></span><span style="display:flex;"><span>            User<span style="color:#ff6ac1">.</span>tag(locale<span style="color:#ff6ac1">=</span>loc, tag<span style="color:#ff6ac1">=</span>tg),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p>Jede Bindung, die den Body erfüllt, erzeugt alle aufgelisteten Head-Fakten als Kandidaten. Das ist die passende Form, wenn mehrere zusammengehörige Fakten eine kohärente Einheit bilden und gemeinsam ausgewertet, geprüft und akzeptiert werden sollen, statt einzeln behandelt zu werden.</p>
+<h2 id="auswerten">Auswerten<a class="anchor" href="#auswerten">#</a></h2>
+<p><code>sdk.evaluate(derivation, mode=...)</code> führt die Ableitung gegen das aktuelle Ledger aus und gibt eine Liste von Kandidaten zurück.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>candidates <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>evaluate(auto_alias, mode<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;native&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;candidates:&#34;</span>, <span style="color:#ff5c57">len</span>(candidates))</span></span></code></pre></div><p>Ein Kandidat ist noch kein Teil des Ledgers. Er ist ein Vorschlag: Prädikat, Subjekt und Wert, die die Ableitung als Assertion vorschlägt, zusammen mit einem Evidenzpaket, das Regel, Version und die Ledger-Einträge nennt, die den Match gestützt haben. Solange der Kandidat nicht akzeptiert ist, hat sich im Ledger nichts geändert. Die Auswertung kann gegen dasselbe Ledger beliebig oft wiederholt werden, um zu prüfen, was vorgeschlagen würde, ohne etwas zu committen.</p>
+<p><code>mode=&quot;native&quot;</code> wählt den eingebauten Evaluator. Er ist für gewöhnliche logische Ableitungen die richtige Wahl. Für Reasoning-Formen, die der native Evaluator nicht abdeckt — Graph-Propagation, probabilistische Inferenz, großskaliges Datalog — gibt es die Alternativen <code>&quot;pyreason&quot;</code>, <code>&quot;problog&quot;</code> und <code>&quot;souffle&quot;</code>, die unter <a href="/docs/guides/using-adapters">Adapter verwenden</a> behandelt werden. Dasselbe <code>Derivation</code>-Objekt kann unter jeder Engine laufen; geändert wird nur der Evaluator, der es ausführt.</p>
+<p>Die Auswertung ist read-only und side-effect-free. Genau deshalb kann sie beliebig oft für Inspektion oder Review vor der Annahme ausgeführt werden, ohne eine spätere Annahme zu beeinflussen.</p>
+<h2 id="prüfen">Prüfen<a class="anchor" href="#pr%c3%bcfen">#</a></h2>
+<p>Zwischen Auswertung und Annahme liegt der Schritt, in dem entschieden wird, welche Kandidaten zu Fakten werden sollen. Der Kernel schreibt dafür keine bestimmte Form vor, weil sie vom jeweiligen System abhängt. Entscheidend ist nur, dass die Entscheidung zusammen mit den daraus entstehenden Writes aufgezeichnet wird. Erst dadurch wird die Audit-Story später interpretierbar.</p>
+<p>In einer automatisierten Pipeline ist die Prüfung meist ein Filter in normalem Code.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>to_accept <span style="color:#ff6ac1">=</span> [c <span style="color:#ff6ac1">for</span> c <span style="color:#ff6ac1">in</span> candidates <span style="color:#ff6ac1">if</span> c<span style="color:#ff6ac1">.</span>confidence <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">None</span> <span style="color:#ff6ac1">or</span> c<span style="color:#ff6ac1">.</span>confidence <span style="color:#ff6ac1">&gt;=</span> <span style="color:#ff9f43">0.8</span>]</span></span></code></pre></div><p>In einem Human-in-the-loop-Workflow werden Kandidaten in einer Oberfläche angezeigt und von einem Reviewer einzeln oder im Batch akzeptiert. Bei einer Ableitung, der per Policy vollständig vertraut wird und die keine Prüfung pro Kandidat braucht, reduziert sich der Filter auf die Identität: <code>to_accept = candidates</code>.</p>
+<p>Die konkrete Form der Entscheidung ist weniger wichtig als die Tatsache, dass sie getroffen und aufgezeichnet wird. Die Annahme schreibt zu jedem Ledger-Write einen Eintrag ins Decision Log, einschließlich Reviewer oder Policy, die den Kandidaten freigegeben hat. Die zentrale Eigenschaft lautet: Jeder Fakt im Ledger wurde entweder direkt geschrieben oder durch eine identifizierbare Entscheidung akzeptiert. Genau das macht den Audit-Trail verständlich, wenn ein Lauf später von Dritten geprüft wird. Der Decision-Log-Eintrag ist die Verbindung zwischen Kandidat und den Writes, die er erzeugt hat.</p>
+<h2 id="akzeptieren">Akzeptieren<a class="anchor" href="#akzeptieren">#</a></h2>
+<p><code>sdk.accept(candidate, approved_by=..., note=..., dry_run=...)</code> schreibt einen einzelnen Kandidaten ins Ledger.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>result <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>accept(candidate, approved_by<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;reviewer-44&#34;</span>, note<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;bulk import&#34;</span>)</span></span></code></pre></div><p>Die Argumente <code>approved_by</code> und <code>note</code> fließen ins Decision Log. Die Evidenz des Kandidaten — Regel-ID, Regelversion und stützende Ledger-Einträge — bleibt als Provenienz an der neuen Assertion erhalten. Acceptance ist idempotent: Wird derselbe Kandidat ein zweites Mal akzeptiert, entsteht kein weiterer Write. Der Duplikatversuch wird im Decision Log festgehalten.</p>
+<p>Für einen Batch von Kandidaten ist <code>accept_many</code> effizienter und bietet einen Parameter zur Steuerung der Atomarität.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>result <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>accept_many(to_accept, mode<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;atomic&#34;</span>)</span></span></code></pre></div><p><code>mode=&quot;atomic&quot;</code> schreibt alles oder nichts: Entweder werden alle Annahmen im Batch erfolgreich geschrieben und gemeinsam sichtbar, oder keine. <code>mode=&quot;best_effort&quot;</code> schreibt, was geschrieben werden kann, und gibt ein Ergebnis zurück, das Fehlschläge separat ausweist. Der atomare Modus passt, wenn die Kandidaten eine kohärente Einheit bilden — etwa wenn eine Ableitung zu einem User gemeinsam Name, Tier und Flag vorschlägt und alle drei nur zusammen sinnvoll sind. Best-Effort passt für unabhängige Kandidaten, bei denen teilweiser Fortschritt besser ist als keiner.</p>
+<p>Sowohl <code>accept</code> als auch <code>accept_many</code> akzeptieren <code>dry_run=True</code>. Damit werden die Writes nur vorgerechnet, ohne sie zu committen. Das Ergebnis hat dieselbe Form wie beim echten Schreiben und eignet sich für einen Preflight-Check oder für ein Interface, das einem Reviewer zeigt, was eine Annahme tun würde, bevor sie ausgeführt wird.</p>
+<h2 id="bodys-und-confidence">Bodys und Confidence<a class="anchor" href="#bodys-und-confidence">#</a></h2>
+<p>Eine Ableitung kann mehrere Wege zur selben Schlussfolgerung haben, mit unterschiedlichem Vertrauen in jeden Weg. Der Wrapper <code>Body(...)</code> macht diese Pfade explizit und versieht sie mit einem Confidence-Wert.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Body, Pred
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;loc&#34;</span>, <span style="color:#5af78e">&#34;tg&#34;</span>) <span style="color:#ff6ac1">as</span> (u, loc, tg):
+</span></span><span style="display:flex;"><span>    vip_inference <span style="color:#ff6ac1">=</span> Derivation(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;drv.vip&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            Body([User(u), u<span style="color:#ff6ac1">.</span>locale <span style="color:#ff6ac1">==</span> loc, Pred(<span style="color:#5af78e">&#34;profile:vip&#34;</span>, u, <span style="color:#ff6ac1">True</span>)],
+</span></span><span style="display:flex;"><span>                 confidence<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">0.95</span>),
+</span></span><span style="display:flex;"><span>            Body([User(u), u<span style="color:#ff6ac1">.</span>locale <span style="color:#ff6ac1">==</span> loc, Pred(<span style="color:#5af78e">&#34;model:high_value&#34;</span>, u, tg)],
+</span></span><span style="display:flex;"><span>                 confidence<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">0.6</span>),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>User<span style="color:#ff6ac1">.</span>tag(locale<span style="color:#ff6ac1">=</span>loc, tag<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;vip&#34;</span>),
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p>Jeder <code>Body</code> ist ein alternativer Match-Pfad. Die Bodys werden per Oder verbunden: Ein Kandidat entsteht, wenn irgendeiner der Bodys für eine Bindung erfüllt ist. Kandidaten tragen die Confidence des Bodys, der sie erzeugt hat, als opake Metadaten. Ein Review-Schritt kann darauf reagieren, etwa Kandidaten mit hoher Confidence automatisch akzeptieren und Kandidaten mit niedriger Confidence an einen menschlichen Reviewer weiterleiten.</p>
+<p>Wenn Confidence im strengen probabilistischen Sinn gemeint ist und die Engine Confidences korrekt unter gemeinsamen Verteilungen und Marginalisierung kombinieren soll, übergibt factpy an ProbLog über die optionale Adapter-Schicht. Die <code>Body</code>-und-Confidence-Form ist der Übergabepunkt des Kernels: Unter dem nativen Evaluator reisen Confidence-Werte als opake Zahlen mit; unter ProbLog werden sie als Wahrscheinlichkeitsannotationen interpretiert und kombiniert. Dasselbe <code>Derivation</code>-Objekt kann unter beiden Evaluatoren laufen. Was sich ändert, ist die Semantik des Confidence-Werts.</p>
+<h2 id="evidenz-nachträglich-lesen">Evidenz nachträglich lesen<a class="anchor" href="#evidenz-nachtr%c3%a4glich-lesen">#</a></h2>
+<p>Nachdem ein Kandidat akzeptiert wurde, trägt die daraus entstandene Assertion im Ledger einen Verweis auf die Regel und Version, die sie erzeugt hat, sowie auf die stützenden Ledger-Einträge. Die Lineage kann direkt aus den Metadaten der Assertion gelesen werden. Für eine strukturierte Sicht über viele abgeleitete Fakten hinweg kann ein Audit-Paket des Laufs mit <code>kernel.audit</code> geöffnet und die Evidenzbäume können durchlaufen werden.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.audit <span style="color:#ff6ac1">import</span> load_audit_package
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pkg <span style="color:#ff6ac1">=</span> load_audit_package(<span style="color:#5af78e">&#34;./audits/run-2024-04-01&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> tree_id, tree <span style="color:#ff6ac1">in</span> pkg<span style="color:#ff6ac1">.</span>provenance_trees<span style="color:#ff6ac1">.</span>items():
+</span></span><span style="display:flex;"><span>    <span style="color:#78787e"># each tree shows a derived fact and its supporting entries</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">...</span></span></span></code></pre></div><p>Siehe <a href="/docs/concepts/audit-and-provenance">Audit und Provenienz</a> für das konzeptionelle Material dazu, was während eines Laufs aufgezeichnet wird, und den <a href="/docs/guides/auditing-a-run">Guide zum Auditieren eines Laufs</a> für die Praxis des Erzeugens und Lesens eines Audit-Pakets.</p>
+<h2 id="muster-und-fallstricke">Muster und Fallstricke<a class="anchor" href="#muster-und-fallstricke">#</a></h2>
+<p>Einige Praktiken tauchen in factpy-Codebasen regelmäßig auf und sollten ausdrücklich benannt werden.</p>
+<p>Eine Ableitung erneut auszuführen ist sicher. Die Auswertung erzeugt Kandidaten aus dem aktuellen Ledger, ohne es zu verändern. Die Annahme ist idempotent: Ein bereits akzeptierter Kandidat erzeugt keinen zweiten Write, und der Duplikatversuch wird im Decision Log festgehalten. Es gibt kein operatives Risiko dabei, dieselbe Ableitung mehrfach auszuwerten, sei es zur Inspektion der Vorschläge unter verschiedenen Ledger-Zuständen oder zur Wiederherstellung eines Kandidatensets nach einem unterbrochenen Review.</p>
+<p>Bodys in einer Multi-Body-Ableitung sind oder-verknüpft, nicht und-verknüpft. Ein Kandidat entsteht, wenn irgendeiner der Bodys passt, nicht erst, wenn alle passen. Für eine und-verknüpfte Bedingung verwendet man einen einzelnen Body mit allen Clauses. Die Multi-Body-Form existiert, um alternative Wege zur selben Schlussfolgerung mit potenziell unterschiedlichen Confidences auszudrücken. Diese beiden Formen zu verwechseln ist der häufigste Modellierungsfehler beim ersten Einsatz von <code>Body(...)</code>.</p>
+<p>Versionierung ist bei Ableitungen genauso wichtig wie bei Regeln, und aus demselben Grund. Wenn sich die Bedeutung des Bodys einer Ableitung ändert, sollte die Version erhöht werden. Die neue Version erzeugt neue Kandidaten. Die unter der alten Version akzeptierten Fakten bleiben mit ihrer ursprünglichen Provenienz im Ledger und sind weiter auf die Regelversion zurückführbar, die sie erzeugt hat. Der Audit-Reader sieht beide Versionen als unterschiedliche Ursprünge unterschiedlicher Fakten und wird nicht dazu verleitet, Ergebnisse unter einer Version direkt mit Ergebnissen unter einer anderen zu vergleichen.</p>
+<p>Auto-Acceptance ist als bewusste Policy angemessen, aber nicht als Default. Der Candidate-and-Acceptance-Lebenszyklus existiert, damit hinter jedem Fakt im Ledger eine identifizierbare Entscheidung steht. Auch wenn diese Entscheidung automatisiert ist, bleibt der Decision-Log-Eintrag die Verbindung, die die Audit-Story kohärent macht. Eine Pipeline, die <code>sdk.evaluate</code> und <code>sdk.accept_many</code> ohne Filter aufruft, ist dann sauber modelliert, wenn die ausgesprochene Entscheidung lautet: <em>Alle Kandidaten dieser vertrauenswürdigen Ableitung werden per Policy akzeptiert.</em> Diese Policy muss aber eine bewusste Wahl sein und nicht bloß die Folge eines weggelassenen Filters.</p>
+<h2 id="nächste-schritte">Nächste Schritte<a class="anchor" href="#n%c3%a4chste-schritte">#</a></h2>
+<p>Der <a href="/docs/guides/auditing-a-run">Guide zum Auditieren eines Laufs</a> behandelt den Export des Pakets, das ein Ableitungslauf erzeugt, und das Wiedereinlesen mit <code>kernel.audit</code>. Der <a href="/docs/guides/using-adapters">Guide zur Verwendung von Adaptern</a> behandelt das Ausführen derselben Ableitungen unter PyReason, ProbLog oder Souffle. Das konzeptionelle Modell — was ein Kandidat ist, warum Evidenz mitläuft und warum Annahme ein eigener Schritt ist — steht unter <a href="/docs/concepts/rules-and-derivations">Regeln und Ableitungen</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/de/docs/guides/writing-rules/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Regeln schreiben</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/de/docs/guides/auditing-a-run/" class="flex align-center">
+        <span>Auditing a Run</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#ableitungen-ausführen">Ableitungen ausführen</a>
+      <ul>
+        <li><a href="#eine-ableitung-deklarieren">Eine Ableitung deklarieren</a></li>
+        <li><a href="#auswerten">Auswerten</a></li>
+        <li><a href="#prüfen">Prüfen</a></li>
+        <li><a href="#akzeptieren">Akzeptieren</a></li>
+        <li><a href="#bodys-und-confidence">Bodys und Confidence</a></li>
+        <li><a href="#evidenz-nachträglich-lesen">Evidenz nachträglich lesen</a></li>
+        <li><a href="#muster-und-fallstricke">Muster und Fallstricke</a></li>
+        <li><a href="#nächste-schritte">Nächste Schritte</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

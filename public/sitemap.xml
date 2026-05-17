@@ -2,15 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/docs/page1/</loc>
-  </url><url>
     <loc>http://localhost:1313/docs/quickstart/</loc>
+    <lastmod>2026-05-05T20:44:32+02:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/docs/concepts/first-factgraph/</loc>
+  </url><url>
+    <loc>http://localhost:1313/docs/concepts/</loc>
+    <lastmod>2026-05-05T20:44:32+02:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/docs/concepts/schema/</loc>
+  </url><url>
+    <loc>http://localhost:1313/docs/concepts/read-write/</loc>
+  </url><url>
+    <loc>http://localhost:1313/docs/concepts/assertions/</loc>
+  </url><url>
+    <loc>http://localhost:1313/docs/concepts/semantics/</loc>
+  </url><url>
+    <loc>http://localhost:1313/docs/concepts/evidence/</loc>
+  </url><url>
+    <loc>http://localhost:1313/docs/concepts/rules-and-inferences/</loc>
+  </url><url>
+    <loc>http://localhost:1313/docs/concepts/persistence/</loc>
+  </url><url>
+    <loc>http://localhost:1313/docs/concepts/namespace-map/</loc>
   </url><url>
     <loc>http://localhost:1313/categories/</loc>
   </url><url>
     <loc>http://localhost:1313/docs/</loc>
+    <lastmod>2026-05-05T20:44:32+02:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/</loc>
+    <lastmod>2026-05-05T20:44:32+02:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/</loc>
   </url>

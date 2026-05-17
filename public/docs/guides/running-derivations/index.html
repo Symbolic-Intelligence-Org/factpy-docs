@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Running derivations# A derivation is a rule whose head proposes new facts when the body matches, rather than returning rows. The lifecycle of a derivation falls into three steps: evaluation produces candidates from the current ledger state, review decides which of those candidates ought to become facts, and acceptance writes the accepted candidates as new ledger entries with their evidence preserved as provenance. The present guide develops each step in practice. For the conceptual material on which the lifecycle rests, see rules and derivations.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/guides/running-derivations/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Running Derivations">
+  <meta property="og:description" content="Running derivations# A derivation is a rule whose head proposes new facts when the body matches, rather than returning rows. The lifecycle of a derivation falls into three steps: evaluation produces candidates from the current ledger state, review decides which of those candidates ought to become facts, and acceptance writes the accepted candidates as new ledger entries with their evidence preserved as provenance. The present guide develops each step in practice. For the conceptual material on which the lifecycle rests, see rules and derivations.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Running Derivations">
+  <meta itemprop="description" content="Running derivations# A derivation is a rule whose head proposes new facts when the body matches, rather than returning rows. The lifecycle of a derivation falls into three steps: evaluation produces candidates from the current ledger state, review decides which of those candidates ought to become facts, and acceptance writes the accepted candidates as new ledger entries with their evidence preserved as provenance. The present guide develops each step in practice. For the conceptual material on which the lifecycle rests, see rules and derivations.">
+  <meta itemprop="wordCount" content="1705">
+
+<title>Running Derivations | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/guides/running-derivations/">
+  <link rel="alternate" hreflang="de" href="http://localhost:1313/de/docs/guides/running-derivations/" title="Ableitungen ausführen">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.2d0bb1214ca4979905abe6ff414cee5d5260e17e8f410ecb0cc797cb83587775.js" integrity="sha256-LQuxIUykl5kFq&#43;b/QUzuXVJg4X6PQQ7LDMeXy4NYd3U=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        English
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/de/docs/guides/running-derivations/" class="flex flex-auto">
+          Deutsch
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-903cb365ca4589d060a9e0c4e9cacd7a" class="toggle"  />
+    <label for="section-903cb365ca4589d060a9e0c4e9cacd7a" class="flex">
+      <a role="button" class="">
+        Concepts</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d26c9af1cc2443c595895ff545ee9a45" class="toggle" checked />
+    <label for="section-d26c9af1cc2443c595895ff545ee9a45" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/defining-a-schema/" class="">
+      Defining a Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/reading-and-writing/" class="">
+      Reading and Writing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/writing-rules/" class="">
+      Writing Rules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/running-derivations/" class="active">
+      Running Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/using-adapters/" class="">
+      Using Adapters</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ca174a65b61b36959d2dfae132eedf04" class="toggle"  />
+    <label for="section-ca174a65b61b36959d2dfae132eedf04" class="flex">
+      <a href="/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Running Derivations</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#running-derivations">Running derivations</a>
+      <ul>
+        <li><a href="#declaring-a-derivation">Declaring a derivation</a></li>
+        <li><a href="#evaluate">Evaluate</a></li>
+        <li><a href="#review">Review</a></li>
+        <li><a href="#accept">Accept</a></li>
+        <li><a href="#bodies-and-confidence">Bodies and confidence</a></li>
+        <li><a href="#reading-evidence-after-the-fact">Reading evidence after the fact</a></li>
+        <li><a href="#patterns-and-pitfalls">Patterns and pitfalls</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="running-derivations">Running derivations<a class="anchor" href="#running-derivations">#</a></h1>
+<p>A derivation is a rule whose head proposes new facts when the body matches, rather than returning rows. The lifecycle of a derivation falls into three steps: evaluation produces candidates from the current ledger state, review decides which of those candidates ought to become facts, and acceptance writes the accepted candidates as new ledger entries with their evidence preserved as provenance. The present guide develops each step in practice. For the conceptual material on which the lifecycle rests, see <a href="/docs/concepts/rules-and-derivations">rules and derivations</a>.</p>
+<h2 id="declaring-a-derivation">Declaring a derivation<a class="anchor" href="#declaring-a-derivation">#</a></h2>
+<p>A <code>Derivation</code> shares the body language of a <code>Rule</code> and the same identity-and-version surface, differing only in the head: where a <code>Rule</code> projects its variable bindings as rows, a <code>Derivation</code> declares a fact-shaped head that names what should be proposed for each binding the body satisfies.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Derivation, <span style="color:#ff5c57">vars</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;loc&#34;</span>, <span style="color:#5af78e">&#34;nm&#34;</span>) <span style="color:#ff6ac1">as</span> (u, loc, nm):
+</span></span><span style="display:flex;"><span>    auto_alias <span style="color:#ff6ac1">=</span> Derivation(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;drv.auto_alias&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[User(u), u<span style="color:#ff6ac1">.</span>locale <span style="color:#ff6ac1">==</span> loc, u<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> nm],
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>User<span style="color:#ff6ac1">.</span>tag(locale<span style="color:#ff6ac1">=</span>loc, tag<span style="color:#ff6ac1">=</span>nm),
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p>The <code>where</code> is an ordinary rule body. The <code>head</code> is a <em>field call</em> — <code>User.tag(...)</code> — that names what fact each match should propose. Identity coordinates such as <code>locale=loc</code> are read from the body&rsquo;s variable bindings; the field value, here <code>tag=nm</code>, is whatever the body has bound. One match in the body produces one candidate fact at the head.</p>
+<p>A derivation can write multiple related facts per match by passing a list of head field calls.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;loc&#34;</span>, <span style="color:#5af78e">&#34;nm&#34;</span>, <span style="color:#5af78e">&#34;tg&#34;</span>) <span style="color:#ff6ac1">as</span> (u, loc, nm, tg):
+</span></span><span style="display:flex;"><span>    multi <span style="color:#ff6ac1">=</span> Derivation(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;drv.multi&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[User(u), u<span style="color:#ff6ac1">.</span>locale <span style="color:#ff6ac1">==</span> loc, u<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> nm, u<span style="color:#ff6ac1">.</span>tag <span style="color:#ff6ac1">==</span> tg],
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            User<span style="color:#ff6ac1">.</span>name(locale<span style="color:#ff6ac1">=</span>loc, name<span style="color:#ff6ac1">=</span>nm),
+</span></span><span style="display:flex;"><span>            User<span style="color:#ff6ac1">.</span>tag(locale<span style="color:#ff6ac1">=</span>loc, tag<span style="color:#ff6ac1">=</span>tg),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p>Each binding the body satisfies produces all of the listed head facts as candidates, which is the appropriate shape when several related facts together form a coherent unit that should be evaluated, reviewed, and accepted in tandem rather than separately.</p>
+<h2 id="evaluate">Evaluate<a class="anchor" href="#evaluate">#</a></h2>
+<p><code>sdk.evaluate(derivation, mode=...)</code> runs the derivation against the current ledger and returns a list of candidates.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>candidates <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>evaluate(auto_alias, mode<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;native&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;candidates:&#34;</span>, <span style="color:#ff5c57">len</span>(candidates))</span></span></code></pre></div><p>A candidate is not yet part of the ledger. It is a proposal: the predicate, subject, and value the derivation says should be asserted, together with an evidence bundle naming the rule, its version, and the ledger entries that supported the match. Until the candidate is accepted, no state has changed in the ledger, and the evaluation can be repeated against the same ledger to inspect what would be proposed without committing to anything.</p>
+<p>The <code>mode=&quot;native&quot;</code> argument selects the built-in evaluator, which is the appropriate choice for ordinary logical derivations. For reasoning shapes the native evaluator does not address — graph propagation, probabilistic inference, large-scale Datalog — the alternatives are <code>&quot;pyreason&quot;</code>, <code>&quot;problog&quot;</code>, and <code>&quot;souffle&quot;</code>, developed in <a href="/docs/guides/using-adapters">using adapters</a>. The same <code>Derivation</code> object runs under each engine; what changes is the evaluator that consumes it.</p>
+<p>Evaluation is read-only and side-effect-free, which is what permits it to be run as often as needed for inspection or for a pre-acceptance review without affecting any subsequent acceptance.</p>
+<h2 id="review">Review<a class="anchor" href="#review">#</a></h2>
+<p>Between evaluation and acceptance is the step at which a decision is made about which candidates ought to become facts. The kernel does not prescribe a shape for this step, since the appropriate shape depends on what is being built, but in every case the decision is recorded alongside the resulting writes and is what makes the audit story interpretable later.</p>
+<p>For an automated pipeline, the review step is typically a filter expressed in ordinary code.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>to_accept <span style="color:#ff6ac1">=</span> [c <span style="color:#ff6ac1">for</span> c <span style="color:#ff6ac1">in</span> candidates <span style="color:#ff6ac1">if</span> c<span style="color:#ff6ac1">.</span>confidence <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">None</span> <span style="color:#ff6ac1">or</span> c<span style="color:#ff6ac1">.</span>confidence <span style="color:#ff6ac1">&gt;=</span> <span style="color:#ff9f43">0.8</span>]</span></span></code></pre></div><p>For a human-in-the-loop workflow, candidates are presented in an interface and a reviewer accepts them individually or in batches. For a derivation that is trusted by policy and has no per-candidate review, the filter reduces to the identity, with <code>to_accept = candidates</code>.</p>
+<p>The form of the decision matters less than that the decision is made and recorded. Acceptance writes a decision-log entry alongside each ledger write, capturing the identity of the reviewer or the policy that approved the candidate. The property that holds — that every fact in the ledger is either directly written or accepted by an identifiable decision — is what makes the audit trail interpretable when the run is later reviewed by a third party, and the decision-log entry is the connective tissue between the candidate and the writes it produced.</p>
+<h2 id="accept">Accept<a class="anchor" href="#accept">#</a></h2>
+<p><code>sdk.accept(candidate, approved_by=..., note=..., dry_run=...)</code> writes a single candidate to the ledger.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>result <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>accept(candidate, approved_by<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;reviewer-44&#34;</span>, note<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;bulk import&#34;</span>)</span></span></code></pre></div><p>The <code>approved_by</code> and <code>note</code> arguments flow into the decision log. The candidate&rsquo;s evidence — the rule id, the rule version, and the supporting ledger entries — is preserved as provenance on the new assertion. Acceptance is idempotent: accepting the same candidate a second time produces no further write and is recorded as a duplicate in the decision log.</p>
+<p>For a batch of candidates, <code>accept_many</code> is more efficient and exposes a parameter for controlling the atomicity of the batch.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>result <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>accept_many(to_accept, mode<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;atomic&#34;</span>)</span></span></code></pre></div><p>The <code>mode=&quot;atomic&quot;</code> setting writes all-or-nothing: either every acceptance in the batch succeeds and the writes become visible together, or none of them do. The <code>mode=&quot;best_effort&quot;</code> setting writes what it can and returns a result that reports the failures separately. The atomic mode is appropriate where the candidates form a coherent unit — a derivation that classifies a user might propose a name, a tier, and a flag together, with all three being meaningful only as a set — and the best-effort mode is appropriate for independent candidates where partial progress is preferable to none.</p>
+<p>Both <code>accept</code> and <code>accept_many</code> accept a <code>dry_run=True</code> argument that previews the writes without committing them. The previewed result has the same shape as the real one and is the basis for a pre-flight check or for an interface that shows a reviewer what an acceptance would do before the click that performs it.</p>
+<h2 id="bodies-and-confidence">Bodies and confidence<a class="anchor" href="#bodies-and-confidence">#</a></h2>
+<p>A derivation may have more than one path to the same conclusion, with different levels of trust attached to each path. The <code>Body(...)</code> wrapper lets these paths be named explicitly and tagged with a confidence value.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Body, Pred
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;loc&#34;</span>, <span style="color:#5af78e">&#34;tg&#34;</span>) <span style="color:#ff6ac1">as</span> (u, loc, tg):
+</span></span><span style="display:flex;"><span>    vip_inference <span style="color:#ff6ac1">=</span> Derivation(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;drv.vip&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            Body([User(u), u<span style="color:#ff6ac1">.</span>locale <span style="color:#ff6ac1">==</span> loc, Pred(<span style="color:#5af78e">&#34;profile:vip&#34;</span>, u, <span style="color:#ff6ac1">True</span>)],
+</span></span><span style="display:flex;"><span>                 confidence<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">0.95</span>),
+</span></span><span style="display:flex;"><span>            Body([User(u), u<span style="color:#ff6ac1">.</span>locale <span style="color:#ff6ac1">==</span> loc, Pred(<span style="color:#5af78e">&#34;model:high_value&#34;</span>, u, tg)],
+</span></span><span style="display:flex;"><span>                 confidence<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">0.6</span>),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>User<span style="color:#ff6ac1">.</span>tag(locale<span style="color:#ff6ac1">=</span>loc, tag<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;vip&#34;</span>),
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p>Each <code>Body</code> is an alternative match path, and the bodies are or-joined: a candidate is produced for any binding that satisfies any of them. Candidates carry the confidence of the body that produced them as opaque metadata, which a review step can branch on — auto-accepting the high-confidence candidates and routing the low-confidence ones to a human reviewer is the standard pattern.</p>
+<p>Where confidence is meant in the strict probabilistic sense and the engine is expected to combine confidences correctly under joint distributions and marginalisation, factpy hands off to ProbLog through the optional adapter layer. The <code>Body</code>-and-confidence shape is the kernel&rsquo;s handoff point: confidence values that travel as opaque numbers under the native evaluator become probability annotations that ProbLog interprets and composes. The same <code>Derivation</code> object runs under either evaluator; what changes is the semantics of the confidence value.</p>
+<h2 id="reading-evidence-after-the-fact">Reading evidence after the fact<a class="anchor" href="#reading-evidence-after-the-fact">#</a></h2>
+<p>Once a candidate has been accepted, the resulting assertion in the ledger carries a reference to the rule and version that produced it together with the supporting ledger entries. The lineage can be read off the assertion&rsquo;s metadata directly, or, for a structured view across many derived facts at once, an audit package produced from the run can be opened with <code>kernel.audit</code> and the evidence trees walked.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.audit <span style="color:#ff6ac1">import</span> load_audit_package
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pkg <span style="color:#ff6ac1">=</span> load_audit_package(<span style="color:#5af78e">&#34;./audits/run-2024-04-01&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> tree_id, tree <span style="color:#ff6ac1">in</span> pkg<span style="color:#ff6ac1">.</span>provenance_trees<span style="color:#ff6ac1">.</span>items():
+</span></span><span style="display:flex;"><span>    <span style="color:#78787e"># each tree shows a derived fact and its supporting entries</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">...</span></span></span></code></pre></div><p>See <a href="/docs/concepts/audit-and-provenance">audit and provenance</a> for the conceptual material on what is recorded during a run, and the <a href="/docs/guides/auditing-a-run">auditing a run guide</a> for the practical mechanics of producing and consuming an audit package.</p>
+<h2 id="patterns-and-pitfalls">Patterns and pitfalls<a class="anchor" href="#patterns-and-pitfalls">#</a></h2>
+<p>A few practices recur across factpy codebases and are worth naming explicitly.</p>
+<p>Re-running a derivation is safe. Evaluation produces candidates from the current ledger without affecting it; acceptance is idempotent in the sense that a candidate already accepted will not produce a second write, and the duplicate is recorded in the decision log. There is no operational risk in evaluating the same derivation repeatedly, whether to inspect what would be proposed under different ledger states or to recover a candidate set after an interrupted review.</p>
+<p>Bodies in a multi-body derivation are or-joined, not and-joined. A candidate is produced when any of the bodies matches, not only when all of them match. The shape for an <em>and</em>-joined condition is a single body containing all the clauses; the multi-body shape exists specifically to express <em>alternative paths to the same conclusion</em> with potentially different confidences. Confusing the two is the most common modelling mistake when first reaching for <code>Body(...)</code>.</p>
+<p>Versioning a derivation matters in the same way that versioning a rule matters, and for the same reason. When a derivation&rsquo;s body changes meaning, the version should be bumped. The new version produces new candidates; the previous version&rsquo;s accepted facts remain in the ledger with their original provenance, traceable back to the version of the rule that produced them. The audit reader sees both versions as distinct origins for distinct facts and is therefore not misled into comparing results obtained under one version directly to those obtained under another.</p>
+<p>Auto-acceptance is appropriate as a deliberate policy and inappropriate as a default. The candidate-and-acceptance lifecycle exists in order that some identifiable decision lies behind every fact written into the ledger; even when the decision is automated, the decision-log entry remains the connective tissue that makes the audit story coherent. A pipeline that calls <code>sdk.evaluate</code> and <code>sdk.accept_many</code> with no filter is well-formed when the decision being expressed is <em>every candidate from this trusted derivation, by policy</em> — but the policy must be the deliberate choice, not the consequence of having omitted a filter.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<p>The <a href="/docs/guides/auditing-a-run">auditing a run guide</a> covers exporting the package a derivation run produces and reading it back with <code>kernel.audit</code>. The <a href="/docs/guides/using-adapters">using adapters guide</a> covers running the same derivations under PyReason, ProbLog, or Souffle. For the conceptual model — what a candidate is, why evidence travels with it, why acceptance is a separate step — see <a href="/docs/concepts/rules-and-derivations">rules and derivations</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/guides/writing-rules/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Writing Rules</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/guides/auditing-a-run/" class="flex align-center">
+        <span>Auditing a Run</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#running-derivations">Running derivations</a>
+      <ul>
+        <li><a href="#declaring-a-derivation">Declaring a derivation</a></li>
+        <li><a href="#evaluate">Evaluate</a></li>
+        <li><a href="#review">Review</a></li>
+        <li><a href="#accept">Accept</a></li>
+        <li><a href="#bodies-and-confidence">Bodies and confidence</a></li>
+        <li><a href="#reading-evidence-after-the-fact">Reading evidence after the fact</a></li>
+        <li><a href="#patterns-and-pitfalls">Patterns and pitfalls</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Tutorial 03 — PyReason propagation# The native evaluator from tutorial 02 is great when reasoning is a one-shot pull from the ledger. It’s not the right tool when beliefs propagate through a graph — when the truth of a fact about one entity depends on what’s now true about its neighbours, and that in turn depends on theirs, and so on, possibly over time. That’s what PyReason is for.
+This tutorial walks through a concrete propagation scenario: an outage in a service dependency graph. We have services that depend on each other; when one is down, services that depend on it become at-risk; when one of those is down, anything depending on it becomes at-risk; and so on. We’ll build the graph, declare propagation rules, run PyReason, and accept the resulting facts back into our ledger.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/tutorials/03-pyreason-propagation/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="03 — PyReason Propagation">
+  <meta property="og:description" content="Tutorial 03 — PyReason propagation# The native evaluator from tutorial 02 is great when reasoning is a one-shot pull from the ledger. It’s not the right tool when beliefs propagate through a graph — when the truth of a fact about one entity depends on what’s now true about its neighbours, and that in turn depends on theirs, and so on, possibly over time. That’s what PyReason is for.
+This tutorial walks through a concrete propagation scenario: an outage in a service dependency graph. We have services that depend on each other; when one is down, services that depend on it become at-risk; when one of those is down, anything depending on it becomes at-risk; and so on. We’ll build the graph, declare propagation rules, run PyReason, and accept the resulting facts back into our ledger.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="03 — PyReason Propagation">
+  <meta itemprop="description" content="Tutorial 03 — PyReason propagation# The native evaluator from tutorial 02 is great when reasoning is a one-shot pull from the ledger. It’s not the right tool when beliefs propagate through a graph — when the truth of a fact about one entity depends on what’s now true about its neighbours, and that in turn depends on theirs, and so on, possibly over time. That’s what PyReason is for.
+This tutorial walks through a concrete propagation scenario: an outage in a service dependency graph. We have services that depend on each other; when one is down, services that depend on it become at-risk; when one of those is down, anything depending on it becomes at-risk; and so on. We’ll build the graph, declare propagation rules, run PyReason, and accept the resulting facts back into our ledger.">
+  <meta itemprop="wordCount" content="1254">
+
+<title>03 — PyReason Propagation | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/tutorials/03-pyreason-propagation/">
+  <link rel="alternate" hreflang="de" href="http://localhost:1313/de/docs/tutorials/03-pyreason-propagation/" title="03 — PyReason Propagation">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.2d0bb1214ca4979905abe6ff414cee5d5260e17e8f410ecb0cc797cb83587775.js" integrity="sha256-LQuxIUykl5kFq&#43;b/QUzuXVJg4X6PQQ7LDMeXy4NYd3U=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        English
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/de/docs/tutorials/03-pyreason-propagation/" class="flex flex-auto">
+          Deutsch
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-903cb365ca4589d060a9e0c4e9cacd7a" class="toggle"  />
+    <label for="section-903cb365ca4589d060a9e0c4e9cacd7a" class="flex">
+      <a role="button" class="">
+        Concepts</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d26c9af1cc2443c595895ff545ee9a45" class="toggle"  />
+    <label for="section-d26c9af1cc2443c595895ff545ee9a45" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/defining-a-schema/" class="">
+      Defining a Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/reading-and-writing/" class="">
+      Reading and Writing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/writing-rules/" class="">
+      Writing Rules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/running-derivations/" class="">
+      Running Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/using-adapters/" class="">
+      Using Adapters</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ca174a65b61b36959d2dfae132eedf04" class="toggle" checked />
+    <label for="section-ca174a65b61b36959d2dfae132eedf04" class="flex">
+      <a href="/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/03-pyreason-propagation/" class="active">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>03 — PyReason Propagation</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#tutorial-03--pyreason-propagation">Tutorial 03 — PyReason propagation</a>
+      <ul>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#a-graph-shaped-schema">A graph-shaped schema</a></li>
+        <li><a href="#a-session-with-seeds">A session, with seeds</a></li>
+        <li><a href="#propagation-rules">Propagation rules</a></li>
+        <li><a href="#running-pyreason">Running PyReason</a></li>
+        <li><a href="#accepting-results-back">Accepting results back</a></li>
+        <li><a href="#the-audit-surface-for-timelines">The audit surface for timelines</a></li>
+        <li><a href="#recap">Recap</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="tutorial-03--pyreason-propagation">Tutorial 03 — PyReason propagation<a class="anchor" href="#tutorial-03--pyreason-propagation">#</a></h1>
+<p>The native evaluator from <a href="02-rules-and-derivations.md">tutorial 02</a> is great when reasoning is a one-shot pull from the ledger. It&rsquo;s not the right tool when <em>beliefs propagate through a graph</em> — when the truth of a fact about one entity <em>depends on what&rsquo;s now true about its neighbours</em>, and that in turn depends on theirs, and so on, possibly over time. That&rsquo;s what PyReason is for.</p>
+<p>This tutorial walks through a concrete propagation scenario: an outage in a service dependency graph. We have services that depend on each other; when one is down, services that depend on it become at-risk; when one of those is down, anything depending on <em>it</em> becomes at-risk; and so on. We&rsquo;ll build the graph, declare propagation rules, run PyReason, and accept the resulting facts back into our ledger.</p>
+<p>Reach for this tutorial when:</p>
+<ul>
+<li>your data has a graph shape, with typed relationships you care about,</li>
+<li>a fact about one entity should <em>propagate</em> to its neighbours through some rule,</li>
+<li>you have time as part of the model (or could),</li>
+<li>intervals — <em>&ldquo;this signal is true with confidence between 0.8 and 0.95&rdquo;</em> — make sense for your problem.</li>
+</ul>
+<p>Otherwise, the native evaluator is enough.</p>
+<h2 id="setup">Setup<a class="anchor" href="#setup">#</a></h2>
+<p>PyReason ships as an optional dependency:</p>
+<pre tabindex="0"><code>pip install factpy-kernel[pyreason]</code></pre><p>The imports for this tutorial:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> SDKStore, Entity, Identity, Field, Relationship
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk.compile <span style="color:#ff6ac1">import</span> compile_schema_from_classes
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk.dsl.expr <span style="color:#ff6ac1">import</span> LogicVar, Pred
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk.dsl.rule <span style="color:#ff6ac1">import</span> Rule
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.adapters.pyreason.session <span style="color:#ff6ac1">import</span> PyReasonSession
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.adapters.pyreason.runner <span style="color:#ff6ac1">import</span> PyReasonRunConfig, run_pyreason
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.adapters.pyreason.accept <span style="color:#ff6ac1">import</span> accept_pyreason_session</span></span></code></pre></div><p>The first block is the regular factpy DSL; the second block is the PyReason adapter surface. The session, runner, and accept calls are the three handles you&rsquo;ll touch.</p>
+<h2 id="a-graph-shaped-schema">A graph-shaped schema<a class="anchor" href="#a-graph-shaped-schema">#</a></h2>
+<p>PyReason works on entities connected by typed relationships. A <code>Service</code>, with a few risk signals as fields, and a <code>DependsOn</code> relationship between services:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">Service</span>(Entity):
+</span></span><span style="display:flex;"><span>    service_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    at_risk: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)           <span style="color:#78787e"># boolean as string</span>
+</span></span><span style="display:flex;"><span>    contingency_gap: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">DependsOn</span>(Relationship):
+</span></span><span style="display:flex;"><span>    from_entity <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;Service&#34;</span>
+</span></span><span style="display:flex;"><span>    to_entity <span style="color:#ff6ac1">=</span> <span style="color:#5af78e">&#34;Service&#34;</span>
+</span></span><span style="display:flex;"><span>    critical_path: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)     <span style="color:#78787e"># boolean as string</span></span></span></code></pre></div><p>A few notes:</p>
+<ul>
+<li>We use the <code>Relationship</code> base class here (not <code>Entity</code>) because PyReason treats edges as first-class — they&rsquo;re what propagation walks. For native-engine code, modelling relationships as plain entities with two <code>entity_ref</code> fields is fine; for PyReason, the typed <code>Relationship</code> form is what fits.</li>
+<li>Boolean signals are encoded as the strings <code>&quot;true&quot;</code> and <code>&quot;false&quot;</code> rather than Python <code>bool</code>. This is the convention PyReason expects in the adapter; conversion to typed booleans happens in the engine.</li>
+<li>We compile the schema explicitly because we need the <code>schema_ir</code> to construct a <code>PyReasonSession</code>:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>schema_ir <span style="color:#ff6ac1">=</span> compile_schema_from_classes([Service, DependsOn])</span></span></code></pre></div><h2 id="a-session-with-seeds">A session, with seeds<a class="anchor" href="#a-session-with-seeds">#</a></h2>
+<p>A <code>PyReasonSession</code> is where you build the graph state PyReason will run on. It has its own batch interface, similar to the SDK&rsquo;s:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>session <span style="color:#ff6ac1">=</span> PyReasonSession(schema_ir)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> session<span style="color:#ff6ac1">.</span>batch() <span style="color:#ff6ac1">as</span> tx:
+</span></span><span style="display:flex;"><span>    <span style="color:#78787e"># Three services</span>
+</span></span><span style="display:flex;"><span>    db      <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Service, service_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;db-primary&#34;</span>)
+</span></span><span style="display:flex;"><span>    api     <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Service, service_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;api-gateway&#34;</span>)
+</span></span><span style="display:flex;"><span>    mobile  <span style="color:#ff6ac1">=</span> tx<span style="color:#ff6ac1">.</span>entity(Service, service_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;mobile-app&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#78787e"># The seed: db-primary is down with full confidence</span>
+</span></span><span style="display:flex;"><span>    db<span style="color:#ff6ac1">.</span>at_risk<span style="color:#ff6ac1">.</span>set(<span style="color:#5af78e">&#34;true&#34;</span>,
+</span></span><span style="display:flex;"><span>                   bound<span style="color:#ff6ac1">=</span>[<span style="color:#ff9f43">1.0</span>, <span style="color:#ff9f43">1.0</span>],
+</span></span><span style="display:flex;"><span>                   meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;incident_triage&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#78787e"># The dependency edges, with their criticality also as confidence intervals</span>
+</span></span><span style="display:flex;"><span>    tx<span style="color:#ff6ac1">.</span>relationship(DependsOn,
+</span></span><span style="display:flex;"><span>                    from_entity<span style="color:#ff6ac1">=</span>db, to_entity<span style="color:#ff6ac1">=</span>api,
+</span></span><span style="display:flex;"><span>                    critical_path<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;true&#34;</span>, bound<span style="color:#ff6ac1">=</span>[<span style="color:#ff9f43">1.0</span>, <span style="color:#ff9f43">1.0</span>],
+</span></span><span style="display:flex;"><span>                    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;dependency_map&#34;</span>})
+</span></span><span style="display:flex;"><span>    tx<span style="color:#ff6ac1">.</span>relationship(DependsOn,
+</span></span><span style="display:flex;"><span>                    from_entity<span style="color:#ff6ac1">=</span>api, to_entity<span style="color:#ff6ac1">=</span>mobile,
+</span></span><span style="display:flex;"><span>                    critical_path<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;true&#34;</span>, bound<span style="color:#ff6ac1">=</span>[<span style="color:#ff9f43">1.0</span>, <span style="color:#ff9f43">1.0</span>],
+</span></span><span style="display:flex;"><span>                    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;dependency_map&#34;</span>})</span></span></code></pre></div><p>Two things are different from the SDK batch you saw in tutorial 01:</p>
+<ol>
+<li><code>bound=[lo, hi]</code> — every fact carries a confidence <em>interval</em>, not a single value. <code>[1.0, 1.0]</code> means &ldquo;we&rsquo;re certain&rdquo;. <code>[0.8, 0.95]</code> would mean &ldquo;we&rsquo;re between 80% and 95% confident&rdquo;. The interval form is core to PyReason; it lets the engine carry uncertainty through propagation properly.</li>
+<li><code>tx.relationship(...)</code> writes typed edges. Each edge can carry its own fields and confidence.</li>
+</ol>
+<p>We&rsquo;ve now described a small graph: three services, two edges, one seed. PyReason will propagate from the seed.</p>
+<h2 id="propagation-rules">Propagation rules<a class="anchor" href="#propagation-rules">#</a></h2>
+<p>The rules look like SDK rules, but they encode <em>what propagates from where to where</em>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>x <span style="color:#ff6ac1">=</span> LogicVar(<span style="color:#5af78e">&#34;x&#34;</span>)
+</span></span><span style="display:flex;"><span>y <span style="color:#ff6ac1">=</span> LogicVar(<span style="color:#5af78e">&#34;y&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rules <span style="color:#ff6ac1">=</span> [
+</span></span><span style="display:flex;"><span>    Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;risk_propagation&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;1.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[Pred(<span style="color:#5af78e">&#34;service:at_risk&#34;</span>, x)],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            Pred(<span style="color:#5af78e">&#34;service:at_risk&#34;</span>, y),
+</span></span><span style="display:flex;"><span>            Pred(<span style="color:#5af78e">&#34;dependson:critical_path&#34;</span>, y, x),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>    ),
+</span></span><span style="display:flex;"><span>]</span></span></code></pre></div><p>Read the rule: <em>if <code>y</code> is at risk, and there&rsquo;s a critical-path dependency from <code>y</code> to <code>x</code>, then <code>x</code> is at risk.</em> PyReason will apply this rule iteratively, propagating the at-risk signal from <code>db-primary</code> to <code>api-gateway</code>, then to <code>mobile-app</code>.</p>
+<p>Notice that this looks structurally like the rules from tutorial 02 — same DSL, same atoms. The difference is in <em>how it runs</em>: PyReason iterates the rule across the graph until propagation stabilises (or a step limit is reached), rather than evaluating it once.</p>
+<h2 id="running-pyreason">Running PyReason<a class="anchor" href="#running-pyreason">#</a></h2>
+<p><code>run_pyreason</code> takes the session, the rules, and a config:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>result <span style="color:#ff6ac1">=</span> run_pyreason(
+</span></span><span style="display:flex;"><span>    session,
+</span></span><span style="display:flex;"><span>    rule_defs<span style="color:#ff6ac1">=</span>rules,
+</span></span><span style="display:flex;"><span>    config<span style="color:#ff6ac1">=</span>PyReasonRunConfig(timesteps<span style="color:#ff6ac1">=</span><span style="color:#ff9f43">4</span>, atom_trace<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>),
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div><p><code>timesteps=4</code> lets propagation walk up to four hops; for our two-edge chain, that&rsquo;s plenty. <code>atom_trace=True</code> records the per-step changes to the interpretation, which is what makes the timeline-flavoured audit story work later.</p>
+<p>The <code>result</code> carries the engine&rsquo;s final interpretation, the elapsed time, and the per-timestep traces. You can inspect what changed:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>interp <span style="color:#ff6ac1">=</span> result<span style="color:#ff6ac1">.</span>interpretation<span style="color:#ff6ac1">.</span>get_dict()
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">f</span><span style="color:#5af78e">&#34;propagation took </span><span style="color:#5af78e">{</span>result<span style="color:#ff6ac1">.</span>elapsed_seconds<span style="color:#5af78e">:</span><span style="color:#5af78e">.1f</span><span style="color:#5af78e">}</span><span style="color:#5af78e">s&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">for</span> service_id, labels <span style="color:#ff6ac1">in</span> interp<span style="color:#ff6ac1">.</span>items():
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">print</span>(<span style="color:#5af78e">f</span><span style="color:#5af78e">&#34;  </span><span style="color:#5af78e">{</span>service_id<span style="color:#5af78e">}</span><span style="color:#5af78e">: </span><span style="color:#5af78e">{</span>labels<span style="color:#5af78e">}</span><span style="color:#5af78e">&#34;</span>)</span></span></code></pre></div><p>If everything went well, all three services now carry <code>at_risk=true</code> — the seed at <code>db-primary</code>, the propagation to <code>api-gateway</code>, and the further propagation to <code>mobile-app</code>.</p>
+<h2 id="accepting-results-back">Accepting results back<a class="anchor" href="#accepting-results-back">#</a></h2>
+<p>Inference is just inference — until something writes the conclusions back, the rest of your system doesn&rsquo;t see them. The adapter provides an explicit accept step that translates engine output into ledger writes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes([Service, DependsOn])
+</span></span><span style="display:flex;"><span>accept_result <span style="color:#ff6ac1">=</span> accept_pyreason_session(sdk, result)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(<span style="color:#5af78e">&#34;written assertions:&#34;</span>, accept_result<span style="color:#ff6ac1">.</span>assertion_count)</span></span></code></pre></div><p>What this does, in shape, is the same as the candidate-and-accept flow from tutorial 02: every engine-derived fact becomes a candidate; accept writes it as a new assertion in the ledger; the engine&rsquo;s reasoning trace is preserved as the new fact&rsquo;s evidence. The audit story is consistent — <em>every fact in the ledger is either directly written or accepted from a derivation, with provenance back to the engine that produced it</em>.</p>
+<p>You can verify the writes the usual way:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>mobile <span style="color:#ff6ac1">=</span> sdk<span style="color:#ff6ac1">.</span>get(Service, service_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;mobile-app&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff5c57">print</span>(mobile<span style="color:#ff6ac1">.</span>at_risk)
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># &#34;true&#34;  — propagated from db-primary through api-gateway</span></span></span></code></pre></div><h2 id="the-audit-surface-for-timelines">The audit surface for timelines<a class="anchor" href="#the-audit-surface-for-timelines">#</a></h2>
+<p>PyReason runs produce <em>timeline-shaped</em> reasoning traces — at each step, certain atoms got new bounds because certain rules fired on certain neighbours. The audit story for that is richer than a flat evidence tree; it has its own surface in the audit module:</p>
+<pre tabindex="0"><code>explain-timeline             # full per-step interpretation history
+explain-timeline-summary     # condensed version
+explain-timeline-narrative   # human-readable form</code></pre><p>These are documented in <a href="../concepts/audit-and-provenance.md">audit and provenance</a> and in (when written) the audit reference. The point for this tutorial: PyReason output, exported into an audit package, gives a reviewer the <em>why</em> of every propagated fact at a per-timestep level. <em>&quot;<code>mobile-app</code> became at-risk at t=2 because <code>api-gateway</code> was at-risk at t=1 and there&rsquo;s a critical-path edge from <code>api-gateway</code> to <code>mobile-app</code>&quot;</em> is the kind of explanation that falls out, not something you have to reconstruct.</p>
+<h2 id="recap">Recap<a class="anchor" href="#recap">#</a></h2>
+<p>In this tutorial you&rsquo;ve:</p>
+<ul>
+<li>declared a graph schema with <code>Entity</code> and <code>Relationship</code>,</li>
+<li>built a <code>PyReasonSession</code> with boolean seeds and confidence-bounded edges,</li>
+<li>written propagation rules in the same DSL you saw in tutorial 02,</li>
+<li>run PyReason with a step-bounded config and inspected the resulting interpretation,</li>
+<li>accepted the engine&rsquo;s output back into a regular factpy ledger with audit provenance preserved.</li>
+</ul>
+<p>PyReason is the right tool when reasoning <em>propagates</em> through a typed graph. Like every adapter, it doesn&rsquo;t replace the SDK or the audit story; it plugs into them, takes a particular reasoning shape, and returns to the same candidate-and-accept rhythm the rest of factpy uses.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<ul>
+<li><a href="04-problog-probabilistic.md">Tutorial 04 — ProbLog probabilistic</a> for genuinely probabilistic logic over uncertain facts.</li>
+<li><a href="05-onboarding-journey.md">Tutorial 05 — Onboarding journey</a> for an end-to-end scenario weaving native rules, derivations, and adapters together.</li>
+<li><a href="../guides/using-adapters.md">Using adapters guide</a> for the reference angle on when to reach for which engine.</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/tutorials/02-rules-and-derivations/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>02 — Rules and Derivations</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/tutorials/04-problog-probabilistic/" class="flex align-center">
+        <span>04 — ProbLog Probabilistic</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#tutorial-03--pyreason-propagation">Tutorial 03 — PyReason propagation</a>
+      <ul>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#a-graph-shaped-schema">A graph-shaped schema</a></li>
+        <li><a href="#a-session-with-seeds">A session, with seeds</a></li>
+        <li><a href="#propagation-rules">Propagation rules</a></li>
+        <li><a href="#running-pyreason">Running PyReason</a></li>
+        <li><a href="#accepting-results-back">Accepting results back</a></li>
+        <li><a href="#the-audit-surface-for-timelines">The audit surface for timelines</a></li>
+        <li><a href="#recap">Recap</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

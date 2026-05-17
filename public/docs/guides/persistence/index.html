@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Persistence# The default ledger lives in memory: it exists for the lifetime of the process that opened it and is discarded when the process exits. This is the appropriate behaviour for tests and for short-lived computation, and is what SDKStore.from_schema_classes([...]) produces when no further arguments are supplied. For everything else — long-running services, jobs whose state must survive a restart, schemas that evolve over time — the ledger is persisted to a file. The present guide develops how persistence is opened, what the schema digest is and what it protects against, which kinds of schema change are safe across restarts and which require migration, how processes share a persistent ledger without losing the audit story, and how sidecar artifacts and backups relate to the ledger file itself.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/guides/persistence/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Persistence">
+  <meta property="og:description" content="Persistence# The default ledger lives in memory: it exists for the lifetime of the process that opened it and is discarded when the process exits. This is the appropriate behaviour for tests and for short-lived computation, and is what SDKStore.from_schema_classes([...]) produces when no further arguments are supplied. For everything else — long-running services, jobs whose state must survive a restart, schemas that evolve over time — the ledger is persisted to a file. The present guide develops how persistence is opened, what the schema digest is and what it protects against, which kinds of schema change are safe across restarts and which require migration, how processes share a persistent ledger without losing the audit story, and how sidecar artifacts and backups relate to the ledger file itself.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Persistence">
+  <meta itemprop="description" content="Persistence# The default ledger lives in memory: it exists for the lifetime of the process that opened it and is discarded when the process exits. This is the appropriate behaviour for tests and for short-lived computation, and is what SDKStore.from_schema_classes([...]) produces when no further arguments are supplied. For everything else — long-running services, jobs whose state must survive a restart, schemas that evolve over time — the ledger is persisted to a file. The present guide develops how persistence is opened, what the schema digest is and what it protects against, which kinds of schema change are safe across restarts and which require migration, how processes share a persistent ledger without losing the audit story, and how sidecar artifacts and backups relate to the ledger file itself.">
+  <meta itemprop="wordCount" content="1724">
+
+<title>Persistence | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/guides/persistence/">
+  <link rel="alternate" hreflang="de" href="http://localhost:1313/de/docs/guides/persistence/" title="Persistenz">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.2d0bb1214ca4979905abe6ff414cee5d5260e17e8f410ecb0cc797cb83587775.js" integrity="sha256-LQuxIUykl5kFq&#43;b/QUzuXVJg4X6PQQ7LDMeXy4NYd3U=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        English
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/de/docs/guides/persistence/" class="flex flex-auto">
+          Deutsch
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-903cb365ca4589d060a9e0c4e9cacd7a" class="toggle"  />
+    <label for="section-903cb365ca4589d060a9e0c4e9cacd7a" class="flex">
+      <a role="button" class="">
+        Concepts</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d26c9af1cc2443c595895ff545ee9a45" class="toggle" checked />
+    <label for="section-d26c9af1cc2443c595895ff545ee9a45" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/defining-a-schema/" class="">
+      Defining a Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/reading-and-writing/" class="">
+      Reading and Writing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/writing-rules/" class="">
+      Writing Rules</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/running-derivations/" class="">
+      Running Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/persistence/" class="active">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/guides/using-adapters/" class="">
+      Using Adapters</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ca174a65b61b36959d2dfae132eedf04" class="toggle"  />
+    <label for="section-ca174a65b61b36959d2dfae132eedf04" class="flex">
+      <a href="/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Persistence</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#persistence">Persistence</a>
+      <ul>
+        <li><a href="#opening-a-persistent-store">Opening a persistent store</a></li>
+        <li><a href="#what-the-schema-digest-protects">What the schema digest protects</a></li>
+        <li><a href="#safe-and-unsafe-changes">Safe and unsafe changes</a></li>
+        <li><a href="#migrating-a-schema">Migrating a schema</a></li>
+        <li><a href="#crossing-process-boundaries">Crossing process boundaries</a></li>
+        <li><a href="#sidecar-artifacts">Sidecar artifacts</a></li>
+        <li><a href="#backups">Backups</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="persistence">Persistence<a class="anchor" href="#persistence">#</a></h1>
+<p>The default ledger lives in memory: it exists for the lifetime of the process that opened it and is discarded when the process exits. This is the appropriate behaviour for tests and for short-lived computation, and is what <code>SDKStore.from_schema_classes([...])</code> produces when no further arguments are supplied. For everything else — long-running services, jobs whose state must survive a restart, schemas that evolve over time — the ledger is persisted to a file. The present guide develops how persistence is opened, what the schema digest is and what it protects against, which kinds of schema change are safe across restarts and which require migration, how processes share a persistent ledger without losing the audit story, and how sidecar artifacts and backups relate to the ledger file itself.</p>
+<h2 id="opening-a-persistent-store">Opening a persistent store<a class="anchor" href="#opening-a-persistent-store">#</a></h2>
+<p>Persistence is opt-in through a <code>ledger_path</code> argument supplied at the moment the store is opened.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> SDKStore
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes(
+</span></span><span style="display:flex;"><span>    [Person, Country, Order],
+</span></span><span style="display:flex;"><span>    ledger_path<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;./data/factpy.db&#34;</span>,
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div><p>The first time a store is opened with a given path, the file is created and the schema&rsquo;s digest is recorded into its metadata. Subsequent writes append entries to the file in the order they occur. When the same path is opened again, the digest of the schema being supplied is recomputed and compared against the digest stored in the file. A match permits the open to proceed and the ledger to be used for reads and writes; a mismatch fails the open with an explicit error rather than allowing the kernel to operate against incompatible data.</p>
+<p>The ledger file is self-contained. The schema digest, the ledger entries, and any sidecar-artifact references all live within the path supplied at open time, and moving the file moves the store as a whole. There is no auxiliary configuration that must travel alongside the file for it to remain readable.</p>
+<h2 id="what-the-schema-digest-protects">What the schema digest protects<a class="anchor" href="#what-the-schema-digest-protects">#</a></h2>
+<p>The digest is a content hash computed over the schema as the kernel sees it: every entity class, every identity field with its primary-key flag and type domain, every field with its cardinality and type domain, together with the <code>Meta.version</code> of each entity. Two schemas produce the same digest if and only if their structurally meaningful parts are identical. Renaming a python module, reordering the classes in the list passed to <code>from_schema_classes</code>, or adding a docstring to a class does not change the digest, since none of these alters what facts the schema admits or how those facts are addressed. Renaming a field, changing a cardinality, or swapping a type domain does change the digest, since each of these alters the legibility of any assertion the previous schema had written.</p>
+<p>The check exists not in order to prevent edits but in order to ensure that when a ledger is reopened — possibly months after it was first written, possibly by a process that does not know its history — the schema being supplied at open time can read the ledger&rsquo;s facts coherently. Silently misreading older data under a changed schema is the failure mode the digest is constructed to rule out, and the failure-loud-on-mismatch behaviour is what gives the digest its value as a protection.</p>
+<h2 id="safe-and-unsafe-changes">Safe and unsafe changes<a class="anchor" href="#safe-and-unsafe-changes">#</a></h2>
+<p>Some schema changes preserve legibility and require no digest bump and no migration. Adding a new entity class extends the vocabulary without affecting any existing assertion. Adding a new field to an existing entity introduces a predicate for which existing entities have no assertions, which is a normal and well-defined state under the projection rules. Adding optional metadata where none existed previously — descriptions, tags, an explicit version where the default was implicit — does not affect the digest. Adding a new <code>Identity</code> field with a <code>default</code> or <code>default_factory</code> allows existing identity tuples to be extended without rewriting them, since the kernel can populate the new coordinate at write time when none is supplied.</p>
+<p>Other changes do not preserve legibility and constitute a new schema version. Renaming a field or an entity makes assertions about the old name unreadable under the new vocabulary. Changing a field&rsquo;s cardinality between <code>single</code> and <code>multi</code> alters how existing assertions reduce in projection. Changing a field&rsquo;s type domain — from <code>string</code> to <code>int</code>, or from a literal type to <code>entity_ref</code> — alters how existing values are interpreted. Changing the identity composition of an existing entity invalidates the addresses by which existing assertions are located. Removing a field that has been written to leaves orphaned assertions in the ledger that the new schema has no place for. Each of these changes alters the digest, the kernel refuses to open the old ledger under the new schema, and migration becomes an explicit step rather than an implicit reinterpretation.</p>
+<p>The dividing line is legibility. An additive change extends the vocabulary without unsettling what the existing entries mean, and the kernel can proceed against an old ledger under the new schema. A change that alters the meaning of existing entries — by renaming the predicate they refer to, by altering the projection rule that reduces them, or by changing the addresses at which they are located — does unsettle their meaning, and the kernel will not pretend otherwise.</p>
+<h2 id="migrating-a-schema">Migrating a schema<a class="anchor" href="#migrating-a-schema">#</a></h2>
+<p>When a change crosses the line from legible to illegible, migration is the explicit operation by which a new ledger is constructed under the new schema. The general shape involves four steps. The relevant entity&rsquo;s <code>Meta.version</code> is bumped, recording the change in the schema itself. The old ledger is opened under the old schema in a separate process or in-memory store, where its assertions remain accessible. Those assertions are replayed into a new ledger under the new schema, with whatever transformations the schema change requires applied as part of the replay. The service is then switched to the new ledger.</p>
+<p>The kernel does not provide an in-place migration tool, by design. A migration is a small program that reads from one store and writes to another, and because the ledger is append-only, both ledgers can be kept in parallel for as long as the audit story needs to span the cut. For development work in which the schema is still molten and there is no data that must be preserved, deleting the file and reopening is the appropriate course; the digest check exists to protect data that exists, and where there is no such data it imposes no further constraint.</p>
+<h2 id="crossing-process-boundaries">Crossing process boundaries<a class="anchor" href="#crossing-process-boundaries">#</a></h2>
+<p>A persistent ledger lets two processes that share the file see the same state, and two patterns of inter-process use are worth distinguishing.</p>
+<p>The first is <em>sequential handoff</em>: process A writes, process A exits, process B opens the file and reads. This is the common case — a batch import that runs to completion, followed by a service that serves reads from the resulting ledger — and the ledger file is the entire interface between the two processes. Nothing further has to be coordinated, since there is no temporal overlap during which both processes hold the file open.</p>
+<p>The second is <em>concurrent access</em>: two or more processes hold the same ledger file open simultaneously. The kernel&rsquo;s locking is sufficient for read-heavy workloads in which a single writer is occasional and the rest of the access is reads. For workloads with multiple concurrent writers, the appropriate shape is typically a single writer process accompanied by reader processes — or a shared service that mediates writes on behalf of multiple clients — rather than several independent processes appending in parallel. The ledger format itself is well-behaved under concurrent reads; the contention point is the metadata coordination that surrounds writes, and this is considerably easier to reason about with a single writer.</p>
+<p>In both patterns the audit story is preserved: every assertion is timestamped, sourced, and traceable, regardless of which process produced it. The fact that some assertions came from a different process appears in the audit record as a piece of metadata like any other.</p>
+<h2 id="sidecar-artifacts">Sidecar artifacts<a class="anchor" href="#sidecar-artifacts">#</a></h2>
+<p>Facts whose values are large — files, images, model weights — are best kept out of the ledger file itself, and the kernel supports this through an <code>artifact_store_root</code> argument that designates a directory where the binary content is stored separately.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>sdk <span style="color:#ff6ac1">=</span> SDKStore<span style="color:#ff6ac1">.</span>from_schema_classes(
+</span></span><span style="display:flex;"><span>    [Person, Document],
+</span></span><span style="display:flex;"><span>    ledger_path<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;./data/factpy.db&#34;</span>,
+</span></span><span style="display:flex;"><span>    artifact_store_root<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;./data/artifacts&#34;</span>,
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div><p>Large values are written into the directory under <code>artifact_store_root</code> and the ledger holds a content-addressed reference rather than the value itself. The audit story is preserved in the same form as for any other fact — the reference is part of the assertion, the file remains reachable from the package — without bloating the ledger file with binary content.</p>
+<p>When <code>artifact_store_root</code> is not supplied, large values flow through the ledger directly, which is acceptable for development work and small artifacts but generally inappropriate for production deployments handling sizable blobs. The sidecar configuration is then worth setting up.</p>
+<h2 id="backups">Backups<a class="anchor" href="#backups">#</a></h2>
+<p>Backing up a factpy store consists of backing up two things: the ledger file at <code>ledger_path</code> and, when one has been configured, the directory at <code>artifact_store_root</code>. Both are append-only at the kernel level — the ledger never rewrites earlier entries, the sidecar never rewrites earlier blobs — and a copy taken while the store is quiescent is therefore internally consistent without any further coordination.</p>
+<p>For a backup of a running store, the simplest correct procedure is to quiesce writes briefly, copy the file together with the sidecar directory if one is in use, and resume. The resulting copy is a complete snapshot from which the store can be replayed or reopened elsewhere.</p>
+<p>Audit packages produced through <code>sdk.export_package</code> are an additional archival format, not a substitute for ledger backups. They capture the records of one or more runs — what was written, what was proposed, what was accepted — and are the appropriate artifact for review and offline inspection. They are not, however, sufficient as a backup of operational state: a ledger file is what one opens to continue operating against the data, and the audit package is what one opens to inspect what was done. Both are worth retaining, in different cadences and for different purposes.</p>
+<h2 id="where-to-next">Where to next<a class="anchor" href="#where-to-next">#</a></h2>
+<p><a href="/docs/guides/defining-a-schema">Defining a schema</a> develops the rules around what changes require a new schema version. <a href="/docs/guides/auditing-a-run">Auditing a run</a> covers how audit packages relate to ledger files and when each is the appropriate artifact. For the underlying append-only model and the mechanics by which snapshots are computed from a persisted ledger, see <a href="/docs/concepts/the-ledger">the ledger</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/guides/auditing-a-run/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Auditing a Run</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/guides/using-adapters/" class="flex align-center">
+        <span>Using Adapters</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#persistence">Persistence</a>
+      <ul>
+        <li><a href="#opening-a-persistent-store">Opening a persistent store</a></li>
+        <li><a href="#what-the-schema-digest-protects">What the schema digest protects</a></li>
+        <li><a href="#safe-and-unsafe-changes">Safe and unsafe changes</a></li>
+        <li><a href="#migrating-a-schema">Migrating a schema</a></li>
+        <li><a href="#crossing-process-boundaries">Crossing process boundaries</a></li>
+        <li><a href="#sidecar-artifacts">Sidecar artifacts</a></li>
+        <li><a href="#backups">Backups</a></li>
+        <li><a href="#where-to-next">Where to next</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

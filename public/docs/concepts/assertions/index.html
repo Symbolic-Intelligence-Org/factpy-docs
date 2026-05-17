@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Assertion records and views# Read and write worked at the snapshot level. This page goes one layer deeper. Every fact you wrote is an assertion, and every assertion has a durable identity called asrt_id. Working at this level is how you do precise edits, named record selections, and audit-friendly retracts without ambiguity.
+The mental model is:
+ledger -&gt; assertion records (asrt_id &#43; value &#43; meta &#43; active/revoked) -&gt; grouped by entity coordinate -&gt; EntitySnapshot -&gt; selected by id membership -&gt; FrozenAssertionView -&gt; looked up by id -&gt; fg.assertions.by_idThe discipline is:
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/concepts/assertions/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Assertions">
+  <meta property="og:description" content="Assertion records and views# Read and write worked at the snapshot level. This page goes one layer deeper. Every fact you wrote is an assertion, and every assertion has a durable identity called asrt_id. Working at this level is how you do precise edits, named record selections, and audit-friendly retracts without ambiguity.
+The mental model is:
+ledger -&gt; assertion records (asrt_id &#43; value &#43; meta &#43; active/revoked) -&gt; grouped by entity coordinate -&gt; EntitySnapshot -&gt; selected by id membership -&gt; FrozenAssertionView -&gt; looked up by id -&gt; fg.assertions.by_idThe discipline is:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Assertions">
+  <meta itemprop="description" content="Assertion records and views# Read and write worked at the snapshot level. This page goes one layer deeper. Every fact you wrote is an assertion, and every assertion has a durable identity called asrt_id. Working at this level is how you do precise edits, named record selections, and audit-friendly retracts without ambiguity.
+The mental model is:
+ledger -&gt; assertion records (asrt_id &#43; value &#43; meta &#43; active/revoked) -&gt; grouped by entity coordinate -&gt; EntitySnapshot -&gt; selected by id membership -&gt; FrozenAssertionView -&gt; looked up by id -&gt; fg.assertions.by_idThe discipline is:">
+  <meta itemprop="wordCount" content="2711">
+
+<title>Assertions | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/concepts/assertions/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.f2649702e93cd1a98c670a367e867d65e997b099e0d56919036121e2b932509f.js" integrity="sha256-8mSXAuk80amMZwo2foZ9ZemXsJng1WkZA2Eh4rkyUJ8=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/" class="">
+      Concepts</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="active">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Assertions</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#assertion-records-and-views">Assertion records and views</a>
+      <ul>
+        <li><a href="#writes-return-assertion-ids">Writes return assertion ids</a></li>
+        <li><a href="#assertionrecord-shape">AssertionRecord shape</a>
+          <ul>
+            <li><a href="#first-class-slots">First-class slots</a></li>
+            <li><a href="#convention-meta-keys-you-can-write">Convention meta keys you can write</a></li>
+            <li><a href="#raw-uncertainty-raw_kind-and-bound">Raw uncertainty: <code>raw_kind</code> and <code>bound</code></a></li>
+            <li><a href="#reserved-and-rejected-meta-keys">Reserved and rejected meta keys</a></li>
+          </ul>
+        </li>
+        <li><a href="#field-assertion-collections">Field assertion collections</a></li>
+        <li><a href="#assertionrecordset-selection-helpers">AssertionRecordSet selection helpers</a></li>
+        <li><a href="#business-time-vs-ingestion-time">Business time vs ingestion time</a></li>
+        <li><a href="#professional-retract">Professional retract</a></li>
+        <li><a href="#frozen-views-named-assertion-id-selections">Frozen views: named assertion-id selections</a></li>
+        <li><a href="#graph-level-readback-fgassertions">Graph-level readback: <code>fg.assertions</code></a></li>
+        <li><a href="#what-is-intentionally-not-supported">What is intentionally not supported</a></li>
+        <li><a href="#complete-example">Complete example</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="assertion-records-and-views">Assertion records and views<a class="anchor" href="#assertion-records-and-views">#</a></h1>
+<p>Read and write worked at the snapshot level. This page goes one layer deeper.
+Every fact you wrote is an <code>assertion</code>, and every assertion has a durable
+identity called <code>asrt_id</code>. Working at this level is how you do precise edits,
+named record selections, and audit-friendly retracts without ambiguity.</p>
+<p>The mental model is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>ledger
+</span></span><span style="display:flex;"><span>  -&gt; assertion records (asrt_id + value + meta + active/revoked)
+</span></span><span style="display:flex;"><span>    -&gt; grouped by entity coordinate     -&gt; EntitySnapshot
+</span></span><span style="display:flex;"><span>    -&gt; selected by id membership        -&gt; FrozenAssertionView
+</span></span><span style="display:flex;"><span>    -&gt; looked up by id                  -&gt; fg.assertions.by_id</span></span></code></pre></div><p>The discipline is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>read side finds &#34;which assertion&#34;;
+</span></span><span style="display:flex;"><span>write side only revokes that exact asrt_id.</span></span></code></pre></div><p>If you remember one sentence: <strong>FactGraph does not overwrite a row. It appends
+assertions, and it revokes specific assertion ids.</strong> The common misconception
+this page prevents is treating snapshots like mutable table rows.</p>
+<h2 id="writes-return-assertion-ids">Writes return assertion ids<a class="anchor" href="#writes-return-assertion-ids">#</a></h2>
+<p><code>fg.write.set(...)</code> and <code>fg.write.add(...)</code> both return the <code>asrt_id</code> of the
+assertion they just appended. Keeping that id is the simplest way to inspect
+or retract that exact write later.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Entity, FactGraph, Field, Identity
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tags: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[User])
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>name_seed <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>name,
+</span></span><span style="display:flex;"><span>    alice,
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;Alice&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;seed&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;import-001&#34;</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>name_hr <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>name,
+</span></span><span style="display:flex;"><span>    alice,
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;Alice Liddell&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;hr&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;hr-2026-05&#34;</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>engineer <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>add(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>tags,
+</span></span><span style="display:flex;"><span>    alice,
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;engineer&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;profile&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;profile-001&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;valid_from&#34;</span>: <span style="color:#5af78e">&#34;2026-01-01T00:00:00Z&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;version&#34;</span>: <span style="color:#5af78e">&#34;tag-v1&#34;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>reviewer <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>add(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>tags,
+</span></span><span style="display:flex;"><span>    alice,
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;reviewer&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;import-002&#34;</span>},
+</span></span><span style="display:flex;"><span>)</span></span></code></pre></div><p>Calling <code>set(...)</code> twice on a single field does not overwrite the first
+assertion. The second call appends a second assertion. Both stay in the
+ledger. The snapshot scalar view picks the latest one.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>snap <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> snap<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Alice Liddell&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">set</span>(snap<span style="color:#ff6ac1">.</span>tags) <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;engineer&#34;</span>, <span style="color:#5af78e">&#34;reviewer&#34;</span>}</span></span></code></pre></div><h2 id="assertionrecord-shape">AssertionRecord shape<a class="anchor" href="#assertionrecord-shape">#</a></h2>
+<p><code>AssertionRecord</code> is the unit of fact identity. The interesting attributes
+are:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>record.asrt_id     -&gt; str, durable id
+</span></span><span style="display:flex;"><span>record.value       -&gt; the raw value
+</span></span><span style="display:flex;"><span>record.is_active   -&gt; bool
+</span></span><span style="display:flex;"><span>record.entity_type -&gt; SDK entity type name
+</span></span><span style="display:flex;"><span>record.field_name  -&gt; SDK field name
+</span></span><span style="display:flex;"><span>record.pred_id     -&gt; kernel predicate id
+</span></span><span style="display:flex;"><span>record.e_ref       -&gt; encoded entity ref
+</span></span><span style="display:flex;"><span>record.meta        -&gt; AssertionMeta</span></span></code></pre></div><p><code>AssertionMeta</code> exposes a fixed set of first-class slots plus a <code>raw</code>
+dictionary for everything else you passed at write time.</p>
+<h3 id="first-class-slots">First-class slots<a class="anchor" href="#first-class-slots">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>meta.source                  -&gt; &#34;seed&#34; / &#34;hr&#34; / &#34;import&#34;
+</span></span><span style="display:flex;"><span>meta.source_loc              -&gt; sub-source locator (line, range, region)
+</span></span><span style="display:flex;"><span>meta.trace_id                -&gt; &#34;import-001&#34;
+</span></span><span style="display:flex;"><span>meta.ingested_at             -&gt; datetime, set by the ledger
+</span></span><span style="display:flex;"><span>meta.approved_by             -&gt; reviewer id
+</span></span><span style="display:flex;"><span>meta.note                    -&gt; free-form text
+</span></span><span style="display:flex;"><span>meta.derived_rule_id         -&gt; set by accept(...) for inferred facts
+</span></span><span style="display:flex;"><span>meta.derived_rule_version
+</span></span><span style="display:flex;"><span>meta.candidate_id / candidate_key / candidate_kind
+</span></span><span style="display:flex;"><span>                             -&gt; set by accept(...) for inferred facts
+</span></span><span style="display:flex;"><span>meta.raw                     -&gt; dict[str, Any]</span></span></code></pre></div><p><code>raw</code> is the full meta dictionary as stored. First-class slots are
+projections out of it. If you wrote <code>meta={&quot;version&quot;: &quot;tag-v1&quot;, &quot;valid_from&quot;: &quot;...&quot;}</code>, those keys live in <code>raw</code>.</p>
+<h3 id="convention-meta-keys-you-can-write">Convention meta keys you can write<a class="anchor" href="#convention-meta-keys-you-can-write">#</a></h3>
+<p>These keys are recognized at write time. Anything outside this set still
+goes through (it lands in <code>meta.raw</code>), but engines and adapters do not
+interpret it.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Key</th>
+          <th>Type</th>
+          <th>Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>source</code></td>
+          <td>str</td>
+          <td>Origin tag (<code>&quot;import&quot;</code>, <code>&quot;hr&quot;</code>, etc.). Participates in the ingest key.</td>
+      </tr>
+      <tr>
+          <td><code>source_loc</code></td>
+          <td>str</td>
+          <td>Sub-source locator (line range, region, document path).</td>
+      </tr>
+      <tr>
+          <td><code>trace_id</code></td>
+          <td>str</td>
+          <td>Cross-system trace identifier. Participates in the ingest key.</td>
+      </tr>
+      <tr>
+          <td><code>raw_kind</code></td>
+          <td><code>&quot;probabilistic&quot;</code> or <code>&quot;possibilistic&quot;</code></td>
+          <td>Raw uncertainty kind. <strong>Must be paired with <code>bound</code>.</strong></td>
+      </tr>
+      <tr>
+          <td><code>bound</code></td>
+          <td><code>[lower, upper]</code></td>
+          <td>Two-element JSON list of floats in <code>[0, 1]</code> with <code>lower &lt;= upper</code>. <strong>Must be paired with <code>raw_kind</code>.</strong></td>
+      </tr>
+      <tr>
+          <td><code>approved_by</code></td>
+          <td>str</td>
+          <td>Reviewer id, for governance.</td>
+      </tr>
+      <tr>
+          <td><code>note</code></td>
+          <td>str</td>
+          <td>Free-form annotation.</td>
+      </tr>
+      <tr>
+          <td><code>valid_from</code> / <code>valid_to</code></td>
+          <td>str</td>
+          <td>Business-time interval endpoints (ISO 8601). Used by <code>.at(t)</code>. Land in <code>meta.raw</code>.</td>
+      </tr>
+      <tr>
+          <td><code>version</code></td>
+          <td>str / int</td>
+          <td>User-provided assertion version label. Land in <code>meta.raw</code>.</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="raw-uncertainty-raw_kind-and-bound">Raw uncertainty: <code>raw_kind</code> and <code>bound</code><a class="anchor" href="#raw-uncertainty-raw_kind-and-bound">#</a></h3>
+<p>Raw uncertainty is the user-authored uncertainty contract. It describes how
+a written assertion&rsquo;s value should be interpreted before any engine
+projection.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fg2 <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[User])
+</span></span><span style="display:flex;"><span>ref <span style="color:#ff6ac1">=</span> fg2<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-9&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>uncertain <span style="color:#ff6ac1">=</span> fg2<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>name,
+</span></span><span style="display:flex;"><span>    ref,
+</span></span><span style="display:flex;"><span>    <span style="color:#5af78e">&#34;Alice&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;ocr&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;ocr-2026-05&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;raw_kind&#34;</span>: <span style="color:#5af78e">&#34;probabilistic&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;bound&#34;</span>: [<span style="color:#ff9f43">0.2</span>, <span style="color:#ff9f43">0.8</span>],
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>snap2 <span style="color:#ff6ac1">=</span> fg2<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-9&#34;</span>)
+</span></span><span style="display:flex;"><span>record <span style="color:#ff6ac1">=</span> snap2<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;name&#34;</span>)<span style="color:#ff6ac1">.</span>all()<span style="color:#ff6ac1">.</span>by_id(uncertain)<span style="color:#ff6ac1">.</span>one()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> record<span style="color:#ff6ac1">.</span>meta<span style="color:#ff6ac1">.</span>raw[<span style="color:#5af78e">&#34;raw_kind&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;probabilistic&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> record<span style="color:#ff6ac1">.</span>meta<span style="color:#ff6ac1">.</span>raw[<span style="color:#5af78e">&#34;bound&#34;</span>] <span style="color:#ff6ac1">==</span> [<span style="color:#ff9f43">0.2</span>, <span style="color:#ff9f43">0.8</span>]</span></span></code></pre></div><p>The two raw kinds are:</p>
+<ul>
+<li><strong><code>&quot;probabilistic&quot;</code></strong> — values from probability, frequency, calibrated
+statistical estimates, or measured error models. The ProbLog adapter
+consumes this lane natively (point bounds project as <code>p::fact</code>; interval
+bounds require an explicit projection strategy).</li>
+<li><strong><code>&quot;possibilistic&quot;</code></strong> — values from compatibility, physical allowance,
+expert uncertainty, or necessity/possibility bounds. The PyReason
+adapter consumes this lane natively as a truth/certainty-compatible
+bound.</li>
+</ul>
+<p>The same numeric <code>bound</code> carries different meaning under each kind; the
+write protocol preserves that boundary instead of flattening it.</p>
+<p>The contract has four invariants:</p>
+<ol>
+<li><strong>Paired.</strong> <code>raw_kind</code> and <code>bound</code> must both appear or both be absent.
+Writing one without the other raises a write protocol error.</li>
+<li><strong>Exact kind values.</strong> <code>raw_kind</code> must be exactly <code>&quot;probabilistic&quot;</code> or
+<code>&quot;possibilistic&quot;</code>.</li>
+<li><strong>Normalized bound.</strong> <code>bound</code> must be a two-element JSON list of numeric
+values (booleans rejected), normalized to floats in <code>[0, 1]</code>, with
+<code>lower &lt;= upper</code>.</li>
+<li><strong>Annotation mirror.</strong> When <code>raw_kind</code> and <code>bound</code> are present, the
+ledger also writes paired annotation rows on the
+<code>shared/semantic/raw_kind</code> and <code>shared/semantic/bound</code> lanes with
+<code>origin=&quot;observed&quot;</code>.</li>
+</ol>
+<p><code>raw_kind</code> and <code>bound</code> are not first-class slots on <code>AssertionMeta</code>. They
+land in <code>meta.raw[&quot;raw_kind&quot;]</code> and <code>meta.raw[&quot;bound&quot;]</code>, and you select them
+through <code>.where(meta={...})</code> like any other raw key:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>uncertain_records <span style="color:#ff6ac1">=</span> snap2<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;name&#34;</span>)<span style="color:#ff6ac1">.</span>active()<span style="color:#ff6ac1">.</span>where(
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;raw_kind&#34;</span>: <span style="color:#5af78e">&#34;probabilistic&#34;</span>, <span style="color:#5af78e">&#34;bound&#34;</span>: [<span style="color:#ff9f43">0.2</span>, <span style="color:#ff9f43">0.8</span>]}
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> uncertain_records<span style="color:#ff6ac1">.</span>one()<span style="color:#ff6ac1">.</span>asrt_id <span style="color:#ff6ac1">==</span> uncertain</span></span></code></pre></div><h3 id="reserved-and-rejected-meta-keys">Reserved and rejected meta keys<a class="anchor" href="#reserved-and-rejected-meta-keys">#</a></h3>
+<p>System-managed keys cannot appear in user meta at write time. The ledger
+fills them itself:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>ingested_at        -&gt; filled by the ledger (nanosecond epoch)
+</span></span><span style="display:flex;"><span>ingest_key         -&gt; filled by the ledger (idempotency key digest)
+</span></span><span style="display:flex;"><span>revoked_asrt_id    -&gt; filled by retract(...) on the revocation record</span></span></code></pre></div><p>Engine-specific uncertainty keys are rejected at write time. Use the raw
+uncertainty contract above instead. Engine adapters produce these as output
+annotations on their own lanes (<code>problog/semantic/probability</code>,
+<code>pyreason/semantic/bound_lower</code>, etc.); they are not user write inputs.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>probability        -&gt; rejected; use raw_kind=&#34;probabilistic&#34; + bound
+</span></span><span style="display:flex;"><span>bound_lower        -&gt; rejected; use bound=[lower, upper]
+</span></span><span style="display:flex;"><span>bound_upper        -&gt; rejected; use bound=[lower, upper]</span></span></code></pre></div><p>Writing any of these raises a write protocol error before the assertion is
+appended.</p>
+<h2 id="field-assertion-collections">Field assertion collections<a class="anchor" href="#field-assertion-collections">#</a></h2>
+<p>Open the assertion view for one field with either:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>snap.field(&#34;name&#34;)         -&gt; dynamic field name
+</span></span><span style="display:flex;"><span>snap.assertions.field(&#34;name&#34;)       -&gt; field under the snapshot assertion manager</span></span></code></pre></div><p>Both return the same <code>FieldAssertions</code> object. <code>snap.assertions.field(...)</code>
+is the form that composes with snapshot-wide assertion manager methods.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>name_field <span style="color:#ff6ac1">=</span> snap<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;name&#34;</span>)
+</span></span><span style="display:flex;"><span>same_field <span style="color:#ff6ac1">=</span> snap<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;name&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> name_field<span style="color:#ff6ac1">.</span>all()<span style="color:#ff6ac1">.</span>by_id(name_seed)<span style="color:#ff6ac1">.</span>one()<span style="color:#ff6ac1">.</span>value <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Alice&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> same_field<span style="color:#ff6ac1">.</span>all()<span style="color:#ff6ac1">.</span>by_id(name_hr)<span style="color:#ff6ac1">.</span>one()<span style="color:#ff6ac1">.</span>value <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Alice Liddell&#34;</span></span></span></code></pre></div><p><code>FieldAssertions</code> exposes two base sets and two shortcuts:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Surface</th>
+          <th>Returns</th>
+          <th>Use it for</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>.active()</code></td>
+          <td><code>AssertionRecordSet</code> of non-revoked records</td>
+          <td>the current authoritative set</td>
+      </tr>
+      <tr>
+          <td><code>.all()</code></td>
+          <td><code>AssertionRecordSet</code> of every record, active and revoked</td>
+          <td>audit, replays, retract selection</td>
+      </tr>
+      <tr>
+          <td><code>.at(t)</code></td>
+          <td>shortcut for <code>.active().at(t)</code></td>
+          <td>business-time slice of active records</td>
+      </tr>
+      <tr>
+          <td><code>.version(v)</code></td>
+          <td>shortcut for <code>.active().version(v)</code></td>
+          <td>active records with <code>meta.raw[&quot;version&quot;] == v</code></td>
+      </tr>
+  </tbody>
+</table>
+<p>The shortcuts mean: most of the time you want active-only filters, and the
+two common ones get a direct entry. Active-plus-revoked time or version
+filters remain explicit:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>historical_v1 <span style="color:#ff6ac1">=</span> snap<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;tags&#34;</span>)<span style="color:#ff6ac1">.</span>all()<span style="color:#ff6ac1">.</span>version(<span style="color:#5af78e">&#34;tag-v1&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {r<span style="color:#ff6ac1">.</span>value <span style="color:#ff6ac1">for</span> r <span style="color:#ff6ac1">in</span> historical_v1} <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;engineer&#34;</span>}</span></span></code></pre></div><h2 id="assertionrecordset-selection-helpers">AssertionRecordSet selection helpers<a class="anchor" href="#assertionrecordset-selection-helpers">#</a></h2>
+<p><code>AssertionRecordSet</code> is the tuple-compatible record collection returned by
+<code>.active()</code>, <code>.all()</code>, and graph-level readback. You do not import it; it is
+the type you get back from those calls.</p>
+<p>It behaves like a tuple:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>all_tags_history <span style="color:#ff6ac1">=</span> snap<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;tags&#34;</span>)<span style="color:#ff6ac1">.</span>all()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">len</span>(all_tags_history) <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>first <span style="color:#ff6ac1">=</span> all_tags_history[<span style="color:#ff9f43">0</span>]
+</span></span><span style="display:flex;"><span>slice_two <span style="color:#ff6ac1">=</span> all_tags_history[:<span style="color:#ff9f43">2</span>]
+</span></span><span style="display:flex;"><span>combined <span style="color:#ff6ac1">=</span> slice_two <span style="color:#ff6ac1">+</span> slice_two</span></span></code></pre></div><p>Slicing, concatenation, and <code>*</code> preserve the helper methods, so you can keep
+chaining selection calls.</p>
+<p>Selection helpers cover the common assertion-selection questions:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Helper</th>
+          <th>Filters on</th>
+          <th>Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>.where(value=..., source=..., trace_id=..., version=..., meta={...})</code></td>
+          <td>value and known meta slots</td>
+          <td>All criteria are keyword-only and AND together. <code>version=v</code> is short for <code>meta.raw[&quot;version&quot;]==v</code>. Use <code>meta={...}</code> for arbitrary raw keys.</td>
+      </tr>
+      <tr>
+          <td><code>.at(t)</code></td>
+          <td><code>meta.raw[&quot;valid_from&quot;]</code> / <code>meta.raw[&quot;valid_to&quot;]</code></td>
+          <td>Business time. Records without <code>valid_from</code> are not matched. Half-open interval.</td>
+      </tr>
+      <tr>
+          <td><code>.version(v)</code></td>
+          <td><code>meta.raw[&quot;version&quot;] == v</code></td>
+          <td>Same effect as <code>.where(version=v)</code>.</td>
+      </tr>
+      <tr>
+          <td><code>.by_id(asrt_id)</code></td>
+          <td>exact <code>asrt_id</code></td>
+          <td>Returns a record set so you can still call <code>.one()</code>.</td>
+      </tr>
+  </tbody>
+</table>
+<p>Terminal helpers turn the set into a single record or a plain tuple:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Helper</th>
+          <th>Returns</th>
+          <th>Use it for</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>.one()</code></td>
+          <td>one <code>AssertionRecord</code></td>
+          <td>exactly-one selection before destructive action</td>
+      </tr>
+      <tr>
+          <td><code>.first()</code></td>
+          <td>first record or <code>None</code></td>
+          <td>preview, browse</td>
+      </tr>
+      <tr>
+          <td><code>.all()</code></td>
+          <td>plain <code>tuple[AssertionRecord, ...]</code></td>
+          <td>when you need an unwrapped sequence</td>
+      </tr>
+  </tbody>
+</table>
+<p><code>.one()</code> raises if the set is empty or has more than one record. That is the
+point. Selection must be unique before the write side accepts a retraction.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>target <span style="color:#ff6ac1">=</span> (
+</span></span><span style="display:flex;"><span>    snap<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;name&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">.</span>all()
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">.</span>where(value<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;Alice&#34;</span>, source<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed&#34;</span>, trace_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;import-001&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">.</span>one()
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> target<span style="color:#ff6ac1">.</span>asrt_id <span style="color:#ff6ac1">==</span> name_seed
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> target<span style="color:#ff6ac1">.</span>meta<span style="color:#ff6ac1">.</span>source <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;seed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> target<span style="color:#ff6ac1">.</span>meta<span style="color:#ff6ac1">.</span>raw[<span style="color:#5af78e">&#34;trace_id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;import-001&#34;</span></span></span></code></pre></div><p>Explicit <code>None</code> and omitted criteria are different:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>unfiltered <span style="color:#ff6ac1">=</span> snap<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;tags&#34;</span>)<span style="color:#ff6ac1">.</span>active()<span style="color:#ff6ac1">.</span>where()             <span style="color:#78787e"># all active tags</span>
+</span></span><span style="display:flex;"><span>no_source <span style="color:#ff6ac1">=</span> snap<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;tags&#34;</span>)<span style="color:#ff6ac1">.</span>active()<span style="color:#ff6ac1">.</span>where(source<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">None</span>)    <span style="color:#78787e"># source must be None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">len</span>(unfiltered) <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> no_source<span style="color:#ff6ac1">.</span>first() <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">None</span></span></span></code></pre></div><p><code>.where()</code> with no arguments does not filter. <code>.where(source=None)</code> requires
+<code>source</code> to be <code>None</code> on the record.</p>
+<h2 id="business-time-vs-ingestion-time">Business time vs ingestion time<a class="anchor" href="#business-time-vs-ingestion-time">#</a></h2>
+<p><code>.at(t)</code> matches <code>meta.raw[&quot;valid_from&quot;]</code> and <code>meta.raw[&quot;valid_to&quot;]</code>, not the
+ledger ingest timestamp:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>visible <span style="color:#ff6ac1">=</span> snap<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;tags&#34;</span>)<span style="color:#ff6ac1">.</span>all()<span style="color:#ff6ac1">.</span>at(<span style="color:#5af78e">&#34;2026-02-01T00:00:00Z&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {r<span style="color:#ff6ac1">.</span>value <span style="color:#ff6ac1">for</span> r <span style="color:#ff6ac1">in</span> visible} <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;engineer&#34;</span>}</span></span></code></pre></div><p>The engineer tag has <code>valid_from=&quot;2026-01-01T00:00:00Z&quot;</code> and no <code>valid_to</code>,
+so it matches any time at or after 2026-01-01. The reviewer tag has no
+<code>valid_from</code>, so <code>.at(...)</code> does not match it.</p>
+<p>The semantics are half-open:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>valid_from &lt;= t and (valid_to is missing or valid_to &gt; t)</span></span></code></pre></div><p>If you want ingestion time instead, read <code>record.meta.ingested_at</code> directly.
+That field is set by the ledger and is not affected by <code>valid_from</code> /
+<code>valid_to</code>.</p>
+<h2 id="professional-retract">Professional retract<a class="anchor" href="#professional-retract">#</a></h2>
+<p><code>fg.write.retract(...)</code> takes one argument: an <code>asrt_id</code>. It does not take an
+entity ref, a value, or an <code>AssertionRecord</code>. The &ldquo;are you sure&rdquo; check lives
+on the read side.</p>
+<p>The pattern is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>read.get / find -&gt; snap -&gt; snap.field(name) -&gt; where(...).one() -&gt; retract</span></span></code></pre></div><p>End to end:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>reviewer_target <span style="color:#ff6ac1">=</span> (
+</span></span><span style="display:flex;"><span>    snap<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;tags&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">.</span>active
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">.</span>where(value<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;reviewer&#34;</span>, source<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;import&#34;</span>, trace_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;import-002&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">.</span>one()
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>revoker <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>retract(
+</span></span><span style="display:flex;"><span>    reviewer_target<span style="color:#ff6ac1">.</span>asrt_id,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;manual-fix&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;fix-001&#34;</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">isinstance</span>(revoker, <span style="color:#ff5c57">str</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>after <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">set</span>(after<span style="color:#ff6ac1">.</span>tags) <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;engineer&#34;</span>}
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> reviewer_target<span style="color:#ff6ac1">.</span>asrt_id <span style="color:#ff6ac1">in</span> {r<span style="color:#ff6ac1">.</span>asrt_id <span style="color:#ff6ac1">for</span> r <span style="color:#ff6ac1">in</span> after<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;tags&#34;</span>)<span style="color:#ff6ac1">.</span>all()}
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> reviewer_target<span style="color:#ff6ac1">.</span>asrt_id <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">in</span> {r<span style="color:#ff6ac1">.</span>asrt_id <span style="color:#ff6ac1">for</span> r <span style="color:#ff6ac1">in</span> after<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;tags&#34;</span>)<span style="color:#ff6ac1">.</span>active()}</span></span></code></pre></div><p>Two id values appear in any retract:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>target.asrt_id     -&gt; the original assertion being revoked
+</span></span><span style="display:flex;"><span>revoker            -&gt; the new revocation assertion id</span></span></code></pre></div><p>If you already saved the original <code>asrt_id</code> at write time, you can retract
+directly. No selection step is needed:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>retract(name_seed, meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;manual-fix&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>later <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> name_seed <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">in</span> {r<span style="color:#ff6ac1">.</span>asrt_id <span style="color:#ff6ac1">for</span> r <span style="color:#ff6ac1">in</span> later<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;name&#34;</span>)<span style="color:#ff6ac1">.</span>active()}
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> name_seed <span style="color:#ff6ac1">in</span> {r<span style="color:#ff6ac1">.</span>asrt_id <span style="color:#ff6ac1">for</span> r <span style="color:#ff6ac1">in</span> later<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;name&#34;</span>)<span style="color:#ff6ac1">.</span>all()}
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> later<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Alice Liddell&#34;</span></span></span></code></pre></div><p>The original assertion is not deleted from the ledger. It moves out of
+<code>.active()</code> and stays in <code>.all()</code>.</p>
+<h2 id="frozen-views-named-assertion-id-selections">Frozen views: named assertion-id selections<a class="anchor" href="#frozen-views-named-assertion-id-selections">#</a></h2>
+<p><code>fg.views</code> stores named frozen sets of assertion ids.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>review <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>views<span style="color:#ff6ac1">.</span>create(<span style="color:#5af78e">&#34;name_review&#34;</span>, asrt_ids<span style="color:#ff6ac1">=</span>[name_seed, name_hr])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> review<span style="color:#ff6ac1">.</span>asrt_ids <span style="color:#ff6ac1">==</span> <span style="color:#ff5c57">frozenset</span>({name_seed, name_hr})
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#5af78e">&#34;name_review&#34;</span> <span style="color:#ff6ac1">in</span> fg<span style="color:#ff6ac1">.</span>views<span style="color:#ff6ac1">.</span>list()</span></span></code></pre></div><p>You can also create a view from objects that carry an <code>.asrt_id</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>seed_record <span style="color:#ff6ac1">=</span> later<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;name&#34;</span>)<span style="color:#ff6ac1">.</span>all()<span style="color:#ff6ac1">.</span>by_id(name_seed)<span style="color:#ff6ac1">.</span>one()
+</span></span><span style="display:flex;"><span>hr_record <span style="color:#ff6ac1">=</span> later<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;name&#34;</span>)<span style="color:#ff6ac1">.</span>all()<span style="color:#ff6ac1">.</span>by_id(name_hr)<span style="color:#ff6ac1">.</span>one()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>obj_view <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>views<span style="color:#ff6ac1">.</span>create(<span style="color:#5af78e">&#34;name_review_objs&#34;</span>, asrts<span style="color:#ff6ac1">=</span>[seed_record, hr_record])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> obj_view<span style="color:#ff6ac1">.</span>asrt_ids <span style="color:#ff6ac1">==</span> review<span style="color:#ff6ac1">.</span>asrt_ids</span></span></code></pre></div><p><code>asrts=</code> is a convenience input. Anything with an <code>.asrt_id</code> attribute is
+accepted, and only the id is stored. The object payload, value, and active
+state are not part of the view.</p>
+<p><code>update(...)</code> replaces the membership entirely:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>views<span style="color:#ff6ac1">.</span>update(<span style="color:#5af78e">&#34;name_review&#34;</span>, asrt_ids<span style="color:#ff6ac1">=</span>[name_hr])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> fg<span style="color:#ff6ac1">.</span>views<span style="color:#ff6ac1">.</span>get(<span style="color:#5af78e">&#34;name_review&#34;</span>)<span style="color:#ff6ac1">.</span>asrt_ids <span style="color:#ff6ac1">==</span> <span style="color:#ff5c57">frozenset</span>({name_hr})</span></span></code></pre></div><p>There is no <code>patch(...)</code> or <code>diff(...)</code> in the current public surface.</p>
+<p>A view does not require every id to exist in the ledger. Revoked assertions
+stay valid members. Empty views are allowed.</p>
+<p><code>FrozenAssertionView</code> is the returned object type. It carries only <code>name</code>
+and <code>asrt_ids</code> (a <code>frozenset[str]</code>). It is intentionally not in
+<code>kernel.sdk.__all__</code>; you reach it through <code>fg.views.get(...)</code> and
+<code>fg.views.list()</code>. <code>fg.views</code> stores assertion-id sets, not read policies.</p>
+<p><code>fg.views</code> is intentionally outside workspace persistence. <code>fg.save(...)</code>
+does not write view membership, and <code>FactGraph.load(...)</code> does not restore
+it. Views are session-scoped name -&gt; id-set bindings.</p>
+<p>For read-time assertion selection, use field-level <code>active</code>, <code>history</code>,
+<code>.where(...)</code>, <code>.at(...)</code>, and <code>.version(...)</code>. Frozen views are id-set
+containers.</p>
+<h2 id="graph-level-readback-fgassertions">Graph-level readback: <code>fg.assertions</code><a class="anchor" href="#graph-level-readback-fgassertions">#</a></h2>
+<p><code>fg.assertions.by_id(...)</code> and <code>fg.assertions.by_ids(...)</code> are the
+graph-level by-id readback for assertion records.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>seed_record <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>by_id(name_seed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> seed_record <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> seed_record<span style="color:#ff6ac1">.</span>value <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Alice&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> seed_record<span style="color:#ff6ac1">.</span>meta<span style="color:#ff6ac1">.</span>source <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;seed&#34;</span></span></span></code></pre></div><p><code>by_ids(...)</code> is the natural pair with frozen views:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>views<span style="color:#ff6ac1">.</span>update(<span style="color:#5af78e">&#34;name_review&#34;</span>, asrt_ids<span style="color:#ff6ac1">=</span>[name_seed, name_hr])
+</span></span><span style="display:flex;"><span>view <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>views<span style="color:#ff6ac1">.</span>get(<span style="color:#5af78e">&#34;name_review&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>records <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>by_ids(view<span style="color:#ff6ac1">.</span>asrt_ids)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {r<span style="color:#ff6ac1">.</span>value <span style="color:#ff6ac1">for</span> r <span style="color:#ff6ac1">in</span> records} <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;Alice&#34;</span>, <span style="color:#5af78e">&#34;Alice Liddell&#34;</span>}</span></span></code></pre></div><p><code>by_id(...)</code> returns <code>AssertionRecord | None</code> &ndash; unknown ids resolve to
+<code>None</code>. <code>by_ids(...)</code> returns an <code>AssertionRecordSet</code> &ndash; unknown ids are
+skipped silently, and there is no <code>strict=</code> flag in this slice.</p>
+<p>From an <code>asrt_id</code>, the audit layer can supply higher-level explanation
+through <code>fg.audit.explain_fact(...)</code> and <code>fg.audit.conflicts(...)</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>explanation <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>audit<span style="color:#ff6ac1">.</span>explain_fact(<span style="color:#5af78e">&#34;user:name&#34;</span>, alice)
+</span></span><span style="display:flex;"><span>conflicting <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>audit<span style="color:#ff6ac1">.</span>conflicts(<span style="color:#5af78e">&#34;user:name&#34;</span>, alice)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> explanation[<span style="color:#5af78e">&#34;pred_id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;user:name&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> conflicting[<span style="color:#5af78e">&#34;pred_id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;user:name&#34;</span></span></span></code></pre></div><p>Those go beyond single-record lookup. This quickstart page stops at the
+by-id boundary; cross-engine evidence graphs and round-event archives are
+advanced audit surfaces.</p>
+<h2 id="what-is-intentionally-not-supported">What is intentionally not supported<a class="anchor" href="#what-is-intentionally-not-supported">#</a></h2>
+<p>The current assertion surface is the smallest one that closes the
+write -&gt; snapshot -&gt; select -&gt; retract -&gt; frozen-view -&gt; readback loop. The
+following are not in scope. The SDK either rejects them or simply does not
+implement them:</p>
+<ul>
+<li><code>fg.write.retract(entity_ref)</code> and <code>fg.write.retract(value=...)</code> &ndash; selection
+must be on the read side, not in the retract call.</li>
+<li><code>fg.write.retract(record)</code> with an <code>AssertionRecord</code> object &ndash; pass the
+<code>record.asrt_id</code> field explicitly.</li>
+<li><code>records[0].asrt_id</code> as a retract target &ndash; ordering is not a confirmation
+mechanism. Use <code>.where(...).one()</code> for selection.</li>
+<li><code>fg.assertions.where(...)</code>, <code>fg.assertions.at(...)</code>,
+<code>fg.assertions.version(...)</code>, and <code>fg.assertions.history(...)</code> &ndash; start from
+<code>fg.assertions.active()</code> / <code>.all()</code> first, then chain record-set filters.</li>
+<li><code>snap.assertions.where(...)</code> directly on the manager &ndash; use
+<code>snap.assertions.active()</code> / <code>.all()</code> first, then call <code>.where(...)</code> on the
+returned <code>AssertionRecordSet</code>. Use <code>.field(&quot;where&quot;)</code> for a field literally
+named <code>where</code>.</li>
+<li><code>fg.assertions.by_ids(..., strict=True)</code> &ndash; unknown ids are skipped
+silently.</li>
+<li><code>fg.views.patch(...)</code> and <code>fg.views.diff(...)</code> &ndash; frozen view updates are
+full replacements.</li>
+<li><code>fg.read.find(view=...)</code> and <code>fg.eval.run(rule, view=...)</code> &ndash; <code>view=</code> is
+not a parameter. Frozen views do not scope reads, rules, or inference
+evaluation; they are id-set containers only.</li>
+<li><code>fg.eval.evaluate(inference, view=...)</code> &ndash; inference evaluation always
+runs against active projection.</li>
+<li>Richer graph-level record context (<code>entity_type</code>, <code>pred_id</code>, field name)
+inside <code>by_ids(...)</code> results &ndash; the record shape stays uniform.</li>
+</ul>
+<p>Each item is a real boundary, not a missing feature. Crossing them changes
+projection semantics, runtime fact universe, or write-side safety, and would
+need a dedicated blueprint.</p>
+<h2 id="complete-example">Complete example<a class="anchor" href="#complete-example">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> Entity, FactGraph, Field, Identity
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    name: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tags: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[User])
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>name_seed <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>name, alice, <span style="color:#5af78e">&#34;Alice&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;seed&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;import-001&#34;</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>name_hr <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>name, alice, <span style="color:#5af78e">&#34;Alice Liddell&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;hr&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;hr-2026-05&#34;</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>engineer <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>add(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>tags, alice, <span style="color:#5af78e">&#34;engineer&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;profile&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;profile-001&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;valid_from&#34;</span>: <span style="color:#5af78e">&#34;2026-01-01T00:00:00Z&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;version&#34;</span>: <span style="color:#5af78e">&#34;tag-v1&#34;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>reviewer <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>add(
+</span></span><span style="display:flex;"><span>    User<span style="color:#ff6ac1">.</span>tags, alice, <span style="color:#5af78e">&#34;reviewer&#34;</span>,
+</span></span><span style="display:flex;"><span>    meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;import&#34;</span>, <span style="color:#5af78e">&#34;trace_id&#34;</span>: <span style="color:#5af78e">&#34;import-002&#34;</span>},
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>snap <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> snap<span style="color:#ff6ac1">.</span>name <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Alice Liddell&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">set</span>(snap<span style="color:#ff6ac1">.</span>tags) <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;engineer&#34;</span>, <span style="color:#5af78e">&#34;reviewer&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>target <span style="color:#ff6ac1">=</span> (
+</span></span><span style="display:flex;"><span>    snap<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;name&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">.</span>all()
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">.</span>where(value<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;Alice&#34;</span>, source<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed&#34;</span>, trace_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;import-001&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">.</span>one()
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> target<span style="color:#ff6ac1">.</span>asrt_id <span style="color:#ff6ac1">==</span> name_seed
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> target<span style="color:#ff6ac1">.</span>meta<span style="color:#ff6ac1">.</span>raw[<span style="color:#5af78e">&#34;trace_id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;import-001&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>visible_at <span style="color:#ff6ac1">=</span> snap<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;tags&#34;</span>)<span style="color:#ff6ac1">.</span>all()<span style="color:#ff6ac1">.</span>at(<span style="color:#5af78e">&#34;2026-02-01T00:00:00Z&#34;</span>)
+</span></span><span style="display:flex;"><span>historical_v1 <span style="color:#ff6ac1">=</span> snap<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;tags&#34;</span>)<span style="color:#ff6ac1">.</span>all()<span style="color:#ff6ac1">.</span>version(<span style="color:#5af78e">&#34;tag-v1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {r<span style="color:#ff6ac1">.</span>value <span style="color:#ff6ac1">for</span> r <span style="color:#ff6ac1">in</span> visible_at} <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;engineer&#34;</span>}
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {r<span style="color:#ff6ac1">.</span>value <span style="color:#ff6ac1">for</span> r <span style="color:#ff6ac1">in</span> historical_v1} <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;engineer&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>reviewer_target <span style="color:#ff6ac1">=</span> snap<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;tags&#34;</span>)<span style="color:#ff6ac1">.</span>active()<span style="color:#ff6ac1">.</span>where(value<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;reviewer&#34;</span>)<span style="color:#ff6ac1">.</span>one()
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>retract(reviewer_target<span style="color:#ff6ac1">.</span>asrt_id, meta<span style="color:#ff6ac1">=</span>{<span style="color:#5af78e">&#34;source&#34;</span>: <span style="color:#5af78e">&#34;manual-fix&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>after <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">set</span>(after<span style="color:#ff6ac1">.</span>tags) <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;engineer&#34;</span>}
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> reviewer_target<span style="color:#ff6ac1">.</span>asrt_id <span style="color:#ff6ac1">in</span> {r<span style="color:#ff6ac1">.</span>asrt_id <span style="color:#ff6ac1">for</span> r <span style="color:#ff6ac1">in</span> after<span style="color:#ff6ac1">.</span>field(<span style="color:#5af78e">&#34;tags&#34;</span>)<span style="color:#ff6ac1">.</span>all()}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>review <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>views<span style="color:#ff6ac1">.</span>create(<span style="color:#5af78e">&#34;name_review&#34;</span>, asrt_ids<span style="color:#ff6ac1">=</span>[name_seed, name_hr])
+</span></span><span style="display:flex;"><span>records <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>by_ids(review<span style="color:#ff6ac1">.</span>asrt_ids)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> review<span style="color:#ff6ac1">.</span>asrt_ids <span style="color:#ff6ac1">==</span> <span style="color:#ff5c57">frozenset</span>({name_seed, name_hr})
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> {r<span style="color:#ff6ac1">.</span>value <span style="color:#ff6ac1">for</span> r <span style="color:#ff6ac1">in</span> records} <span style="color:#ff6ac1">==</span> {<span style="color:#5af78e">&#34;Alice&#34;</span>, <span style="color:#5af78e">&#34;Alice Liddell&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>seed_record <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>assertions<span style="color:#ff6ac1">.</span>by_id(name_seed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> seed_record <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> seed_record<span style="color:#ff6ac1">.</span>meta<span style="color:#ff6ac1">.</span>source <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;seed&#34;</span></span></span></code></pre></div><h2 id="syntax-checklist">Syntax checklist<a class="anchor" href="#syntax-checklist">#</a></h2>
+<ul>
+<li><code>fg.write.set(...)</code> and <code>fg.write.add(...)</code> return <code>asrt_id</code> strings; keep
+them when you may need to retract or audit later.</li>
+<li><code>AssertionRecord</code> exposes <code>asrt_id</code>, <code>value</code>, <code>is_active</code>, context fields
+(<code>entity_type</code>, <code>field_name</code>, <code>pred_id</code>, <code>e_ref</code>), and <code>meta</code>. Use
+<code>not record.is_active</code> for revoked/inactive records.</li>
+<li><code>AssertionMeta</code> exposes <code>source</code>, <code>source_loc</code>, <code>trace_id</code>, <code>ingested_at</code>,
+<code>approved_by</code>, <code>note</code>, derived-rule fields, candidate fields, and <code>raw</code>.</li>
+<li>Business-time keys (<code>valid_from</code>, <code>valid_to</code>) and the <code>version</code> label live
+in <code>meta.raw</code>, not as first-class slots.</li>
+<li>Raw uncertainty is written as <code>meta={&quot;raw_kind&quot;: ..., &quot;bound&quot;: ...}</code> and
+also lives in <code>meta.raw</code>. <code>raw_kind</code> must be <code>&quot;probabilistic&quot;</code> or
+<code>&quot;possibilistic&quot;</code>; <code>bound</code> must be a two-element JSON list of floats in
+<code>[0, 1]</code> with <code>lower &lt;= upper</code>; the two keys must be provided together.</li>
+<li><code>raw_kind</code> and <code>bound</code> are also mirrored into shared annotation rows
+(<code>shared/semantic/raw_kind</code>, <code>shared/semantic/bound</code>) with
+<code>origin=&quot;observed&quot;</code>.</li>
+<li>For uncertainty inputs, use <code>raw_kind</code> and <code>bound</code>.</li>
+<li><code>probability</code>, <code>bound_lower</code>, and <code>bound_upper</code> are rejected as
+user-authored meta. They were per-engine projections and are not write
+inputs.</li>
+<li><code>ingested_at</code>, <code>ingest_key</code>, and <code>revoked_asrt_id</code> are system-managed
+meta keys; user writes that include them are rejected.</li>
+<li><code>snap.field(&quot;name&quot;)</code> and <code>snap.assertions.field(&quot;name&quot;)</code> both return
+<code>FieldAssertions</code>.</li>
+<li><code>FieldAssertions.active()</code> and <code>.all()</code> return <code>AssertionRecordSet</code>.</li>
+<li><code>FieldAssertions.at(t)</code> and <code>.version(v)</code> are shortcuts over the active
+set.</li>
+<li><code>AssertionRecordSet</code> is tuple-compatible: indexing, slicing, concatenation,
+iteration, <code>len(...)</code>.</li>
+<li><code>.where(value=..., source=..., trace_id=..., version=..., meta={...})</code> is
+keyword-only and AND-combined.</li>
+<li><code>.at(t)</code> matches business time via <code>meta.raw[&quot;valid_from&quot;]</code> and <code>valid_to</code>,
+not <code>ingested_at</code>.</li>
+<li><code>.version(v)</code> matches <code>meta.raw[&quot;version&quot;] == v</code>.</li>
+<li><code>.by_id(asrt_id)</code> returns a record set so you can still call <code>.one()</code>.</li>
+<li><code>.one()</code> requires exactly one record; <code>.first()</code> previews; <code>.all()</code> returns
+a tuple.</li>
+<li><code>fg.write.retract(asrt_id)</code> revokes by id and returns the revoker&rsquo;s
+<code>asrt_id</code>.</li>
+<li><code>fg.write.retract(...)</code> does not accept entity refs, values, or
+<code>AssertionRecord</code> objects.</li>
+<li><code>fg.views.create/update(name, asrt_ids=[...])</code> stores a frozen id set;
+<code>asrts=</code> accepts objects with <code>.asrt_id</code>.</li>
+<li><code>FrozenAssertionView.asrt_ids</code> is a <code>frozenset[str]</code>.</li>
+<li><code>fg.views</code> is frozen-only: it stores <code>FrozenAssertionView</code> entries.</li>
+<li><code>fg.assertions.by_id(asrt_id)</code> returns <code>AssertionRecord | None</code>;
+<code>fg.assertions.by_ids(asrt_ids)</code> returns <code>AssertionRecordSet</code> with unknown
+ids skipped silently.</li>
+<li>Graph-wide assertion queries, view-scoped reads, and <code>records[0]</code>-style
+retract are intentionally not supported.</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/concepts/read-write/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Read and Write</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/concepts/semantics/" class="flex align-center">
+        <span>Semantics</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#assertion-records-and-views">Assertion records and views</a>
+      <ul>
+        <li><a href="#writes-return-assertion-ids">Writes return assertion ids</a></li>
+        <li><a href="#assertionrecord-shape">AssertionRecord shape</a>
+          <ul>
+            <li><a href="#first-class-slots">First-class slots</a></li>
+            <li><a href="#convention-meta-keys-you-can-write">Convention meta keys you can write</a></li>
+            <li><a href="#raw-uncertainty-raw_kind-and-bound">Raw uncertainty: <code>raw_kind</code> and <code>bound</code></a></li>
+            <li><a href="#reserved-and-rejected-meta-keys">Reserved and rejected meta keys</a></li>
+          </ul>
+        </li>
+        <li><a href="#field-assertion-collections">Field assertion collections</a></li>
+        <li><a href="#assertionrecordset-selection-helpers">AssertionRecordSet selection helpers</a></li>
+        <li><a href="#business-time-vs-ingestion-time">Business time vs ingestion time</a></li>
+        <li><a href="#professional-retract">Professional retract</a></li>
+        <li><a href="#frozen-views-named-assertion-id-selections">Frozen views: named assertion-id selections</a></li>
+        <li><a href="#graph-level-readback-fgassertions">Graph-level readback: <code>fg.assertions</code></a></li>
+        <li><a href="#what-is-intentionally-not-supported">What is intentionally not supported</a></li>
+        <li><a href="#complete-example">Complete example</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

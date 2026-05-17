@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Überblick# Die Architektur von factpy beruht auf einer zentralen Entscheidung: Zustand wird nicht direkt gespeichert, sondern aus Fakten berechnet. Jede Aussage über eine Entität wird als eigener Fakt festgehalten. Der aktuelle Zustand einer Entität entsteht erst dann, wenn er gebraucht wird, indem diese Fakten nach den Regeln des Schemas zu einem Snapshot verdichtet werden. Es gibt keine Zeile, die aktualisiert wird, und kein Dokument, das ersetzt wird. Eine Entität ist die Projektion all dessen, was jemals über sie ausgesagt wurde. Die übrigen Komponenten des Kernels — Schema, Regeln, Ableitungen und Audit-Pakete — dienen dazu, diese Arbeitsweise praktikabel zu machen und die dabei entstehende Evidenzspur zu erhalten. Diese Seite beschreibt die Architektur auf einer gemeinsamen Abstraktionsebene; die vier folgenden Konzeptseiten behandeln die einzelnen Bestandteile im Detail.
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/de/docs/concepts/overview/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Überblick">
+  <meta property="og:description" content="Überblick# Die Architektur von factpy beruht auf einer zentralen Entscheidung: Zustand wird nicht direkt gespeichert, sondern aus Fakten berechnet. Jede Aussage über eine Entität wird als eigener Fakt festgehalten. Der aktuelle Zustand einer Entität entsteht erst dann, wenn er gebraucht wird, indem diese Fakten nach den Regeln des Schemas zu einem Snapshot verdichtet werden. Es gibt keine Zeile, die aktualisiert wird, und kein Dokument, das ersetzt wird. Eine Entität ist die Projektion all dessen, was jemals über sie ausgesagt wurde. Die übrigen Komponenten des Kernels — Schema, Regeln, Ableitungen und Audit-Pakete — dienen dazu, diese Arbeitsweise praktikabel zu machen und die dabei entstehende Evidenzspur zu erhalten. Diese Seite beschreibt die Architektur auf einer gemeinsamen Abstraktionsebene; die vier folgenden Konzeptseiten behandeln die einzelnen Bestandteile im Detail.">
+  <meta property="og:locale" content="de">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Überblick">
+  <meta itemprop="description" content="Überblick# Die Architektur von factpy beruht auf einer zentralen Entscheidung: Zustand wird nicht direkt gespeichert, sondern aus Fakten berechnet. Jede Aussage über eine Entität wird als eigener Fakt festgehalten. Der aktuelle Zustand einer Entität entsteht erst dann, wenn er gebraucht wird, indem diese Fakten nach den Regeln des Schemas zu einem Snapshot verdichtet werden. Es gibt keine Zeile, die aktualisiert wird, und kein Dokument, das ersetzt wird. Eine Entität ist die Projektion all dessen, was jemals über sie ausgesagt wurde. Die übrigen Komponenten des Kernels — Schema, Regeln, Ableitungen und Audit-Pakete — dienen dazu, diese Arbeitsweise praktikabel zu machen und die dabei entstehende Evidenzspur zu erhalten. Diese Seite beschreibt die Architektur auf einer gemeinsamen Abstraktionsebene; die vier folgenden Konzeptseiten behandeln die einzelnen Bestandteile im Detail.">
+  <meta itemprop="wordCount" content="1355">
+
+<title>Überblick | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/de/docs/concepts/overview/">
+<link rel="stylesheet" href="/book.min.4d6d5ad3b0ae85d2a15b20ab217863f70db543e46314629e239ced759e674898.css" integrity="sha256-TW1a07CuhdKhWyCrIXhj9w21Q&#43;RjFGKeI5ztdZ5nSJg=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/de.search.min.a92013675f37793ce9c8fb9acdda196dc19f26e429d7c863d62fdef621fe6daa.js" integrity="sha256-qSATZ183eTzpyPuazdoZbcGfJuQp18hj1i/e9iH&#43;bao=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/de/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Suche"
+    aria-label="Suche"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+
+<ul class="book-languages">
+  <li>
+    <input type="checkbox" id="languages" class="toggle" />
+    <label for="languages" class="flex">
+      <a role="button">
+        <img src="/icons/translate.svg" class="book-icon" alt="Languages" />
+        Deutsch
+      </a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+
+    <ul>
+      
+      <li>
+        <a href="/" class="flex flex-auto">
+          English
+        </a>
+      </li>
+      
+    </ul>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/quickstart/" class="">
+      Schnellstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="toggle" checked />
+    <label for="section-e8ffe4e4c841cf30ee0a26a29b50dffd" class="flex">
+      <a role="button" class="">
+        Konzepte</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/overview/" class="active">
+      Überblick</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/the-ledger/" class="">
+      Das Ledger</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/entities-and-fields/" class="">
+      Entitäten und Felder</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/rules-and-derivations/" class="">
+      Regeln und Ableitungen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/concepts/audit-and-provenance/" class="">
+      Audit und Provenienz</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-34058d101374bf945fbfadcda1396a3e" class="toggle"  />
+    <label for="section-34058d101374bf945fbfadcda1396a3e" class="flex">
+      <a role="button" class="">
+        Guides</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/defining-a-schema/" class="">
+      Ein Schema definieren</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/reading-and-writing/" class="">
+      Lesen und Schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/writing-rules/" class="">
+      Regeln schreiben</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/running-derivations/" class="">
+      Ableitungen ausführen</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/auditing-a-run/" class="">
+      Auditing a Run</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/persistence/" class="">
+      Persistenz</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/guides/using-adapters/" class="">
+      Adapter verwenden</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-877dfaeda590afb0dbf2967bfa587bd2" class="toggle"  />
+    <label for="section-877dfaeda590afb0dbf2967bfa587bd2" class="flex">
+      <a href="/de/docs/tutorials/" class="">
+        Tutorials</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/01-sdk-basics/" class="">
+      01 — SDK Basics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/02-rules-and-derivations/" class="">
+      02 — Rules and Derivations</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/03-pyreason-propagation/" class="">
+      03 — PyReason Propagation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/04-problog-probabilistic/" class="">
+      04 — ProbLog Probabilistic</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/de/docs/tutorials/05-onboarding-journey/" class="">
+      05 — Onboarding Journey</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      Reference</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Überblick</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#überblick">Überblick</a>
+      <ul>
+        <li><a href="#fakten">Fakten</a></li>
+        <li><a href="#das-ledger">Das Ledger</a></li>
+        <li><a href="#schema">Schema</a></li>
+        <li><a href="#regeln">Regeln</a></li>
+        <li><a href="#ableitungen">Ableitungen</a></li>
+        <li><a href="#audit">Audit</a></li>
+        <li><a href="#zusammenspiel-der-teile">Zusammenspiel der Teile</a></li>
+        <li><a href="#nächste-schritte">Nächste Schritte</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="überblick">Überblick<a class="anchor" href="#%c3%bcberblick">#</a></h1>
+<p>Die Architektur von factpy beruht auf einer zentralen Entscheidung: Zustand wird nicht direkt gespeichert, sondern aus Fakten berechnet. Jede Aussage über eine Entität wird als eigener Fakt festgehalten. Der aktuelle Zustand einer Entität entsteht erst dann, wenn er gebraucht wird, indem diese Fakten nach den Regeln des Schemas zu einem Snapshot verdichtet werden. Es gibt keine Zeile, die aktualisiert wird, und kein Dokument, das ersetzt wird. Eine Entität ist die Projektion all dessen, was jemals über sie ausgesagt wurde. Die übrigen Komponenten des Kernels — Schema, Regeln, Ableitungen und Audit-Pakete — dienen dazu, diese Arbeitsweise praktikabel zu machen und die dabei entstehende Evidenzspur zu erhalten. Diese Seite beschreibt die Architektur auf einer gemeinsamen Abstraktionsebene; die vier folgenden Konzeptseiten behandeln die einzelnen Bestandteile im Detail.</p>
+<h2 id="fakten">Fakten<a class="anchor" href="#fakten">#</a></h2>
+<p>Ein Fakt in factpy ist die kleinste mögliche Aussage über die Welt: ein Prädikat, ein Subjekt, ein Wert und die Metadaten des Schreibvorgangs. Die Aussage, dass eine bestimmte Person <em>Alice</em> heißt und an einem bestimmten Tag von einem Import-Job geschrieben wurde, ist ein Fakt. Wenn später ein anderer Prozess festhält, dass dieselbe Person nun <em>Alicia</em> heißt, entsteht ein zweiter Fakt. Der erste wird nicht verändert. Beide bleiben im System erhalten und lassen sich über Zeitstempel und Herkunftsmetadaten voneinander unterscheiden.</p>
+<p>Diese Art, Zustand zu modellieren, ist nicht neu. Event-Logs, Buchhaltungsjournale und Versionskontrollsysteme folgen einem ähnlichen Grundmuster. factpy macht diese Form jedoch zur Grundlage des gesamten Designs. Wenn zwei Quellen sich bei demselben Prädikat widersprechen, entstehen zwei Fakten, und der Widerspruch bleibt sichtbar, statt durch Überschreiben zu verschwinden. Wie eine Entität zu ihrem aktuellen Zustand gekommen ist, bleibt ohne zusätzliche Instrumentierung nachvollziehbar. Die Herkunft einer Aussage steckt in der Aussage selbst und muss nicht nachträglich aus einer mehrfach veränderten Zeile rekonstruiert werden. Der Snapshot einer Entität wird erzeugt, indem die relevanten Fakten nach der Kardinalität des jeweiligen Feldes reduziert werden: einwertige Felder nehmen die neueste aktive Aussage, mehrwertige Felder die Vereinigung ihrer aktiven Aussagen, und zurückgezogene Einträge werden übersprungen. Die Historie geht dabei nicht verloren; sie erscheint nur nicht in der Snapshot-Ansicht.</p>
+<h2 id="das-ledger">Das Ledger<a class="anchor" href="#das-ledger">#</a></h2>
+<p>Die Struktur, in der die Fakten liegen, heißt Ledger. Sie ist strikt append-only: Jeder Schreibvorgang erzeugt einen neuen Eintrag und verändert oder löscht niemals einen alten. Das SDK stellt Operationen bereit, die aus gewöhnlichen Stores vertraut wirken — <code>set</code>, <code>add</code>, <code>retract</code> —, doch intern werden sie alle als Append ins Ledger umgesetzt, nicht als In-place-Änderung eines separat gehaltenen Zustands. Auch eine Retraktion entfernt die betroffene Aussage nicht. Sie ist ein neuer Eintrag, der bei der nächsten Snapshot-Berechnung dafür sorgt, dass die zurückgezogene Aussage in der Projektion übersprungen wird. Das Ledger enthält damit sowohl die ursprüngliche Behauptung als auch den Akt ihrer Zurücknahme. Ein Audit-Reader sieht beides in der richtigen Reihenfolge.</p>
+<p>Das Ledger ist die einzige Quelle der Wahrheit in einem factpy-System. Der Snapshot einer Entität, die Zeilen einer Query und die von einer Ableitung vorgeschlagenen Kandidaten sind alles Projektionen des Ledgers. Keines dieser Ergebnisse hält eigenen Zustand. Jedes lässt sich reproduzieren, indem das Ledger bis zum relevanten Punkt erneut ausgewertet wird.</p>
+<h2 id="schema">Schema<a class="anchor" href="#schema">#</a></h2>
+<p>Ein Schema in factpy ist eher ein Vokabular als ein Layout. Klassen, die von <code>Entity</code> erben, deklarieren, über welche Arten von Dingen das System Fakten halten kann. Die darin definierten <code>Identity</code>- und <code>Field</code>-Deklarationen legen fest, über welche Koordinaten eine Entität identifiziert wird und welche Prädikate für Aussagen verfügbar sind. Es gibt keine Tabelle, kein Zeilenlayout und keine feste Spaltenordnung. Es gibt nur typisierte Prädikate und die Kardinalität, mit der ihre Fakten in der Projektion zusammengeführt werden.</p>
+<p>Dadurch ist die Rolle des Schemas enger gefasst. Es beschreibt nicht, wie Fakten gespeichert werden, denn alle Fakten werden gleich gespeichert. Es beschreibt, welche Fakten lesbar sind: welche Prädikate die Projektion reduzieren kann, welche Wertbereiche Aussagen haben dürfen und über welche Beziehungen Regeln Joins bilden können. Eine Schemaänderung, die diese Lesbarkeit erhält, etwa das Hinzufügen eines neuen Feldes oder einer neuen Entität, braucht keine Migration und keinen neuen Digest. Eine Änderung, die die Lesbarkeit bricht, etwa das Umbenennen eines Feldes oder das Ändern einer Kardinalität, wird beim Öffnen über einen Content-Hash des Schemas erkannt und abgelehnt, bis die Migration bewusst durchgeführt wurde.</p>
+<h2 id="regeln">Regeln<a class="anchor" href="#regeln">#</a></h2>
+<p>Eine Regel formuliert eine Frage an das Ledger. Ihr Body enthält die Bedingungen, die für eine bestimmte Bindung von Logikvariablen gleichzeitig erfüllt sein müssen. Ihr Head beschreibt, was für jede passende Bindung zurückgegeben werden soll. Bedingungen können eine einzelne Entität einschränken, Entitäten über gemeinsame Variablen oder Referenzfelder verbinden, fehlschlagen, wenn eine entsprechende Aussage im Ledger nicht vorhanden ist — mit Negation-as-Failure-Semantik, nicht mit expliziter Negation — und andere benannte Regeln aufrufen, um größere Queries aus kleineren zusammenzusetzen.</p>
+<p>Eine Regel ist zugleich eine ausführbare Query und eine benannte Definition, auf die andere Regeln per Identifier verweisen können. Jede Regel hat eine Version. Wird sie ausgeführt, hält der Audit-Trail fest, welche Version gegen welchen Ledger-Zustand ausgewertet wurde und welche Zeilen dabei entstanden sind. Zwei Versionen derselben Regel können aus demselben Ledger unterschiedliche Antworten erzeugen, weil der Body bewusst geändert wurde. Die Audit-Spur hält diese Läufe auseinander, damit ein Ergebnis von gestern unter einer alten Regelversion nicht stillschweigend mit einem Ergebnis von heute unter einer neuen Version verwechselt wird.</p>
+<h2 id="ableitungen">Ableitungen<a class="anchor" href="#ableitungen">#</a></h2>
+<p>Eine Ableitung ist eine Regel, deren Head keine Daten zurückgibt, sondern neue Fakten vorschlägt. Jede Bindung, die den Body erfüllt, erzeugt einen <em>Kandidaten</em>: einen Fakt in der vom Head beschriebenen Form, ergänzt um Identität und Version der Regel sowie die Ledger-Einträge, die den Match gestützt haben. Ein Kandidat ist noch kein Fakt im Ledger. Er ist ein Vorschlag, über den entschieden werden muss.</p>
+<p>Die Annahme eines Kandidaten ist ein eigener Schritt. Ein Aufruf von <code>sdk.accept</code> oder im Batch von <code>sdk.accept_many</code> schreibt den Kandidaten als gewöhnliche Aussage ins Ledger und übernimmt seine Evidenz als Provenienz des neuen Eintrags. Jede Annahme wird zusammen mit den daraus entstehenden Schreibvorgängen in einem Decision Log festgehalten. So gelangt kein Fakt ins Ledger, ohne dass ein bestimmbarer Akt der Entscheidung dahintersteht. Damit ist jeder Fakt im Ledger entweder direkt geschrieben oder bewusst aus einem Kandidaten akzeptiert worden. Jeder abgeleitete Fakt bleibt sowohl auf seine stützenden Fakten als auch auf die Regel und den Annahmezeitpunkt zurückführbar. Genau diese Trennung — Auswertung erzeugt Kandidaten, ein separater Schritt akzeptiert sie — unterscheidet ein auditierbares Inferenzsystem von einem nicht auditierbaren. Eine Engine, die ihre Schlüsse sofort in gemeinsamen Zustand schreibt, verliert den Moment, in dem ein bestimmter Schluss bestätigt wurde. factpy erhält diesen Moment konstruktiv.</p>
+<h2 id="audit">Audit<a class="anchor" href="#audit">#</a></h2>
+<p>Weil die Provenienz lokal an jedem Fakt liegt, weil das Rule Registry jede jemals ausgeführte Regelversion kennt, weil das Candidate Ledger jeden ausgewerteten Vorschlag speichert und weil das Decision Log jede Annahme festhält, braucht es keine zusätzliche Buchführung, um zu rekonstruieren, was ein System getan hat. Ein vollständiges <em>Audit-Paket</em> ist die Vereinigung dieser Aufzeichnungen, serialisiert als eigenständiges Verzeichnis und erzeugt durch einen einzigen Aufruf von <code>sdk.export_package</code>. Das Paket kann archiviert, in einem separaten Prozess geprüft oder über das kleine Modul <code>kernel.audit</code> wieder eingelesen werden, ohne den Rest des Kernels zu benötigen. Es ist kein nachträglich für Compliance-Zwecke zusammengebautes Nebenprodukt. Es sind dieselben Daten, mit denen das System zur Laufzeit über sich selbst Auskunft gibt, nur in portabler Form. Ein solches Paket zu erzeugen ist mechanisch, weil während der Ausführung nichts verworfen wurde.</p>
+<h2 id="zusammenspiel-der-teile">Zusammenspiel der Teile<a class="anchor" href="#zusammenspiel-der-teile">#</a></h2>
+<pre class="mermaid">flowchart TD
+    subgraph Audit [&#34;Audit-Paket&#34;]
+        direction TB
+        Write([Fakten schreiben]) --&gt; Ledger[(&#34;LEDGER&lt;br/&gt;append-only,&lt;br/&gt;Quelle der Wahrheit&#34;)]
+        Ledger --&gt; Snapshot[&#34;Snapshot&lt;br/&gt;(jetzt)&#34;]
+        Ledger --&gt; RuleRun[&#34;Regelausführung&#34;]
+        Ledger --&gt; DerivRun[&#34;Ableitungslauf&#34;]
+        DerivRun --&gt; Candidate[&#34;Kandidat&lt;br/&gt;vorgeschlagener Fakt + Evidenz&#34;]
+        Candidate --&gt;|annehmen| Ledger
+    end
+
+    style Audit fill:none</pre><script src="/mermaid.min.js"></script><script>mermaid.initialize({"flowchart":{"useMaxWidth":true},"theme":"default"})</script><p>Ein factpy-Programm beliebiger Größe kombiniert diese Elemente in unterschiedlichen Anteilen. Der meiste Anwendungscode schreibt Fakten und liest Snapshots. Ein Teil führt Regeln und Queries aus. Die Teile, die Schlüsse ziehen, werten Ableitungen aus und akzeptieren ausgewählte Kandidaten. Review und nachträgliche Analyse lesen die Audit-Pakete, die aus solchen Läufen exportiert wurden. Jeder dieser Schritte trägt zum selben Datensatz bei, und genau dieser Datensatz macht das System überprüfbar.</p>
+<h2 id="nächste-schritte">Nächste Schritte<a class="anchor" href="#n%c3%a4chste-schritte">#</a></h2>
+<p><a href="/docs/concepts/entities-and-fields">Entities and fields</a> beschreibt die Schemaebene. <a href="/docs/concepts/the-ledger">The ledger</a> behandelt das append-only-Modell und die Mechanik der Projektion im Detail. <a href="/docs/concepts/rules-and-derivations">Rules and derivations</a> erklärt die Reasoning-Schicht von Anfang bis Ende. <a href="/docs/concepts/audit-and-provenance">Audit and provenance</a> beschreibt, was während eines Laufs aufgezeichnet wird, was ein exportiertes Paket enthält und wie es wieder gelesen wird. Der <a href="/docs/quickstart">quickstart</a> zeigt dieselbe Architektur in ausführbarem Code für Leser, die sie lieber zuerst in Aktion sehen.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/de/docs/quickstart/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Schnellstart</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/de/docs/concepts/the-ledger/" class="flex align-center">
+        <span>Das Ledger</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#überblick">Überblick</a>
+      <ul>
+        <li><a href="#fakten">Fakten</a></li>
+        <li><a href="#das-ledger">Das Ledger</a></li>
+        <li><a href="#schema">Schema</a></li>
+        <li><a href="#regeln">Regeln</a></li>
+        <li><a href="#ableitungen">Ableitungen</a></li>
+        <li><a href="#audit">Audit</a></li>
+        <li><a href="#zusammenspiel-der-teile">Zusammenspiel der Teile</a></li>
+        <li><a href="#nächste-schritte">Nächste Schritte</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

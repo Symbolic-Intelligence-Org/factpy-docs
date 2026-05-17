@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Docs on FactPy</title>
+    <title>Docs on factgraph</title>
     <link>http://localhost:1313/docs/</link>
-    <description>Recent content in Docs on FactPy</description>
+    <description>Recent content in Docs on factgraph</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>[© CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)</copyright>
     <atom:link href="http://localhost:1313/docs/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Page1</title>
-      <link>http://localhost:1313/docs/page1/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/docs/page1/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title></title>
+      <title>Quickstart</title>
       <link>http://localhost:1313/docs/quickstart/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/docs/quickstart/</guid>
-      <description>&lt;p&gt;Foo&lt;/p&gt;</description>
+      <description>&lt;h1 id=&#34;factgraph&#34;&gt;factgraph&lt;a class=&#34;anchor&#34; href=&#34;#factgraph&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;&lt;code&gt;factgraph&lt;/code&gt; is a Python library for append-only facts, rule-based inference, and auditable reasoning.&lt;/p&gt;&#xA;&lt;p&gt;It is designed for applications that need to know not only what is currently true, but also where a fact came from, which assertion supports it, which rule derived it, and how it can be reviewed or explained.&lt;/p&gt;&#xA;&lt;h2 id=&#34;why-factgraph&#34;&gt;Why factgraph?&lt;a class=&#34;anchor&#34; href=&#34;#why-factgraph&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;Most application state is mutable: a value changes, and the previous state disappears unless a separate audit system is added later.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

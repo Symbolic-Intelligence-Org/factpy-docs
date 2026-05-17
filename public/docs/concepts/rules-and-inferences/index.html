@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Rules and inferences# The previous pages wrote facts directly. Rules and inferences let you describe patterns over those facts.
+A Rule asks the graph what is already true. It is a reusable read query over the current snapshot.
+An Inference proposes new facts from existing facts. It does not write by itself. Evaluation produces candidates, and accepting a candidate appends the new assertion to the ledger.
+The short version is:
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/concepts/rules-and-inferences/">
+  <meta property="og:site_name" content="factgraph">
+  <meta property="og:title" content="Rules & Inference">
+  <meta property="og:description" content="Rules and inferences# The previous pages wrote facts directly. Rules and inferences let you describe patterns over those facts.
+A Rule asks the graph what is already true. It is a reusable read query over the current snapshot.
+An Inference proposes new facts from existing facts. It does not write by itself. Evaluation produces candidates, and accepting a candidate appends the new assertion to the ledger.
+The short version is:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+
+
+  <meta itemprop="name" content="Rules & Inference">
+  <meta itemprop="description" content="Rules and inferences# The previous pages wrote facts directly. Rules and inferences let you describe patterns over those facts.
+A Rule asks the graph what is already true. It is a reusable read query over the current snapshot.
+An Inference proposes new facts from existing facts. It does not write by itself. Evaluation produces candidates, and accepting a candidate appends the new assertion to the ledger.
+The short version is:">
+  <meta itemprop="wordCount" content="1830">
+
+<title>Rules &amp; Inference | factgraph</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/concepts/rules-and-inferences/">
+<link rel="stylesheet" href="/book.min.aec574abb39ae49ecbdf06a62869bcff7dbe963dce6a4d87b5f5965eb7626bd1.css" integrity="sha256-rsV0q7Oa5J7L3wamKGm8/32&#43;lj3Oak2HtfWWXrdia9E=" crossorigin="anonymous">
+
+
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.f2649702e93cd1a98c670a367e867d65e997b099e0d56919036121e2b932509f.js" integrity="sha256-8mSXAuk80amMZwo2foZ9ZemXsJng1WkZA2Eh4rkyUJ8=" crossorigin="anonymous"></script>
+
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>factgraph</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text" 
+    placeholder="Search"
+    aria-label="Search"
+    maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/quickstart/" class="">
+      Quickstart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/" class="">
+      Concepts</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/first-factgraph/" class="">
+      Your first factgraph</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/schema/" class="">
+      Schema</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/read-write/" class="">
+      Read and Write</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/assertions/" class="">
+      Assertions</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/semantics/" class="">
+      Semantics</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evidence/" class="">
+      Evidence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/rules-and-inferences/" class="active">
+      Rules &amp; Inference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/persistence/" class="">
+      Persistence</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/namespace-map/" class="">
+      Namespace Map</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Rules &amp; Inference</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#rules-and-inferences">Rules and inferences</a>
+      <ul>
+        <li><a href="#start-with-facts">Start with facts</a></li>
+        <li><a href="#body-atoms-the-building-blocks">Body atoms: the building blocks</a>
+          <ul>
+            <li><a href="#logic-variables">Logic variables</a></li>
+            <li><a href="#entity-existence-useru">Entity existence: <code>User(u)</code></a></li>
+            <li><a href="#two-ways-to-match-a-predicate">Two ways to match a predicate</a></li>
+            <li><a href="#comparisons">Comparisons</a></li>
+            <li><a href="#negation-not">Negation: <code>Not([...])</code></a></li>
+            <li><a href="#branches">Branches</a></li>
+            <li><a href="#head-atoms">Head atoms</a></li>
+          </ul>
+        </li>
+        <li><a href="#run-a-rule">Run a Rule</a></li>
+        <li><a href="#use-query-for-one-off-projections">Use Query for one-off projections</a></li>
+        <li><a href="#evaluate-an-inference">Evaluate an Inference</a></li>
+        <li><a href="#accept-a-candidate">Accept a candidate</a></li>
+        <li><a href="#inspect-rule-shape">Inspect rule shape</a></li>
+        <li><a href="#ruleref-is-not-a-saved-rule-handle">RuleRef is not a saved-rule handle</a></li>
+        <li><a href="#where-semantics-engines-fit">Where semantics engines fit</a></li>
+        <li><a href="#complete-example">Complete example</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="rules-and-inferences">Rules and inferences<a class="anchor" href="#rules-and-inferences">#</a></h1>
+<p>The previous pages wrote facts directly. Rules and inferences let you describe
+patterns over those facts.</p>
+<p>A <code>Rule</code> asks the graph what is already true. It is a reusable read query over
+the current snapshot.</p>
+<p>An <code>Inference</code> proposes new facts from existing facts. It does not write by
+itself. Evaluation produces candidates, and accepting a candidate appends the
+new assertion to the ledger.</p>
+<p>The short version is:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Need</th>
+          <th>Use</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Read matching facts</td>
+          <td><code>Rule</code> + <code>fg.eval.run(...)</code></td>
+      </tr>
+      <tr>
+          <td>Propose new facts</td>
+          <td><code>Inference</code> + <code>fg.eval.evaluate(...)</code></td>
+      </tr>
+      <tr>
+          <td>Commit proposed facts</td>
+          <td><code>fg.eval.accept(...)</code></td>
+      </tr>
+      <tr>
+          <td>Inspect rule shape</td>
+          <td><code>fg.rules.inspect(...)</code></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="start-with-facts">Start with facts<a class="anchor" href="#start-with-facts">#</a></h2>
+<p>Rules and inferences work over facts already in the graph. This example keeps
+the schema small: <code>tag_seed</code> is a direct fact, and <code>tag</code> will be inferred from
+it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> (
+</span></span><span style="display:flex;"><span>    Branch,
+</span></span><span style="display:flex;"><span>    Entity,
+</span></span><span style="display:flex;"><span>    FactGraph,
+</span></span><span style="display:flex;"><span>    Field,
+</span></span><span style="display:flex;"><span>    Identity,
+</span></span><span style="display:flex;"><span>    Inference,
+</span></span><span style="display:flex;"><span>    Pred,
+</span></span><span style="display:flex;"><span>    Query,
+</span></span><span style="display:flex;"><span>    Rule,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">vars</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    tag_seed: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tag: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[User])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>tag_seed, alice, <span style="color:#5af78e">&#34;engineer&#34;</span>)</span></span></code></pre></div><p>The predicate id for <code>User.tag_seed</code> is <code>user:tag_seed</code>. Rule bodies use these
+predicate ids to match facts. Later docs cover more advanced authoring patterns;
+this page keeps the shape explicit.</p>
+<h2 id="body-atoms-the-building-blocks">Body atoms: the building blocks<a class="anchor" href="#body-atoms-the-building-blocks">#</a></h2>
+<p>A rule, query, or inference <code>where</code> clause is a list of body atoms. Each
+atom either matches facts in the ledger or constrains the logic variables
+already in scope. The same shape covers rules, queries, and inferences.</p>
+<h3 id="logic-variables">Logic variables<a class="anchor" href="#logic-variables">#</a></h3>
+<p><code>vars(...)</code> is a context manager that produces fresh <code>LogicVar</code> objects.
+Each variable has a <code>$</code>-prefixed token (<code>$u</code>, <code>$tag</code>) and is scoped to the
+body it appears in. Variables become bound when an atom witnesses their
+value.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff6ac1">...</span>  <span style="color:#78787e"># u and tag are LogicVar instances inside this block</span></span></span></code></pre></div><p>Use one <code>vars(...)</code> block per rule, query, or inference. Logic variables
+from one block must not leak into another.</p>
+<h3 id="entity-existence-useru">Entity existence: <code>User(u)</code><a class="anchor" href="#entity-existence-useru">#</a></h3>
+<p><code>User(u)</code> is the existence atom for an entity type. It does two things:</p>
+<ol>
+<li>Requires that <code>u</code> refers to an existing <code>User</code> entity.</li>
+<li>Binds <code>u</code>&rsquo;s entity type so later atoms can use the <code>u.field</code> shorthand.</li>
+</ol>
+<p><code>u</code> must appear in an entity-existence atom <strong>before</strong> any <code>u.field</code>
+reference; otherwise the SDK raises <code>SDKDSLError</code>.</p>
+<h3 id="two-ways-to-match-a-predicate">Two ways to match a predicate<a class="anchor" href="#two-ways-to-match-a-predicate">#</a></h3>
+<p>The same body atom can be written in two equivalent styles. The choice is
+ergonomic.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#78787e"># Lower-level: explicit predicate id, no entity class required</span>
+</span></span><span style="display:flex;"><span>Pred(<span style="color:#5af78e">&#34;user:tag_seed&#34;</span>, u, tag)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e"># Class-rooted: needs the entity class but reads as object syntax</span>
+</span></span><span style="display:flex;"><span>User(u), u<span style="color:#ff6ac1">.</span>tag_seed <span style="color:#ff6ac1">==</span> tag</span></span></code></pre></div><p>Both forms match the same rows. <code>Pred(...)</code> skips the <code>User(u)</code> atom and
+is useful when the entity class is not imported here, when you want the
+predicate id explicit, or when you reference predicates that do not have
+an entity-class binding. The class-rooted form makes the entity-type
+binding explicit, which is required if you want to use the <code>u.field</code>
+shorthand afterward.</p>
+<h3 id="comparisons">Comparisons<a class="anchor" href="#comparisons">#</a></h3>
+<p>The <code>==</code> operator on <code>u.field</code> is sugar for a field-predicate atom; the
+lowered form is the same as <code>Pred(&quot;user:field&quot;, u, value)</code>. Other
+comparison operators (<code>!=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>) are <strong>not</strong> supported
+directly on <code>u.field</code>; the SDK raises <code>SDKDSLError</code>. To compare a field
+against a constant or another variable, bind the field to a logic
+variable first via <code>u.field == var</code>, then compare <code>var</code> — which is a plain
+logic variable, not an <code>AttrRef</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>u.age == age      # OK: AttrRef equality, lowers to a field-predicate atom
+</span></span><span style="display:flex;"><span>age &gt;= 18         # OK: LogicVar comparison, lowers to a numeric guard
+</span></span><span style="display:flex;"><span>u.age &gt;= 18       # ❌ SDKDSLError: AttrRef supports only `==`</span></span></code></pre></div><h3 id="negation-not">Negation: <code>Not([...])</code><a class="anchor" href="#negation-not">#</a></h3>
+<p><code>Not([...])</code> wraps a sub-body to require absence. Variables bound by atoms
+outside the <code>Not</code> can still correlate inside it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>) <span style="color:#ff6ac1">as</span> (u,):
+</span></span><span style="display:flex;"><span>    no_vip_tag <span style="color:#ff6ac1">=</span> Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;rule.no_vip_tag&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[u],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Branch([User(u), Not([Pred(<span style="color:#5af78e">&#34;user:tag&#34;</span>, u, <span style="color:#5af78e">&#34;vip&#34;</span>)])], <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;path&#34;</span>)],
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><h3 id="branches">Branches<a class="anchor" href="#branches">#</a></h3>
+<p>A <code>Branch([...], id=&quot;...&quot;)</code> names one alternative path through the body.
+A rule with multiple branches succeeds when any one branch matches.
+Branch ids are structural; <code>fg.rules.inspect(rule)</code> exposes them so you
+can address one branch in evidence and what-if surfaces later on.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    important <span style="color:#ff6ac1">=</span> Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;rule.important&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[u, tag],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            Branch([User(u), u<span style="color:#ff6ac1">.</span>tag <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;vip&#34;</span>], <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;vip&#34;</span>),
+</span></span><span style="display:flex;"><span>            Branch([User(u), u<span style="color:#ff6ac1">.</span>tag <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;admin&#34;</span>], <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;admin&#34;</span>),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p><code>RuleRef</code> is a body-level reference to another rule and is covered in the
+persistence docs.</p>
+<h3 id="head-atoms">Head atoms<a class="anchor" href="#head-atoms">#</a></h3>
+<p>The <code>head</code> of a <code>Query</code> or <code>Inference</code> describes what to project. Head
+atoms look similar to body atoms but read differently:</p>
+<ul>
+<li><code>User(u)</code> in a body asks &ldquo;u must be a User&rdquo;; in a head it declares
+&ldquo;this entity is in the output&rdquo;.</li>
+<li><code>u.tag_seed</code> in a body is an <code>AttrRef</code> for matching. In a head, the
+parallel form is <code>User.tag_seed(value=tag)</code> — the field <em>descriptor</em>
+(class attribute) called with keyword arguments to declare the
+predicate and value layout of the output fact.</li>
+</ul>
+<p><code>Pred(...)</code> and <code>Not(...)</code> are body atoms only; they do not appear in
+heads.</p>
+<h2 id="run-a-rule">Run a Rule<a class="anchor" href="#run-a-rule">#</a></h2>
+<p>Use <code>vars(...)</code> to create logic variables, <code>Pred(...)</code> or the class-rooted
+<code>User(u), u.field == ...</code> form to match predicates, and <code>Rule(...)</code> to
+name the reusable pattern.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    seeded_tags <span style="color:#ff6ac1">=</span> Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;rule.seeded_tags&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[u, tag],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            Branch(
+</span></span><span style="display:flex;"><span>                [Pred(<span style="color:#5af78e">&#34;user:tag_seed&#34;</span>, u, tag)],
+</span></span><span style="display:flex;"><span>                <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed_path&#34;</span>,
+</span></span><span style="display:flex;"><span>            )
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p>The <code>where</code> clause describes what must be found. The <code>select</code> list describes
+what the rule returns. Running the rule is read-only.</p>
+<p>The same rule with the class-rooted body form is equivalent:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    seeded_tags_class_rooted <span style="color:#ff6ac1">=</span> Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;rule.seeded_tags_class_rooted&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[u, tag],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            Branch(
+</span></span><span style="display:flex;"><span>                [User(u), u<span style="color:#ff6ac1">.</span>tag_seed <span style="color:#ff6ac1">==</span> tag],
+</span></span><span style="display:flex;"><span>                <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed_path&#34;</span>,
+</span></span><span style="display:flex;"><span>            )
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>rows <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>run(seeded_tags)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> rows <span style="color:#ff6ac1">==</span> [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;u&#34;</span>: alice,
+</span></span><span style="display:flex;"><span>        <span style="color:#5af78e">&#34;tag&#34;</span>: <span style="color:#5af78e">&#34;engineer&#34;</span>,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>]
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> ()</span></span></code></pre></div><p>The second assertion matters. The rule found the <code>tag_seed</code> fact, but it did
+not write a <code>tag</code> fact.</p>
+<h2 id="use-query-for-one-off-projections">Use Query for one-off projections<a class="anchor" href="#use-query-for-one-off-projections">#</a></h2>
+<p>Use <code>Query</code> when you want an ad-hoc result shape without saving a reusable
+rule. It uses the same body language, but the head describes the projected
+columns directly using the entity- and field-descriptor head atoms
+introduced in &ldquo;Body atoms&rdquo;.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    seeded_tag_query <span style="color:#ff6ac1">=</span> Query(
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>[User(u), User<span style="color:#ff6ac1">.</span>tag_seed(value<span style="color:#ff6ac1">=</span>tag)],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[User(u), u<span style="color:#ff6ac1">.</span>tag_seed <span style="color:#ff6ac1">==</span> tag],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>query_rows <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>run(seeded_tag_query)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">len</span>(query_rows) <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> query_rows[<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;u&#34;</span>]<span style="color:#ff6ac1">.</span>ref <span style="color:#ff6ac1">==</span> alice
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> query_rows[<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;tag&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;engineer&#34;</span></span></span></code></pre></div><p>Note the symmetry: <code>u.tag_seed</code> (an <code>AttrRef</code>) appears in the body for
+matching, while <code>User.tag_seed(value=tag)</code> (the field descriptor on the
+class) appears in the head for projection.</p>
+<p>Queries are read-time projections. They are useful for one-off shapes. The
+durable authoring surfaces are saved rules and saved inferences.</p>
+<h2 id="evaluate-an-inference">Evaluate an Inference<a class="anchor" href="#evaluate-an-inference">#</a></h2>
+<p>An inference can use the same body and propose a new target predicate.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    tags_from_seed <span style="color:#ff6ac1">=</span> Inference(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;inf.tags_from_seed&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[
+</span></span><span style="display:flex;"><span>            Branch(
+</span></span><span style="display:flex;"><span>                [Pred(<span style="color:#5af78e">&#34;user:tag_seed&#34;</span>, u, tag)],
+</span></span><span style="display:flex;"><span>                <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed_path&#34;</span>,
+</span></span><span style="display:flex;"><span>            )
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        target<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;user:tag&#34;</span>,
+</span></span><span style="display:flex;"><span>        head_vars<span style="color:#ff6ac1">=</span>[u, tag],
+</span></span><span style="display:flex;"><span>    )</span></span></code></pre></div><p><code>fg.eval.evaluate(...)</code> returns candidate fact sets. It is still read-only.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>candidates <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>evaluate(tags_from_seed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">len</span>(candidates) <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> candidates[<span style="color:#ff9f43">0</span>]<span style="color:#ff6ac1">.</span>target <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;user:tag&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> candidates[<span style="color:#ff9f43">0</span>]<span style="color:#ff6ac1">.</span>derivation_id <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;inf.tags_from_seed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> ()</span></span></code></pre></div><p>The candidate says &ldquo;this inference can write <code>user:tag</code> for this user with this
+value.&rdquo; It has not changed the graph yet.</p>
+<h2 id="accept-a-candidate">Accept a candidate<a class="anchor" href="#accept-a-candidate">#</a></h2>
+<p>Accepting is the commit step. It appends assertion records for the candidate
+facts.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>accepted <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>accept(candidates[<span style="color:#ff9f43">0</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> accepted<span style="color:#ff6ac1">.</span>accepted_count <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> accepted<span style="color:#ff6ac1">.</span>written_assertions[<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;pred_id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;user:tag&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>after <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> after <span style="color:#ff6ac1">is</span> <span style="color:#ff6ac1">not</span> <span style="color:#ff6ac1">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(after<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> (<span style="color:#5af78e">&#34;engineer&#34;</span>,)</span></span></code></pre></div><p>This two-step workflow is intentional:</p>
+<ol>
+<li><code>evaluate</code> explains what could be written.</li>
+<li><code>accept</code> decides what actually enters the ledger.</li>
+</ol>
+<p>That separation is useful when you want to inspect candidates, apply a review
+step, compare engines, or keep inferred facts out of the graph until a user
+approves them.</p>
+<h2 id="inspect-rule-shape">Inspect rule shape<a class="anchor" href="#inspect-rule-shape">#</a></h2>
+<p><code>fg.rules.inspect(...)</code> shows the structure of a rule or inference without
+executing it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>inspected <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>inspect(tags_from_seed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> inspected[<span style="color:#5af78e">&#34;kind&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Inference&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> inspected[<span style="color:#5af78e">&#34;id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;inf.tags_from_seed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> inspected[<span style="color:#5af78e">&#34;branches&#34;</span>][<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;seed_path&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> inspected[<span style="color:#5af78e">&#34;branches&#34;</span>][<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;fallback_id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;b0&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> inspected[<span style="color:#5af78e">&#34;branches&#34;</span>][<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;atom_count&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">1</span></span></span></code></pre></div><p>Branch ids are structural names. Use explicit branch ids when a rule has
+meaningful pathways that you may want to inspect or configure later. If you do
+not provide an id, the SDK still exposes a fallback id such as <code>b0</code>.</p>
+<h2 id="ruleref-is-not-a-saved-rule-handle">RuleRef is not a saved-rule handle<a class="anchor" href="#ruleref-is-not-a-saved-rule-handle">#</a></h2>
+<p><code>RuleRef</code> is a lower-level body atom used when one rule body depends on another
+rule. It is not how you run a saved rule from the registry.</p>
+<p>For saved authoring assets, use the persistence surface:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>saved = fg.rules.save(rule)
+</span></span><span style="display:flex;"><span>rule = fg.rules.load(saved)
+</span></span><span style="display:flex;"><span>rows = fg.eval.run(rule)</span></span></code></pre></div><p>That topic is covered later. In the quickstart, keep the model simple:</p>
+<ul>
+<li><code>Rule</code> reads.</li>
+<li><code>Inference</code> proposes.</li>
+<li><code>CandidateSet</code> waits for review.</li>
+<li><code>accept</code> writes.</li>
+<li><code>SavedRuleRef</code> and <code>SavedInferenceRef</code> must be loaded before runtime use.</li>
+</ul>
+<h2 id="where-semantics-engines-fit">Where semantics engines fit<a class="anchor" href="#where-semantics-engines-fit">#</a></h2>
+<p>The default examples here use the native evaluation path. FactGraph also has
+semantics options for engines such as ProbLog and PyReason. Those options
+change how an inference is evaluated; they do not change the basic lifecycle:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Inference -&gt; evaluate -&gt; CandidateSet -&gt; accept -&gt; ledger assertion</span></span></code></pre></div><p>Learn the lifecycle first. Engine-specific semantics are an advanced topic.</p>
+<h2 id="complete-example">Complete example<a class="anchor" href="#complete-example">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> kernel.sdk <span style="color:#ff6ac1">import</span> (
+</span></span><span style="display:flex;"><span>    Branch,
+</span></span><span style="display:flex;"><span>    Entity,
+</span></span><span style="display:flex;"><span>    FactGraph,
+</span></span><span style="display:flex;"><span>    Field,
+</span></span><span style="display:flex;"><span>    Identity,
+</span></span><span style="display:flex;"><span>    Inference,
+</span></span><span style="display:flex;"><span>    Pred,
+</span></span><span style="display:flex;"><span>    Query,
+</span></span><span style="display:flex;"><span>    Rule,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff5c57">vars</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">class</span> <span style="color:#f3f99d">User</span>(Entity):
+</span></span><span style="display:flex;"><span>    user_id: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Identity(primary_key<span style="color:#ff6ac1">=</span><span style="color:#ff6ac1">True</span>)
+</span></span><span style="display:flex;"><span>    tag_seed: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;single&#34;</span>)
+</span></span><span style="display:flex;"><span>    tag: <span style="color:#ff5c57">str</span> <span style="color:#ff6ac1">=</span> Field(cardinality<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;multi&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fg <span style="color:#ff6ac1">=</span> FactGraph<span style="color:#ff6ac1">.</span>create(schema_classes<span style="color:#ff6ac1">=</span>[User])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>alice <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>ref(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)
+</span></span><span style="display:flex;"><span>fg<span style="color:#ff6ac1">.</span>write<span style="color:#ff6ac1">.</span>set(User<span style="color:#ff6ac1">.</span>tag_seed, alice, <span style="color:#5af78e">&#34;engineer&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    seeded_tags <span style="color:#ff6ac1">=</span> Rule(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;rule.seeded_tags&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        select<span style="color:#ff6ac1">=</span>[u, tag],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Branch([Pred(<span style="color:#5af78e">&#34;user:tag_seed&#34;</span>, u, tag)], <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed_path&#34;</span>)],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rows <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>run(seeded_tags)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> rows <span style="color:#ff6ac1">==</span> [{<span style="color:#5af78e">&#34;u&#34;</span>: alice, <span style="color:#5af78e">&#34;tag&#34;</span>: <span style="color:#5af78e">&#34;engineer&#34;</span>}]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    seeded_tag_query <span style="color:#ff6ac1">=</span> Query(
+</span></span><span style="display:flex;"><span>        head<span style="color:#ff6ac1">=</span>[User(u), User<span style="color:#ff6ac1">.</span>tag_seed(value<span style="color:#ff6ac1">=</span>tag)],
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[User(u), u<span style="color:#ff6ac1">.</span>tag_seed <span style="color:#ff6ac1">==</span> tag],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>query_rows <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>run(seeded_tag_query)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> query_rows[<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;tag&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;engineer&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">with</span> <span style="color:#ff5c57">vars</span>(<span style="color:#5af78e">&#34;u&#34;</span>, <span style="color:#5af78e">&#34;tag&#34;</span>) <span style="color:#ff6ac1">as</span> (u, tag):
+</span></span><span style="display:flex;"><span>    tags_from_seed <span style="color:#ff6ac1">=</span> Inference(
+</span></span><span style="display:flex;"><span>        <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;inf.tags_from_seed&#34;</span>,
+</span></span><span style="display:flex;"><span>        version<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        where<span style="color:#ff6ac1">=</span>[Branch([Pred(<span style="color:#5af78e">&#34;user:tag_seed&#34;</span>, u, tag)], <span style="color:#ff5c57">id</span><span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;seed_path&#34;</span>)],
+</span></span><span style="display:flex;"><span>        target<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;user:tag&#34;</span>,
+</span></span><span style="display:flex;"><span>        head_vars<span style="color:#ff6ac1">=</span>[u, tag],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>candidates <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>evaluate(tags_from_seed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">len</span>(candidates) <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> ()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>accepted <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>eval<span style="color:#ff6ac1">.</span>accept(candidates[<span style="color:#ff9f43">0</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> accepted<span style="color:#ff6ac1">.</span>accepted_count <span style="color:#ff6ac1">==</span> <span style="color:#ff9f43">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> accepted<span style="color:#ff6ac1">.</span>written_assertions[<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;pred_id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;user:tag&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> <span style="color:#ff5c57">tuple</span>(fg<span style="color:#ff6ac1">.</span>read<span style="color:#ff6ac1">.</span>get(User, user_id<span style="color:#ff6ac1">=</span><span style="color:#5af78e">&#34;u-1&#34;</span>)<span style="color:#ff6ac1">.</span>tag) <span style="color:#ff6ac1">==</span> (<span style="color:#5af78e">&#34;engineer&#34;</span>,)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>inspected <span style="color:#ff6ac1">=</span> fg<span style="color:#ff6ac1">.</span>rules<span style="color:#ff6ac1">.</span>inspect(tags_from_seed)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> inspected[<span style="color:#5af78e">&#34;kind&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;Inference&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> inspected[<span style="color:#5af78e">&#34;branches&#34;</span>][<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;seed_path&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff6ac1">assert</span> inspected[<span style="color:#5af78e">&#34;branches&#34;</span>][<span style="color:#ff9f43">0</span>][<span style="color:#5af78e">&#34;fallback_id&#34;</span>] <span style="color:#ff6ac1">==</span> <span style="color:#5af78e">&#34;b0&#34;</span></span></span></code></pre></div><h2 id="syntax-checklist">Syntax checklist<a class="anchor" href="#syntax-checklist">#</a></h2>
+<ul>
+<li>Use <code>vars(...)</code> to create logic variables for DSL bodies. Logic vars
+carry <code>$</code>-prefixed tokens and are scoped to one <code>vars(...)</code> block.</li>
+<li>Two equivalent ways to match a predicate in a body:
+<code>Pred(&quot;user:field&quot;, u, value)</code> (low-level, no entity class needed) and
+<code>User(u), u.field == value</code> (class-rooted; requires the <code>User</code> import
+and an explicit <code>User(u)</code> entity-existence atom before any <code>u.field</code>
+reference).</li>
+<li><code>u.field == ...</code> is the only <code>AttrRef</code> comparison supported; for <code>&gt;</code>,
+<code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>, bind the field to a logic variable first
+(<code>u.age == age</code>) and compare that variable (<code>age &gt;= 18</code>).</li>
+<li>Wrap absence checks with <code>Not([...])</code>; the negated body can correlate
+with variables bound outside the <code>Not</code>.</li>
+<li>Use <code>Branch([...], id=&quot;...&quot;)</code> to name alternative paths; a rule with
+multiple branches succeeds when any one matches.</li>
+<li>Head atoms differ from body atoms: <code>User(u)</code> declares an entity output;
+<code>User.tag_seed(value=tag)</code> (the field descriptor on the class) declares
+a field-fact output with the given value layout.</li>
+<li>Use <code>Rule(id=..., select=[...], where=[...])</code> for reusable read patterns.</li>
+<li>Run rules with <code>fg.eval.run(rule)</code>; running a rule does not write.</li>
+<li>Use <code>Query(head=..., where=[...])</code> for ad-hoc read projections.</li>
+<li>Use <code>Inference(id=..., where=[...], target=..., head_vars=[...])</code> for
+proposed facts.</li>
+<li>Evaluate inferences with <code>fg.eval.evaluate(inference)</code>; evaluation does not
+write.</li>
+<li>Accept candidates with <code>fg.eval.accept(candidate)</code> or
+<code>fg.eval.accept_many(candidates)</code>.</li>
+<li>Inspect rule or inference structure with <code>fg.rules.inspect(...)</code>.</li>
+<li><code>RuleRef</code> is a body-composition tool, not a saved-rule handle.</li>
+<li><code>SavedRuleRef</code> and <code>SavedInferenceRef</code> are registry handles; load them
+before passing value objects to runtime methods.</li>
+<li>Semantic engines are evaluation configuration; the evaluate/accept lifecycle
+stays the same.</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  <div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/concepts/evidence/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Evidence</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/concepts/persistence/" class="flex align-center">
+        <span>Persistence</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+  
+
+
+ 
+        
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "my-site" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+        
+        
+  
+  <div class="book-copyright flex justify-center">
+    <small>factgraph - <a href="https://creativecommons.org/licenses/by/4.0/legalcode">© CC BY 4.0</a></small>
+
+  </div>
+  
+ 
+        
+  
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#rules-and-inferences">Rules and inferences</a>
+      <ul>
+        <li><a href="#start-with-facts">Start with facts</a></li>
+        <li><a href="#body-atoms-the-building-blocks">Body atoms: the building blocks</a>
+          <ul>
+            <li><a href="#logic-variables">Logic variables</a></li>
+            <li><a href="#entity-existence-useru">Entity existence: <code>User(u)</code></a></li>
+            <li><a href="#two-ways-to-match-a-predicate">Two ways to match a predicate</a></li>
+            <li><a href="#comparisons">Comparisons</a></li>
+            <li><a href="#negation-not">Negation: <code>Not([...])</code></a></li>
+            <li><a href="#branches">Branches</a></li>
+            <li><a href="#head-atoms">Head atoms</a></li>
+          </ul>
+        </li>
+        <li><a href="#run-a-rule">Run a Rule</a></li>
+        <li><a href="#use-query-for-one-off-projections">Use Query for one-off projections</a></li>
+        <li><a href="#evaluate-an-inference">Evaluate an Inference</a></li>
+        <li><a href="#accept-a-candidate">Accept a candidate</a></li>
+        <li><a href="#inspect-rule-shape">Inspect rule shape</a></li>
+        <li><a href="#ruleref-is-not-a-saved-rule-handle">RuleRef is not a saved-rule handle</a></li>
+        <li><a href="#where-semantics-engines-fit">Where semantics engines fit</a></li>
+        <li><a href="#complete-example">Complete example</a></li>
+        <li><a href="#syntax-checklist">Syntax checklist</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
