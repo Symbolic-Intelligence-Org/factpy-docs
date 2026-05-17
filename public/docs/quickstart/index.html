@@ -8,18 +8,16 @@ https://github.com/alex-shpak/hugo-book
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="factgraph# factgraph is a Python library for append-only facts, rule-based inference, and auditable reasoning.
-It is designed for applications that need to know not only what is currently true, but also where a fact came from, which assertion supports it, which rule derived it, and how it can be reviewed or explained.
-Why factgraph?# Most application state is mutable: a value changes, and the previous state disappears unless a separate audit system is added later.
+<meta name="description" content="Install# pip install factgraphQuickstart# Define a typed schema, write facts, and read the current snapshot:
+from factgraph.sdk import Entity, FactGraph, Field, Identity class User(Entity): user_id: str = Identity(primary_key=True) name: str = Field(cardinality=&#34;single&#34;) role_seed: str = Field(cardinality=&#34;single&#34;) roles: str = Field(cardinality=&#34;multi&#34;) fg = FactGraph.create(schema_classes=[User]) alice = fg.read.ref(User, user_id=&#34;u-1&#34;) name_id = fg.write.set(User.name, alice, &#34;Alice&#34;) fg.write.set(User.role_seed, alice, &#34;engineer&#34;) snap = fg.read.get(User, user_id=&#34;u-1&#34;) assert snap is not None assert snap.name == &#34;Alice&#34; assert snap.role_seed == &#34;engineer&#34;A write appends an assertion and returns an asrt_id. A read returns a snapshot resolved from the active assertions.
 ">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
 <meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/quickstart/">
   <meta property="og:site_name" content="factgraph">
   <meta property="og:title" content="Quickstart">
-  <meta property="og:description" content="factgraph# factgraph is a Python library for append-only facts, rule-based inference, and auditable reasoning.
-It is designed for applications that need to know not only what is currently true, but also where a fact came from, which assertion supports it, which rule derived it, and how it can be reviewed or explained.
-Why factgraph?# Most application state is mutable: a value changes, and the previous state disappears unless a separate audit system is added later.">
+  <meta property="og:description" content="Install# pip install factgraphQuickstart# Define a typed schema, write facts, and read the current snapshot:
+from factgraph.sdk import Entity, FactGraph, Field, Identity class User(Entity): user_id: str = Identity(primary_key=True) name: str = Field(cardinality=&#34;single&#34;) role_seed: str = Field(cardinality=&#34;single&#34;) roles: str = Field(cardinality=&#34;multi&#34;) fg = FactGraph.create(schema_classes=[User]) alice = fg.read.ref(User, user_id=&#34;u-1&#34;) name_id = fg.write.set(User.name, alice, &#34;Alice&#34;) fg.write.set(User.role_seed, alice, &#34;engineer&#34;) snap = fg.read.get(User, user_id=&#34;u-1&#34;) assert snap is not None assert snap.name == &#34;Alice&#34; assert snap.role_seed == &#34;engineer&#34;A write appends an assertion and returns an asrt_id. A read returns a snapshot resolved from the active assertions.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="docs">
@@ -27,11 +25,10 @@ Why factgraph?# Most application state is mutable: a value changes, and the prev
 
 
   <meta itemprop="name" content="Quickstart">
-  <meta itemprop="description" content="factgraph# factgraph is a Python library for append-only facts, rule-based inference, and auditable reasoning.
-It is designed for applications that need to know not only what is currently true, but also where a fact came from, which assertion supports it, which rule derived it, and how it can be reviewed or explained.
-Why factgraph?# Most application state is mutable: a value changes, and the previous state disappears unless a separate audit system is added later.">
+  <meta itemprop="description" content="Install# pip install factgraphQuickstart# Define a typed schema, write facts, and read the current snapshot:
+from factgraph.sdk import Entity, FactGraph, Field, Identity class User(Entity): user_id: str = Identity(primary_key=True) name: str = Field(cardinality=&#34;single&#34;) role_seed: str = Field(cardinality=&#34;single&#34;) roles: str = Field(cardinality=&#34;multi&#34;) fg = FactGraph.create(schema_classes=[User]) alice = fg.read.ref(User, user_id=&#34;u-1&#34;) name_id = fg.write.set(User.name, alice, &#34;Alice&#34;) fg.write.set(User.role_seed, alice, &#34;engineer&#34;) snap = fg.read.get(User, user_id=&#34;u-1&#34;) assert snap is not None assert snap.name == &#34;Alice&#34; assert snap.role_seed == &#34;engineer&#34;A write appends an assertion and returns an asrt_id. A read returns a snapshot resolved from the active assertions.">
   <meta itemprop="dateModified" content="2026-05-05T20:44:32+02:00">
-  <meta itemprop="wordCount" content="616">
+  <meta itemprop="wordCount" content="473">
 
 <title>Quickstart | factgraph</title>
 <link rel="icon" href="/favicon.png" >
@@ -297,9 +294,8 @@ Why factgraph?# Most application state is mutable: a value changes, and the prev
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#factgraph">factgraph</a>
+    <li>
       <ul>
-        <li><a href="#why-factgraph">Why factgraph?</a></li>
         <li><a href="#install">Install</a></li>
         <li><a href="#quickstart">Quickstart</a></li>
         <li><a href="#assertions-and-views">Assertions And Views</a></li>
@@ -323,14 +319,7 @@ Why factgraph?# Most application state is mutable: a value changes, and the prev
 
       
       
-  <article class="markdown book-article"><h1 id="factgraph">factgraph<a class="anchor" href="#factgraph">#</a></h1>
-<p><code>factgraph</code> is a Python library for append-only facts, rule-based inference, and auditable reasoning.</p>
-<p>It is designed for applications that need to know not only what is currently true, but also where a fact came from, which assertion supports it, which rule derived it, and how it can be reviewed or explained.</p>
-<h2 id="why-factgraph">Why factgraph?<a class="anchor" href="#why-factgraph">#</a></h2>
-<p>Most application state is mutable: a value changes, and the previous state disappears unless a separate audit system is added later.</p>
-<p><code>factgraph</code> starts from a different model. Facts are written as assertions into an append-only ledger. Current state is resolved from active assertions. Rules and inferences can reason over those facts, propose new facts, and preserve the evidence needed to inspect the result.</p>
-<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>schema -&gt; assertions -&gt; snapshots -&gt; inference candidates -&gt; accepted facts -&gt; evidence</span></span></code></pre></div><p>This keeps storage, reasoning, and audit connected instead of treating them as separate systems.</p>
-<h2 id="install">Install<a class="anchor" href="#install">#</a></h2>
+  <article class="markdown book-article"><h2 id="install">Install<a class="anchor" href="#install">#</a></h2>
 <div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install factgraph</span></span></code></pre></div><h2 id="quickstart">Quickstart<a class="anchor" href="#quickstart">#</a></h2>
 <p>Define a typed schema, write facts, and read the current snapshot:</p>
 <div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff6ac1">from</span> factgraph.sdk <span style="color:#ff6ac1">import</span> Entity, FactGraph, Field, Identity
@@ -574,9 +563,8 @@ Why factgraph?# Most application state is mutable: a value changes, and the prev
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#factgraph">factgraph</a>
+    <li>
       <ul>
-        <li><a href="#why-factgraph">Why factgraph?</a></li>
         <li><a href="#install">Install</a></li>
         <li><a href="#quickstart">Quickstart</a></li>
         <li><a href="#assertions-and-views">Assertions And Views</a></li>
